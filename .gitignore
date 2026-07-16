@@ -1,0 +1,39 @@
+# Byte-compiled / cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+dist/
+build/
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+.tox/
+.venv/
+venv/
+.env
+.env.*
+!.env.example
+
+# IDE / OS
+.idea/
+.vscode/
+*.swp
+.DS_Store
+
+# Local scan workspaces
+/tmp/gie-scans/
+*.zip
+coverage.xml
+
+# Terraform
+**/.terraform/
+*.tfstate*
+crash.log
+
+# Node
+node_modules/
+packages/sdk-typescript/dist/

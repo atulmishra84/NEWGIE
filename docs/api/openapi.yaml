@@ -1,0 +1,507 @@
+openapi: 3.1.0
+info:
+  title: GIE Context Intelligence Agent API
+  version: 1.0.0
+  description: |
+    Scan AI application artifacts and retrieve normalized Context Models (`gie.context.v1`).
+  contact:
+    name: GIE Platform
+    email: platform@gie.example.com
+  license:
+    name: Apache-2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+
+servers:
+  - url: https://context-intelligence.gie.example.com
+    description: Production
+  - url: http://localhost:8080
+    description: Local development
+
+tags:
+  - name: scans
+    description: Scan lifecycle
+  - name: context-models
+    description: Normalized context models
+  - name: health
+    description: Health and metrics
+
+paths:
+  /healthz:
+    get:
+      tags: [health]
+      summary: Liveness/readiness probe
+      operationId: healthz
+      security: []
+      responses:
+        "200":
+          description: Service healthy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthResponse"
+
+  /v1/scans:
+    post:
+      tags: [scans]
+      summary: Create a scan
+      operationId: createScan
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ScanCreateRequest"
+            examples:
+              folderScan:
+                summary: Local folder scan
+                value:
+                  source:
+                    type: folder
+                    path: /workspace/my-ai-app
+                  idempotency_key: scan-acme-2026-07-16-001
+      responses:
+        "202":
+          description: Scan accepted (sync or async completion)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ScanEnvelope"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "500":
+          $ref: "#/components/responses/InternalError"
+
+  /v1/scans/{scan_id}:
+    get:
+      tags: [scans]
+      summary: Get scan status
+      operationId: getScan
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/ScanId"
+      responses:
+        "200":
+          description: Scan record
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ScanEnvelope"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+  /v1/context-models/{model_id}:
+    get:
+      tags: [context-models]
+      summary: Retrieve a context model
+      operationId: getContextModel
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/ModelId"
+      responses:
+        "200":
+          description: Normalized context model
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ContextModelEnvelope"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT or API key bearer token
+
+  parameters:
+    ScanId:
+      name: scan_id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    ModelId:
+      name: model_id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+
+  responses:
+    BadRequest:
+      description: Invalid request
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorEnvelope"
+    Unauthorized:
+      description: Missing or invalid authentication
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorEnvelope"
+    Forbidden:
+      description: Insufficient permissions
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorEnvelope"
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorEnvelope"
+    InternalError:
+      description: Server error
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorEnvelope"
+
+  schemas:
+    HealthResponse:
+      type: object
+      required: [status, agent, version]
+      properties:
+        status:
+          type: string
+          enum: [ok]
+        agent:
+          type: string
+          example: context-intelligence
+        version:
+          type: string
+          example: "1.0.0"
+
+    ScanCreateRequest:
+      type: object
+      required: [source]
+      properties:
+        source:
+          $ref: "#/components/schemas/ScanSource"
+        idempotency_key:
+          type: string
+          maxLength: 128
+        webhook_url:
+          type: string
+          format: uri
+
+    ScanSource:
+      type: object
+      required: [type]
+      properties:
+        type:
+          type: string
+          enum: [folder, git, zip, github, kubernetes, aws, azure, gcp]
+        path:
+          type: string
+          description: Required for folder sources
+        url:
+          type: string
+          format: uri
+          description: Required for git/github sources
+        ref:
+          type: string
+          default: HEAD
+        labels:
+          type: object
+          additionalProperties:
+            type: string
+
+    ScanResponse:
+      type: object
+      required: [scan_id, status]
+      properties:
+        scan_id:
+          type: string
+          format: uuid
+        status:
+          type: string
+          enum: [pending, running, completed, failed]
+        model_id:
+          type: string
+          format: uuid
+          nullable: true
+
+    ResponseMeta:
+      type: object
+      required: [trace_id, request_id, correlation_id, execution_ms, agent_version]
+      properties:
+        trace_id:
+          type: string
+        request_id:
+          type: string
+        correlation_id:
+          type: string
+        execution_ms:
+          type: number
+          format: float
+        confidence:
+          type: number
+          format: float
+          minimum: 0
+          maximum: 1
+          nullable: true
+        reasoning_path:
+          type: array
+          items:
+            type: object
+        agent_version:
+          type: string
+        agent_name:
+          type: string
+          default: context-intelligence
+
+    ScanEnvelope:
+      type: object
+      required: [data, meta]
+      properties:
+        data:
+          $ref: "#/components/schemas/ScanResponse"
+        meta:
+          $ref: "#/components/schemas/ResponseMeta"
+
+    ContextModel:
+      type: object
+      required: [model_id, schema_version, version, provenance]
+      properties:
+        model_id:
+          type: string
+          format: uuid
+        schema_version:
+          type: string
+          const: gie.context.v1
+        version:
+          type: integer
+          minimum: 1
+        identity:
+          $ref: "#/components/schemas/IdentitySection"
+        ai:
+          $ref: "#/components/schemas/AiSection"
+        interfaces:
+          $ref: "#/components/schemas/InterfacesSection"
+        data:
+          $ref: "#/components/schemas/DataSection"
+        security:
+          $ref: "#/components/schemas/SecuritySection"
+        deployment:
+          $ref: "#/components/schemas/DeploymentSection"
+        graph:
+          $ref: "#/components/schemas/GraphSection"
+        provenance:
+          $ref: "#/components/schemas/ProvenanceSection"
+
+    IdentitySection:
+      type: object
+      properties:
+        languages:
+          type: array
+          items:
+            $ref: "#/components/schemas/DetectedItem"
+        package_managers:
+          type: array
+          items:
+            $ref: "#/components/schemas/DetectedItem"
+        runtimes:
+          type: array
+          items:
+            $ref: "#/components/schemas/DetectedItem"
+        project_name:
+          type: string
+          nullable: true
+
+    AiSection:
+      type: object
+      properties:
+        frameworks:
+          type: array
+          items:
+            $ref: "#/components/schemas/DetectedItem"
+        sdks:
+          type: array
+          items:
+            $ref: "#/components/schemas/DetectedItem"
+        models:
+          type: array
+          items:
+            $ref: "#/components/schemas/DetectedItem"
+        prompts:
+          type: array
+          items:
+            $ref: "#/components/schemas/DetectedItem"
+
+    InterfacesSection:
+      type: object
+      properties:
+        mcp_servers:
+          type: array
+          items:
+            $ref: "#/components/schemas/DetectedItem"
+        tools:
+          type: array
+          items:
+            $ref: "#/components/schemas/DetectedItem"
+
+    DataSection:
+      type: object
+      properties:
+        secret_findings:
+          type: array
+          items:
+            $ref: "#/components/schemas/SecretFinding"
+        vector_databases:
+          type: array
+          items:
+            $ref: "#/components/schemas/DetectedItem"
+
+    SecuritySection:
+      type: object
+      properties:
+        identity_providers:
+          type: array
+          items:
+            $ref: "#/components/schemas/DetectedItem"
+
+    DeploymentSection:
+      type: object
+      properties:
+        containers:
+          type: array
+          items:
+            $ref: "#/components/schemas/DetectedItem"
+        kubernetes:
+          type: array
+          items:
+            $ref: "#/components/schemas/DetectedItem"
+
+    GraphSection:
+      type: object
+      properties:
+        nodes:
+          type: array
+          items:
+            type: object
+        edges:
+          type: array
+          items:
+            type: object
+
+    ProvenanceSection:
+      type: object
+      required: [agent_version, scan_id, tenant_id, source_type]
+      properties:
+        schema_version:
+          type: string
+        agent_name:
+          type: string
+        agent_version:
+          type: string
+        scan_id:
+          type: string
+          format: uuid
+        tenant_id:
+          type: string
+        source_type:
+          type: string
+        source_digest:
+          type: string
+          nullable: true
+        detectors:
+          type: array
+          items:
+            type: string
+        confidence:
+          $ref: "#/components/schemas/Confidence"
+
+    DetectedItem:
+      type: object
+      required: [name]
+      properties:
+        name:
+          type: string
+        version:
+          type: string
+          nullable: true
+        confidence:
+          $ref: "#/components/schemas/Confidence"
+        attributes:
+          type: object
+          additionalProperties: true
+
+    SecretFinding:
+      type: object
+      required: [kind, location, fingerprint, severity]
+      properties:
+        kind:
+          type: string
+          example: openai_api_key
+        location:
+          type: string
+          example: .env
+        fingerprint:
+          type: string
+          description: SHA-256 fingerprint — raw secret never included
+          example: sha256:a1b2c3d4e5f6...
+        severity:
+          type: string
+          enum: [low, medium, high, critical]
+
+    Confidence:
+      type: object
+      properties:
+        score:
+          type: number
+          minimum: 0
+          maximum: 1
+        rationale:
+          type: string
+          nullable: true
+
+    ContextModelEnvelope:
+      type: object
+      required: [data, meta]
+      properties:
+        data:
+          $ref: "#/components/schemas/ContextModel"
+        meta:
+          $ref: "#/components/schemas/ResponseMeta"
+
+    ErrorBody:
+      type: object
+      required: [code, message, meta]
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        details:
+          type: object
+        retryable:
+          type: boolean
+        meta:
+          $ref: "#/components/schemas/ResponseMeta"
+
+    ErrorEnvelope:
+      type: object
+      properties:
+        detail:
+          oneOf:
+            - type: string
+            - $ref: "#/components/schemas/ErrorBody"

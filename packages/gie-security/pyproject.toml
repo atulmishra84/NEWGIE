@@ -1,0 +1,19 @@
+[project]
+name = "gie-security"
+version = "1.0.0"
+description = "Authentication and RBAC for Guardrails Intelligence Engine"
+requires-python = ">=3.12"
+dependencies = [
+  "PyJWT>=2.8,<3",
+  "pydantic>=2.7,<3",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0", "ruff>=0.5"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/gie_security"]

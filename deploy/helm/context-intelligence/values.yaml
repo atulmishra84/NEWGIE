@@ -1,0 +1,90 @@
+replicaCount: 2
+
+image:
+  repository: ghcr.io/gie/context-intelligence
+  tag: "1.0.0"
+  pullPolicy: IfNotPresent
+
+imagePullSecrets: []
+
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
+
+podAnnotations:
+  prometheus.io/scrape: "true"
+  prometheus.io/port: "8080"
+  prometheus.io/path: "/metrics"
+
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 1000
+  fsGroup: 1000
+
+securityContext:
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: true
+  capabilities:
+    drop:
+      - ALL
+
+service:
+  type: ClusterIP
+  port: 8080
+
+ingress:
+  enabled: false
+  className: nginx
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/proxy-body-size: "50m"
+  hosts:
+    - host: context-intelligence.gie.example.com
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: context-intelligence-tls
+      hosts:
+        - context-intelligence.gie.example.com
+
+resources:
+  requests:
+    cpu: 250m
+    memory: 512Mi
+  limits:
+    cpu: "2"
+    memory: 2Gi
+
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 70
+  targetMemoryUtilizationPercentage: 80
+
+env:
+  GIE_ENV: production
+  FLAG_ENABLE_CLOUD_SCANNERS: "true"
+  SCAN_MAX_FILE_BYTES: "1048576"
+  SCAN_MAX_FILES: "10000"
+  OTEL_EXPORTER_OTLP_ENDPOINT: ""
+  KAFKA_BOOTSTRAP_SERVERS: kafka.gie.svc.cluster.local:9092
+  QDRANT_URL: http://qdrant.gie.svc.cluster.local:6333
+  NEO4J_URI: bolt://neo4j.gie.svc.cluster.local:7687
+  REDIS_URL: redis://redis.gie.svc.cluster.local:6379/0
+
+secrets:
+  databaseUrl: "postgresql+asyncpg://gie:CHANGE_ME@postgres:5432/gie_context"
+  jwtSecret: "replace-with-32-byte-random"
+  apiKeyPepper: "replace-with-random-pepper"
+  neo4jUser: neo4j
+  neo4jPassword: "replace-neo4j-password"
+
+nodeSelector: {}
+tolerations: []
+affinity: {}

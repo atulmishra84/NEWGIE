@@ -1,0 +1,16 @@
+{
+  "name": "@gie/context-sdk",
+  "version": "1.0.0",
+  "description": "TypeScript SDK for GIE Context Intelligence Agent",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "prepublishOnly": "npm run build"
+  },
+  "files": ["dist"],
+  "devDependencies": {
+    "typescript": "^5.6.0"
+  }
+}

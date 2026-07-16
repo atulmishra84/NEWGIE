@@ -1,0 +1,12 @@
+{
+  "name": "sample-ai-project",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "langgraph": "^0.2.0",
+    "openai": "^4.52.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0"
+  }
+}

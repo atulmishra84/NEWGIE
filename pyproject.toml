@@ -1,0 +1,12 @@
+[workspace]
+members = []
+# Python monorepo managed via path installs; see root pyproject for tooling.
+
+[tool.uv.workspace]
+members = [
+  "packages/gie-contracts",
+  "packages/gie-observability",
+  "packages/gie-security",
+  "packages/sdk-python",
+  "agents/context-intelligence",
+]

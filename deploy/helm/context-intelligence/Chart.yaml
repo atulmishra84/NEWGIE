@@ -1,0 +1,14 @@
+apiVersion: v2
+name: context-intelligence
+description: GIE Context Intelligence Agent — scan AI projects into gie.context.v1
+type: application
+version: 1.0.0
+appVersion: "1.0.0"
+keywords:
+  - gie
+  - ai-governance
+  - context-intelligence
+maintainers:
+  - name: GIE Platform Team
+    email: platform@gie.example.com
+dependencies: []
