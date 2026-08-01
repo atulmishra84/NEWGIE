@@ -1,0 +1,30 @@
+# Full+GIE multi-cluster / multi-region topology
+version: 1
+regions:
+  - id: us-east-1
+    name: US East
+    clusters:
+      - id: staging-use1
+        env: staging
+        endpoint: http://127.0.0.1:8090
+        weight: 100
+      - id: prod-use1
+        env: production
+        endpoint: http://127.0.0.1:8090/demo/prod/us-east-1
+        weight: 70
+  - id: eu-west-1
+    name: EU West
+    clusters:
+      - id: staging-euw1
+        env: staging
+        endpoint: http://127.0.0.1:8090
+        weight: 100
+      - id: prod-euw1
+        env: production
+        endpoint: http://127.0.0.1:8090/demo/prod/eu-west-1
+        weight: 30
+
+promotion:
+  order: [us-east-1, eu-west-1]
+  require_all_healthy: true
+  unsupervised_allowed: true

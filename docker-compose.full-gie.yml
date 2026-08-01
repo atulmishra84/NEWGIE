@@ -1,0 +1,94 @@
+# Full+GIE one-shot stack: data plane + Context Intelligence + Risk + Policy + Chief Orchestrator
+# Usage: docker compose -f docker-compose.yml -f docker-compose.full-gie.yml up -d --build
+#
+# Note: `context-stub` provides /healthz on :8080 for fleet e2e when the full
+# Context Intelligence app image is not ready. Disable stub and enable the real
+# CI service when that agent boots cleanly.
+
+services:
+  context-stub:
+    image: python:3.12-slim
+    command: ["python", "/scripts/context_stub.py"]
+    volumes:
+      - ./scripts/context_stub.py:/scripts/context_stub.py:ro
+    ports:
+      - "8080:8080"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8080/healthz')"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 5s
+  risk-assessment:
+    build:
+      context: .
+      dockerfile: agents/risk-assessment/Dockerfile
+    ports:
+      - "8091:8091"
+    environment:
+      GIE_ENV: staging
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8091/healthz')"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 15s
+
+  policy-engine:
+    build:
+      context: .
+      dockerfile: agents/policy-engine/Dockerfile
+    ports:
+      - "8092:8092"
+    environment:
+      GIE_ENV: staging
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8092/healthz')"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 15s
+
+  chief-orchestrator:
+    build:
+      context: .
+      dockerfile: agents/chief-orchestrator/Dockerfile
+    ports:
+      - "8090:8090"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    environment:
+      ORCH_ENV: staging
+      ORCH_STAGING_BASE_URL: http://localhost:8090
+      ORCH_GOLDEN_STAGING_URL: http://localhost:8090/demo/golden
+      # Use host-gateway so orchestrator can reach published ports even when
+      # container-to-container bridge forwarding is unavailable.
+      ORCH_CONTEXT_INTELLIGENCE_URL: http://host.docker.internal:8080
+      ORCH_RISK_ASSESSMENT_URL: http://host.docker.internal:8091
+      ORCH_POLICY_ENGINE_URL: http://host.docker.internal:8092
+      ORCH_ALLOW_CUSTOMER_PROD: "false"
+      ORCH_UNSUPERVISED_PROD: "false"
+      ORCH_STT_PROVIDER: stub
+      ORCH_TTS_PROVIDER: stub
+      ORCH_CVE_PROVIDERS: osv
+      ORCH_MULTI_REGION_CONFIG: /workspace/deploy/full-gie/multi-region.yaml
+      ORCH_ARTIFACT_DIR: /tmp/gie-fleet-artifacts
+    volumes:
+      - fleet_artifacts:/tmp/gie-fleet-artifacts
+      - ./deploy/full-gie:/workspace/deploy/full-gie:ro
+    depends_on:
+      risk-assessment:
+        condition: service_healthy
+      policy-engine:
+        condition: service_healthy
+      context-stub:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8090/healthz')"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+
+volumes:
+  fleet_artifacts:

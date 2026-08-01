@@ -16,10 +16,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 COPY pyproject.toml /app/pyproject.toml
 COPY packages/gie-contracts /app/packages/gie-contracts
 COPY packages/gie-observability /app/packages/gie-observability
+COPY packages/gie-security /app/packages/gie-security
 COPY agents/context-intelligence /app/agents/context-intelligence
 
 RUN pip install --upgrade pip && \
-    pip install /app/packages/gie-contracts /app/packages/gie-observability && \
+    pip install /app/packages/gie-contracts /app/packages/gie-observability /app/packages/gie-security && \
     pip install /app/agents/context-intelligence
 
 ENV PYTHONPATH=/app/agents/context-intelligence/src

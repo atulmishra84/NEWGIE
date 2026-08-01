@@ -137,3 +137,37 @@ class WorkspaceFactory(Protocol):
     """Creates isolated scan workspaces."""
 
     def __call__(self, scan_id: UUID) -> ScanWorkspace: ...
+
+
+@runtime_checkable
+class IdempotencyCache(Protocol):
+    """Idempotency key cache for scan create."""
+
+    async def get(self, key: str) -> str | None: ...
+
+    async def set(self, key: str, value: str, ttl_seconds: int | None = None) -> None: ...
+
+
+@runtime_checkable
+class ModelCache(Protocol):
+    """Hot cache for context models."""
+
+    async def get(self, key: str) -> bytes | None: ...
+
+    async def set(self, key: str, value: bytes, ttl_seconds: int | None = None) -> None: ...
+
+    async def delete(self, key: str) -> None: ...
+
+
+@runtime_checkable
+class OutboxWriter(Protocol):
+    """Transactional outbox writer for domain events."""
+
+    async def enqueue(self, event: EventEnvelope) -> None: ...
+
+
+@runtime_checkable
+class RateLimiter(Protocol):
+    """Request rate limiter port."""
+
+    async def allow(self, key: str, *, limit: int, window_seconds: int) -> bool: ...

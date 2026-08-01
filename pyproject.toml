@@ -9,4 +9,7 @@ members = [
   "packages/gie-security",
   "packages/sdk-python",
   "agents/context-intelligence",
+  "agents/chief-orchestrator",
+  "agents/risk-assessment",
+  "agents/policy-engine",
 ]

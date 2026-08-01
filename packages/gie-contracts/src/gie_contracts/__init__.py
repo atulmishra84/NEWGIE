@@ -25,6 +25,27 @@ from gie_contracts.events import (
 )
 from gie_contracts.envelope import ErrorBody, ObservabilityEnvelope, ResponseMeta
 from gie_contracts.sources import ScanSource, SourceType
+from gie_contracts.fleet import (
+    FULL_GIE_AGENT_IDS,
+    FLEET_AGENT_META,
+    AgentHeartbeat,
+    AgentId,
+    AgentLane,
+    AgentStepResult,
+    Channel,
+    CommandRequest,
+    EvidencePackage,
+    Finding,
+    FleetRun,
+    GoNoGoReport,
+    IntentType,
+    NormalizedIntent,
+    PolicyDecision,
+    PolicyReport,
+    RiskReport,
+    RunStatus,
+    Severity,
+)
 
 __all__ = [
     "CONTEXT_MODEL_SCHEMA",
@@ -51,4 +72,23 @@ __all__ = [
     "ScanSource",
     "SecuritySection",
     "SourceType",
+    "FULL_GIE_AGENT_IDS",
+    "FLEET_AGENT_META",
+    "AgentHeartbeat",
+    "AgentId",
+    "AgentLane",
+    "AgentStepResult",
+    "Channel",
+    "CommandRequest",
+    "EvidencePackage",
+    "Finding",
+    "FleetRun",
+    "GoNoGoReport",
+    "IntentType",
+    "NormalizedIntent",
+    "PolicyDecision",
+    "PolicyReport",
+    "RiskReport",
+    "RunStatus",
+    "Severity",
 ]

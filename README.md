@@ -13,22 +13,34 @@ The first agent in the platform is **Context Intelligence**, responsible for dis
 ```
 GIE/
 ├── agents/context-intelligence/   # Context Intelligence Agent (API, workers, scanners)
+├── agents/chief-orchestrator/     # Full+GIE front door (text + voice)
+├── agents/risk-assessment/        # Risk scoring agent
+├── agents/policy-engine/          # Deploy allow/deny policy agent
 ├── packages/                      # Shared libraries (contracts, observability, security)
 ├── deploy/                        # Kubernetes, Helm, Terraform
 ├── docs/                          # Architecture, API, security, performance
-└── docker-compose.yml             # Local full stack
+├── docker-compose.yml             # Context Intelligence stack
+└── docker-compose.full-gie.yml    # Full+GIE one-shot overlay
 ```
 
-See [FOLDER_STRUCTURE.md](docs/FOLDER_STRUCTURE.md) for the complete layout.
+See [FOLDER_STRUCTURE.md](docs/FOLDER_STRUCTURE.md) and [FULL_GIE_FLEET.md](docs/FULL_GIE_FLEET.md).
 
 ## Agents
 
 | Agent | Status | Capability |
 |-------|--------|------------|
+| **Chief Orchestrator** | Active | Text+voice command surface; runs Full+GIE lanes |
 | **Context Intelligence** | Active | Scan AI projects → normalized Context Model (`gie.context.v1`) |
-| Risk Assessment | Planned | Consume context models for threat scoring |
-| Policy Engine | Planned | Evaluate policies against detected capabilities |
-| Compliance | Planned | Map findings to regulatory frameworks |
+| **Risk Assessment** | Active | Score risk from context + findings |
+| **Policy Engine** | Active | Allow/deny deploy decisions |
+| Delivery / Security / Release-Ops roles | Active (fleet registry) | PM, UX, Dev, AppSec, Vuln, SecTest, Compliance, QA, Release, DevOps, SRE, Docs |
+
+### Full+GIE one-shot (live staging)
+
+```bash
+./scripts/oneshot_deploy.sh
+python scripts/live_test_full_gie.py
+```
 
 ## Quick Start
 

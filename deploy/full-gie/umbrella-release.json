@@ -1,0 +1,56 @@
+{
+  "release": "full-gie-oneshot",
+  "version": "1.0.0",
+  "ingress": {
+    "chief-orchestrator": {
+      "port": 8090,
+      "channels": ["text", "voice"]
+    }
+  },
+  "agents": {
+    "delivery": [
+      "chief-orchestrator",
+      "product-manager",
+      "ux-designer",
+      "senior-developer",
+      "frontend-specialist",
+      "backend-specialist"
+    ],
+    "security": [
+      "security-engineer",
+      "vulnerability-engineer",
+      "security-test-engineer",
+      "compliance-officer"
+    ],
+    "release_ops": [
+      "qa-engineer",
+      "release-manager",
+      "devops",
+      "sre-observability",
+      "tech-writer"
+    ],
+    "platform": [
+      "context-intelligence",
+      "risk-assessment",
+      "policy-engine"
+    ]
+  },
+  "services": {
+    "context-intelligence": {"port": 8080, "dockerfile": "agents/context-intelligence/Dockerfile"},
+    "risk-assessment": {"port": 8091, "dockerfile": "agents/risk-assessment/Dockerfile"},
+    "policy-engine": {"port": 8092, "dockerfile": "agents/policy-engine/Dockerfile"},
+    "chief-orchestrator": {"port": 8090, "dockerfile": "agents/chief-orchestrator/Dockerfile"}
+  },
+  "compose": [
+    "docker-compose.yml",
+    "docker-compose.full-gie.yml"
+  ],
+  "deploy": "scripts/oneshot_deploy.sh",
+  "live_test": "scripts/live_test_full_gie.py",
+  "go_no_go": "scripts/go_no_go_report.sh",
+  "rollback": "scripts/rollback_full_gie.sh",
+  "customer_prod": "human_gated_or_unsupervised",
+  "voice_providers": ["stub", "openai", "deepgram"],
+  "cve_providers": ["osv", "snyk"],
+  "multi_region": "deploy/full-gie/multi-region.yaml"
+}

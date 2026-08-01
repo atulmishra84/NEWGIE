@@ -1,0 +1,76 @@
+name: Full+GIE One-Shot
+
+on:
+  pull_request:
+    paths:
+      - "agents/chief-orchestrator/**"
+      - "agents/risk-assessment/**"
+      - "agents/policy-engine/**"
+      - "packages/gie-contracts/**"
+      - "docker-compose.full-gie.yml"
+      - "scripts/oneshot_deploy.sh"
+      - "scripts/live_test_full_gie.py"
+      - "scripts/provision_live_staging.sh"
+      - ".github/workflows/full-gie-oneshot.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: full-gie-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  umbrella-tests:
+    name: Umbrella contracts + orchestrator tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Full+GIE packages
+        run: |
+          pip install ./packages/gie-contracts
+          pip install "./agents/chief-orchestrator[dev]"
+          pip install ./agents/risk-assessment ./agents/policy-engine
+
+      - name: Unit tests
+        working-directory: agents/chief-orchestrator
+        run: pytest tests/ -v
+
+  local-oneshot-live-test:
+    name: Local one-shot deploy + live test
+    runs-on: ubuntu-latest
+    needs: umbrella-tests
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: One-shot deploy (local staging)
+        env:
+          STAGING_MODE: local
+        run: |
+          chmod +x scripts/*.sh scripts/*.py
+          ./scripts/oneshot_deploy.sh
+
+      - name: Live tests LT-1..LT-5
+        run: ORCH_URL=http://127.0.0.1:8090 python scripts/live_test_full_gie.py
+
+      - name: Go / No-Go report
+        run: ./scripts/go_no_go_report.sh /tmp/gie-fleet-artifacts
+
+      - name: Upload evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: full-gie-go-no-go
+          path: |
+            /tmp/gie-fleet-artifacts/go-no-go.json
+            /tmp/gie-fleet-artifacts/LIVE_STAGING_READY.json
+            /tmp/gie-fleet-artifacts/logs/
