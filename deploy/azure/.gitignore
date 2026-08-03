@@ -1,0 +1,8 @@
+.last-outputs.json
+.last-image.txt
+.last-images.txt
+.last-url.txt
+.last-web-url.txt
+.last-neo4j-password.txt
+*.local.json
+secrets/

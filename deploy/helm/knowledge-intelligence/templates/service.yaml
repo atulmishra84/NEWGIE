@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: knowledge-intelligence
+  labels:
+    app: knowledge-intelligence
+spec:
+  type: {{ .Values.service.type | default "ClusterIP" }}
+  selector:
+    app: knowledge-intelligence
+  ports:
+    - name: http
+      port: {{ .Values.service.port }}
+      targetPort: http

@@ -1,0 +1,31 @@
+openapi: 3.1.0
+info:
+  title: GIE Learning Intelligence Agent API
+  version: 1.0.0
+servers:
+  - url: http://localhost:8089
+paths:
+  /feedback:
+    post:
+      summary: Submit feedback signal
+      responses:
+        "200":
+          description: Accepted feedback
+  /learn:
+    post:
+      summary: Run learning cycle
+      responses:
+        "200":
+          description: LearningReport
+  /learning/history:
+    get:
+      summary: Learning report history
+      responses:
+        "200":
+          description: History list
+  /knowledge/changes:
+    get:
+      summary: Proposed/approved knowledge changes
+      responses:
+        "200":
+          description: Knowledge change list

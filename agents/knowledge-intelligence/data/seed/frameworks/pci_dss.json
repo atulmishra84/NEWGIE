@@ -1,0 +1,86 @@
+{
+  "domain": "pci_dss",
+  "nodes": [
+    {
+      "node_id": "fw-pci_dss",
+      "kind": "Framework",
+      "domain": "pci_dss",
+      "title": "PCI DSS",
+      "summary": "Payment Card Industry Data Security Standard",
+      "body": "Payment Card Industry Data Security Standard",
+      "tags": [
+        "framework",
+        "root"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-fw-pci_dss",
+          "source_title": "PCI DSS",
+          "citation": "pci_dss",
+          "excerpt": "Payment Card Industry Data Security Standard"
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "pci-pan-mask",
+      "kind": "Control",
+      "domain": "pci_dss",
+      "title": "PAN Masking",
+      "summary": "Mask payment card data in prompts, logs, and model outputs.",
+      "body": "Mask payment card data in prompts, logs, and model outputs.",
+      "tags": [
+        "compliance",
+        "pci_dss"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-pci-pan-mask",
+          "source_title": "PAN Masking",
+          "citation": "pci_dss",
+          "excerpt": "Mask payment card data in prompts, logs, and model outputs."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "pci-key-mgmt",
+      "kind": "Control",
+      "domain": "pci_dss",
+      "title": "Cryptographic Key Management",
+      "summary": "Protect keys used by AI services under PCI DSS req 3/4.",
+      "body": "Protect keys used by AI services under PCI DSS req 3/4.",
+      "tags": [
+        "compliance",
+        "pci_dss"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-pci-key-mgmt",
+          "source_title": "Cryptographic Key Management",
+          "citation": "pci_dss",
+          "excerpt": "Protect keys used by AI services under PCI DSS req 3/4."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    }
+  ]
+}

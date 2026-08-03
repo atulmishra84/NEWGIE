@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>GIE Technical Deep-Dive</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --ink: #0a1628;
+      --navy: #102a43;
+      --teal: #0f766e;
+      --teal-bright: #14b8a6;
+      --mist: #9fb3c8;
+      --fog: #d9e2ec;
+      --paper: #f0f4f8;
+      --white: #fafbfc;
+      --slate: #486581;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; height: 100%; background: #0a1628; color: var(--ink); font-family: Manrope, sans-serif; }
+    .deck { height: 100%; display: grid; place-items: center; }
+    .slide {
+      width: min(1100px, 96vw);
+      aspect-ratio: 16 / 9;
+      background: var(--paper);
+      border-radius: 8px;
+      padding: 2.2rem 2.5rem;
+      overflow: hidden;
+      display: none;
+      flex-direction: column;
+      box-shadow: 0 20px 60px rgba(0,0,0,.45);
+    }
+    .slide.on { display: flex; }
+    .slide.title-slide {
+      background: linear-gradient(145deg, #07131f, #102a43 50%, #0a3d3a);
+      color: var(--white);
+      justify-content: flex-end;
+    }
+    .brand { font-family: Syne, sans-serif; font-size: clamp(3.5rem, 8vw, 5.5rem); font-weight: 800; color: var(--teal-bright); line-height: .9; margin: 0; }
+    .brand small { display: block; font-size: .22em; letter-spacing: .12em; text-transform: uppercase; color: rgba(255,255,255,.7); margin-top: .6rem; }
+    h1 { font-family: Syne, sans-serif; font-size: 1.85rem; margin: 0 0 1rem; color: var(--navy); }
+    .title-slide h1 { color: var(--white); font-size: 1.4rem; font-weight: 700; max-width: 18ch; }
+    .lede { color: var(--mist); max-width: 42ch; }
+    .bar {
+      background: var(--navy); color: var(--white); margin: -2.2rem -2.5rem 1.25rem;
+      padding: 1rem 2.5rem; border-bottom: 4px solid var(--teal-bright);
+      font-family: Syne, sans-serif; font-size: 1.5rem;
+    }
+    ul { margin: 0; padding-left: 1.1rem; columns: 1; }
+    ul.two { columns: 2; column-gap: 2rem; }
+    li { margin: 0 0 .55rem; color: var(--ink); break-inside: avoid; }
+    .grid { display: grid; gap: 1rem; grid-template-columns: repeat(3, 1fr); }
+    .grid.four { grid-template-columns: repeat(4, 1fr); }
+    .grid.two { grid-template-columns: 1fr 1fr; }
+    .card { background: var(--white); border: 1px solid var(--fog); border-radius: 6px; padding: 1rem; }
+    .card h3 { margin: 0 0 .5rem; color: var(--teal); font-family: Syne, sans-serif; font-size: 1rem; }
+    .card p, .card li { margin: 0; color: var(--slate); font-size: .95rem; }
+    table { width: 100%; border-collapse: collapse; font-size: .82rem; }
+    th, td { text-align: left; padding: .45rem .5rem; border-bottom: 1px solid var(--fog); }
+    th { background: var(--navy); color: var(--white); }
+    tr:nth-child(even) td { background: #e8eef4; }
+    .nav {
+      position: fixed; bottom: 1rem; left: 50%; transform: translateX(-50%);
+      display: flex; gap: .5rem; align-items: center;
+      background: rgba(10,22,40,.92); color: #fff; padding: .5rem .75rem; border-radius: 8px;
+      font-size: .85rem;
+    }
+    .nav button {
+      background: var(--teal); color: #fff; border: 0; border-radius: 4px;
+      padding: .4rem .75rem; font-weight: 700; cursor: pointer;
+    }
+    .hint { color: var(--mist); font-size: .8rem; margin-top: auto; padding-top: 1rem; }
+  </style>
+</head>
+<body>
+  <div class="deck" id="deck">
+    <section class="slide title-slide on">
+      <p class="brand">GIE<small>Guardrails Intelligence Engine</small></p>
+      <h1>Technical Deep-Dive — Architecture, Agents, Pipeline, Data Plane &amp; Deployment</h1>
+      <p class="lede">Discussion &amp; demonstration deck for the multi-agent AI governance platform.</p>
+    </section>
+
+    <section class="slide">
+      <div class="bar">Agenda</div>
+      <ul class="two">
+        <li>Why GIE — problem &amp; value</li>
+        <li>Platform architecture</li>
+        <li>Hexagonal / Clean Architecture</li>
+        <li>12-agent mesh</li>
+        <li>Orchestrator pipeline</li>
+        <li>Contracts &amp; versioning</li>
+        <li>Data plane</li>
+        <li>Security &amp; approval gates</li>
+        <li>Observability</li>
+        <li>Local Docker validation</li>
+        <li>Azure full sandbox</li>
+        <li>Live demo script</li>
+        <li>Integrations</li>
+        <li>Discussion &amp; next steps</li>
+      </ul>
+    </section>
+
+    <section class="slide">
+      <div class="bar">Why GIE exists</div>
+      <div class="grid">
+        <div class="card"><h3>The gap</h3><p>AI apps ship with prompts, tools, MCP servers, and cloud bindings — often invisible to risk teams.</p></div>
+        <div class="card"><h3>What GIE does</h3><p>Scan → normalize → reason → recommend → validate → explain. One Orchestrator. Human gates when stakes rise.</p></div>
+        <div class="card"><h3>Outcomes</h3><p>Context Model, risk/compliance posture, deployable policies, explanations, learning loop, IDE/CI connectors.</p></div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="bar">Platform architecture</div>
+      <p style="color:var(--slate);margin:0 0 1rem">Clients → Orchestrator (:8091) → peers (:8080–:8090) → data plane</p>
+      <div class="grid four">
+        <div class="card"><h3>Clients</h3><p>Dashboard, CLI, IDE, CI, MCP</p></div>
+        <div class="card"><h3>Control</h3><p>Analyze, Approve, Trace, Graph, Status</p></div>
+        <div class="card"><h3>Agents</h3><p>12 specialized services</p></div>
+        <div class="card"><h3>Data</h3><p>Postgres, Redis, Neo4j, Qdrant, Kafka</p></div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="bar">Hexagonal / Clean Architecture</div>
+      <ul>
+        <li>Adapters → Application → Domain ← Ports ← Driven adapters</li>
+        <li>Domain free of FastAPI / SQLAlchemy / Neo4j / Kafka</li>
+        <li>DDD aggregates + CQRS + outbox → Kafka</li>
+        <li>Shared: <code>gie-contracts</code>, <code>gie-observability</code>, <code>gie-security</code></li>
+      </ul>
+    </section>
+
+    <section class="slide">
+      <div class="bar">Agent mesh</div>
+      <table>
+        <thead><tr><th>Agent</th><th>Port</th><th>Schema</th></tr></thead>
+        <tbody>
+          <tr><td>Context</td><td>8080</td><td>gie.context.v1</td></tr>
+          <tr><td>Knowledge</td><td>8081</td><td>gie.knowledge.v1</td></tr>
+          <tr><td>Policy</td><td>8082</td><td>gie.policy.v1</td></tr>
+          <tr><td>Risk</td><td>8083</td><td>gie.risk.v1</td></tr>
+          <tr><td>Compliance</td><td>8084</td><td>gie.compliance.v1</td></tr>
+          <tr><td>Recommendation</td><td>8085</td><td>gie.recommendation.v1</td></tr>
+          <tr><td>Policy Generator</td><td>8086</td><td>gie.policygen.v1</td></tr>
+          <tr><td>Explainability</td><td>8087</td><td>gie.explainability.v1</td></tr>
+          <tr><td>Validation</td><td>8088</td><td>gie.validation.v1</td></tr>
+          <tr><td>Learning</td><td>8089</td><td>gie.learning.v1</td></tr>
+          <tr><td>Integration</td><td>8090</td><td>gie.integration.v1</td></tr>
+          <tr><td>Orchestrator</td><td>8091</td><td>gie.orchestrator.v1</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="slide">
+      <div class="bar">Orchestrator pipeline</div>
+      <div class="grid two">
+        <ul>
+          <li><code>POST /analyze</code> unified entry</li>
+          <li>Modes: sync / async / streaming / batch</li>
+          <li>Parallel Risk ∥ Compliance</li>
+          <li><code>SIMULATE_AGENTS</code> toggle</li>
+          <li><code>/status /execution /trace /graph /approve</code></li>
+        </ul>
+        <div class="card">
+          <h3>AnalyzeRequest</h3>
+          <p>tenant_id · source · mode · options · approval_gates · cache · agent_versions</p>
+          <p style="margin-top:.75rem">Response: ObservabilityEnvelope → ExecutionRecord</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="bar">Execution graph</div>
+      <div class="grid two">
+        <div class="card"><h3>01–04</h3><p>Context → Knowledge → Risk∥Compliance → Policy</p></div>
+        <div class="card"><h3>05–08</h3><p>Recommend→Generate → Validate → Explain → Gate/Learn</p></div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="bar">Context &amp; Knowledge</div>
+      <div class="grid two">
+        <div class="card"><h3>Context (:8080)</h3><p>Scan folder/repo/zip → ContextModel. Detectors, Neo4j graph, Qdrant evidence, Celery workers.</p></div>
+        <div class="card"><h3>Knowledge (:8081)</h3><p>Versioned graph (OWASP LLM, MITRE ATLAS, NIST AI RMF). Semantic retrieval. Seed + fallback memory.</p></div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="bar">Data plane · Security · Ops</div>
+      <ul>
+        <li>Postgres (12 DBs) · Redis 0–11 · Neo4j · Qdrant · Kafka 3.7.1 KRaft</li>
+        <li>JWT / API keys · RBAC · approval gates · learning publish blocked by default</li>
+        <li>structlog · OTEL · Prometheus · smoke scripts local + Azure</li>
+      </ul>
+    </section>
+
+    <section class="slide">
+      <div class="bar">Local Docker &amp; Azure</div>
+      <div class="grid two">
+        <div class="card"><h3>Local</h3><p><code>./scripts/local-up.sh</code><br/><code>./scripts/local-smoke.sh</code><br/>UI :5173 · API :8091 · live peers</p></div>
+        <div class="card"><h3>Azure full</h3><p>00→05 scripts · AKS 3×D4s_v5 · 12 DBs · Neo4j/Qdrant/Kafka · all agents · web LB</p></div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="bar">Live demo script</div>
+      <ul>
+        <li>Landing → Dashboard (API base :8091) → Ping</li>
+        <li>Orchestrator <code>/</code> and <code>/docs</code></li>
+        <li>Analyze sync → Fetch execution</li>
+        <li>Context <code>/ready</code> shows data plane green</li>
+        <li>Call out approval + Learning for regulated flows</li>
+      </ul>
+    </section>
+
+    <section class="slide">
+      <div class="bar">Discussion &amp; next steps</div>
+      <div class="grid">
+        <div class="card"><h3>Now</h3><p>Compose green · dashboard analyze · pick pilot · approval owners</p></div>
+        <div class="card"><h3>Next</h3><p>Azure full · real repo source · REQUIRE_AUTH · CI Action</p></div>
+        <div class="card"><h3>Later</h3><p>Private AKS · Key Vault · Entra · HA · full invoker APIs</p></div>
+      </div>
+    </section>
+
+    <section class="slide title-slide">
+      <p class="brand">GIE</p>
+      <h1>Govern AI decisions before they ship.</h1>
+      <p class="lede">Questions &amp; discussion — docs/ · deploy/azure/ · deploy/docker/ · web/</p>
+    </section>
+  </div>
+
+  <div class="nav">
+    <button type="button" id="prev">Prev</button>
+    <span id="pos">1</span>
+    <button type="button" id="next">Next</button>
+    <span class="hint" style="margin:0 0 0 .5rem;padding:0;color:#9fb3c8">← → keys</span>
+  </div>
+
+  <script>
+    const slides = [...document.querySelectorAll('.slide')];
+    let i = 0;
+    const pos = document.getElementById('pos');
+    function show(n) {
+      i = (n + slides.length) % slides.length;
+      slides.forEach((s, idx) => s.classList.toggle('on', idx === i));
+      pos.textContent = `${i + 1} / ${slides.length}`;
+    }
+    document.getElementById('prev').onclick = () => show(i - 1);
+    document.getElementById('next').onclick = () => show(i + 1);
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ') show(i + 1);
+      if (e.key === 'ArrowLeft') show(i - 1);
+    });
+    show(0);
+  </script>
+</body>
+</html>

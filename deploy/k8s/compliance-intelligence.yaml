@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: compliance-intelligence
+  namespace: gie
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: compliance-intelligence
+  template:
+    metadata:
+      labels:
+        app: compliance-intelligence
+    spec:
+      containers:
+        - name: api
+          image: gie/compliance-intelligence:1.0.0
+          ports:
+            - containerPort: 8084
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: compliance-intelligence
+  namespace: gie
+spec:
+  selector:
+    app: compliance-intelligence
+  ports:
+    - port: 8084
+      targetPort: 8084

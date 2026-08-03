@@ -1,0 +1,484 @@
+{
+  "version": "2026.07.1",
+  "frameworks": {
+    "hipaa": {
+      "name": "HIPAA",
+      "version": "Security/Privacy Rule",
+      "last_update": "2024-12-01",
+      "triggers": [
+        "healthcare",
+        "phi",
+        "hipaa",
+        "ephi",
+        "hospital",
+        "clinic"
+      ],
+      "controls": [
+        {
+          "id": "hipaa-phi-min",
+          "title": "Minimum Necessary PHI",
+          "description": "Limit PHI in AI prompts/logs to minimum necessary",
+          "category": "privacy"
+        },
+        {
+          "id": "hipaa-access",
+          "title": "Access Controls",
+          "description": "Unique user ID, emergency access, automatic logoff for AI systems",
+          "category": "access"
+        },
+        {
+          "id": "hipaa-audit",
+          "title": "Audit Controls",
+          "description": "Record and examine AI access to ePHI",
+          "category": "audit"
+        },
+        {
+          "id": "hipaa-baa",
+          "title": "Business Associate Agreements",
+          "description": "BAAs with AI vendors processing ePHI",
+          "category": "vendor"
+        }
+      ]
+    },
+    "gdpr": {
+      "name": "GDPR",
+      "version": "2016/679",
+      "last_update": "2024-06-01",
+      "triggers": [
+        "gdpr",
+        "eu",
+        "personal data",
+        "eea",
+        "europe"
+      ],
+      "controls": [
+        {
+          "id": "gdpr-art5",
+          "title": "Purpose Limitation",
+          "description": "Process personal data in AI only for specified purposes",
+          "category": "privacy"
+        },
+        {
+          "id": "gdpr-art22",
+          "title": "Automated Decision-Making",
+          "description": "Safeguards for solely automated decisions",
+          "category": "governance"
+        },
+        {
+          "id": "gdpr-art32",
+          "title": "Security of Processing",
+          "description": "Technical/organizational measures for AI processing",
+          "category": "security"
+        },
+        {
+          "id": "gdpr-dpia",
+          "title": "DPIA for High-Risk AI",
+          "description": "Data protection impact assessment for high-risk AI",
+          "category": "governance"
+        }
+      ]
+    },
+    "pci_dss": {
+      "name": "PCI DSS",
+      "version": "4.0",
+      "last_update": "2024-03-01",
+      "triggers": [
+        "pci",
+        "payment",
+        "cardholder",
+        "pan",
+        "credit card"
+      ],
+      "controls": [
+        {
+          "id": "pci-pan-mask",
+          "title": "PAN Masking",
+          "description": "Mask PAN in prompts, logs, model outputs",
+          "category": "data"
+        },
+        {
+          "id": "pci-key-mgmt",
+          "title": "Key Management",
+          "description": "Protect keys used by AI payment services",
+          "category": "crypto"
+        },
+        {
+          "id": "pci-logging",
+          "title": "Logging of Access",
+          "description": "Audit AI access to CHD environments",
+          "category": "audit"
+        }
+      ]
+    },
+    "soc2": {
+      "name": "SOC 2",
+      "version": "TSC 2017",
+      "last_update": "2023-01-01",
+      "triggers": [
+        "soc2",
+        "soc 2",
+        "trust services",
+        "saas"
+      ],
+      "controls": [
+        {
+          "id": "soc2-cc6",
+          "title": "Logical Access (CC6)",
+          "description": "Least privilege for AI agent identities",
+          "category": "access"
+        },
+        {
+          "id": "soc2-cc7",
+          "title": "System Monitoring (CC7)",
+          "description": "Monitor AI runtime anomalies",
+          "category": "monitor"
+        },
+        {
+          "id": "soc2-cc8",
+          "title": "Change Management (CC8)",
+          "description": "Control changes to AI models/prompts/policies",
+          "category": "change"
+        }
+      ]
+    },
+    "iso27001": {
+      "name": "ISO/IEC 27001",
+      "version": "2022",
+      "last_update": "2022-10-01",
+      "triggers": [
+        "iso27001",
+        "iso 27001",
+        "isms"
+      ],
+      "controls": [
+        {
+          "id": "iso-a5",
+          "title": "Organizational Controls",
+          "description": "Policies governing AI information security",
+          "category": "policy"
+        },
+        {
+          "id": "iso-a8",
+          "title": "Asset Management",
+          "description": "Inventory models, prompts, datasets as assets",
+          "category": "asset"
+        },
+        {
+          "id": "iso-a8-access",
+          "title": "Access Control",
+          "description": "Access rights for AI systems",
+          "category": "access"
+        }
+      ]
+    },
+    "nist_ai_rmf": {
+      "name": "NIST AI RMF",
+      "version": "1.0",
+      "last_update": "2023-01-26",
+      "triggers": [
+        "nist ai",
+        "ai rmf",
+        "united states",
+        "us"
+      ],
+      "controls": [
+        {
+          "id": "nist-govern",
+          "title": "Govern",
+          "description": "Culture of AI risk management",
+          "category": "govern"
+        },
+        {
+          "id": "nist-map",
+          "title": "Map",
+          "description": "Context and risk identification",
+          "category": "map"
+        },
+        {
+          "id": "nist-measure",
+          "title": "Measure",
+          "description": "Analyze and track AI risks",
+          "category": "measure"
+        },
+        {
+          "id": "nist-manage",
+          "title": "Manage",
+          "description": "Prioritize and respond to AI risks",
+          "category": "manage"
+        }
+      ]
+    },
+    "nist_csf": {
+      "name": "NIST CSF",
+      "version": "2.0",
+      "last_update": "2024-02-26",
+      "triggers": [
+        "nist csf",
+        "cybersecurity framework"
+      ],
+      "controls": [
+        {
+          "id": "csf-identify",
+          "title": "Identify",
+          "description": "Asset and risk identification for AI",
+          "category": "identify"
+        },
+        {
+          "id": "csf-protect",
+          "title": "Protect",
+          "description": "Safeguards for AI workloads",
+          "category": "protect"
+        },
+        {
+          "id": "csf-detect",
+          "title": "Detect",
+          "description": "Detect anomalous AI activity",
+          "category": "detect"
+        },
+        {
+          "id": "csf-respond",
+          "title": "Respond",
+          "description": "Incident response for AI systems",
+          "category": "respond"
+        },
+        {
+          "id": "csf-recover",
+          "title": "Recover",
+          "description": "Recovery plans for AI outages",
+          "category": "recover"
+        }
+      ]
+    },
+    "eu_ai_act": {
+      "name": "EU AI Act",
+      "version": "2024/1689",
+      "last_update": "2024-08-01",
+      "triggers": [
+        "eu ai act",
+        "high-risk",
+        "europe",
+        "eea",
+        "artificial intelligence act"
+      ],
+      "controls": [
+        {
+          "id": "euai-risk-mgmt",
+          "title": "Risk Management System",
+          "description": "Risk management for high-risk AI",
+          "category": "govern"
+        },
+        {
+          "id": "euai-data-gov",
+          "title": "Data Governance",
+          "description": "Training/validation data quality",
+          "category": "data"
+        },
+        {
+          "id": "euai-transparency",
+          "title": "Transparency",
+          "description": "Disclose AI interactions where required",
+          "category": "transparency"
+        },
+        {
+          "id": "euai-human",
+          "title": "Human Oversight",
+          "description": "Effective human oversight measures",
+          "category": "oversight"
+        }
+      ]
+    },
+    "fda": {
+      "name": "FDA (SaMD/AI-ML)",
+      "version": "AI/ML Action Plan",
+      "last_update": "2025-01-01",
+      "triggers": [
+        "fda",
+        "samd",
+        "medical device",
+        "clinical",
+        "diagnostic"
+      ],
+      "controls": [
+        {
+          "id": "fda-qms",
+          "title": "Quality Management System",
+          "description": "QMS for AI/ML medical device software",
+          "category": "quality"
+        },
+        {
+          "id": "fda-gmlp",
+          "title": "Good Machine Learning Practice",
+          "description": "GMLP across AI lifecycle",
+          "category": "ml"
+        },
+        {
+          "id": "fda-change",
+          "title": "Predetermined Change Control",
+          "description": "Plan for model updates",
+          "category": "change"
+        }
+      ]
+    },
+    "rbi": {
+      "name": "RBI (India)",
+      "version": "Digital Lending / IT Framework",
+      "last_update": "2024-09-01",
+      "triggers": [
+        "rbi",
+        "india",
+        "reserve bank",
+        "nbfc",
+        "digital lending"
+      ],
+      "controls": [
+        {
+          "id": "rbi-it-gov",
+          "title": "IT Governance",
+          "description": "Board oversight of AI/IT systems",
+          "category": "govern"
+        },
+        {
+          "id": "rbi-data-loc",
+          "title": "Data Localization",
+          "description": "Payment data storage requirements",
+          "category": "data"
+        },
+        {
+          "id": "rbi-outsourcing",
+          "title": "Outsourcing Controls",
+          "description": "Controls for AI vendor outsourcing",
+          "category": "vendor"
+        }
+      ]
+    },
+    "mas": {
+      "name": "MAS (Singapore)",
+      "version": "FEAT / TRM",
+      "last_update": "2024-06-01",
+      "triggers": [
+        "mas",
+        "singapore",
+        "feat",
+        "monetary authority"
+      ],
+      "controls": [
+        {
+          "id": "mas-feat",
+          "title": "FEAT Principles",
+          "description": "Fairness, Ethics, Accountability, Transparency for AI",
+          "category": "ethics"
+        },
+        {
+          "id": "mas-trm",
+          "title": "Technology Risk Management",
+          "description": "TRM guidelines for AI systems",
+          "category": "risk"
+        },
+        {
+          "id": "mas-model",
+          "title": "Model Risk Management",
+          "description": "Validate and monitor AI models",
+          "category": "model"
+        }
+      ]
+    },
+    "dora": {
+      "name": "DORA",
+      "version": "EU 2022/2554",
+      "last_update": "2025-01-17",
+      "triggers": [
+        "dora",
+        "digital operational resilience",
+        "financial entity",
+        "ict"
+      ],
+      "controls": [
+        {
+          "id": "dora-ict-risk",
+          "title": "ICT Risk Management",
+          "description": "ICT risk framework covering AI systems",
+          "category": "risk"
+        },
+        {
+          "id": "dora-incident",
+          "title": "Incident Reporting",
+          "description": "Major ICT-related incident reporting",
+          "category": "incident"
+        },
+        {
+          "id": "dora-testing",
+          "title": "Resilience Testing",
+          "description": "Digital operational resilience testing",
+          "category": "test"
+        },
+        {
+          "id": "dora-thirdparty",
+          "title": "Third-Party Risk",
+          "description": "ICT third-party risk for AI providers",
+          "category": "vendor"
+        }
+      ]
+    },
+    "ccpa": {
+      "name": "CCPA/CPRA",
+      "version": "CPRA",
+      "last_update": "2023-01-01",
+      "triggers": [
+        "ccpa",
+        "cpra",
+        "california",
+        "consumer privacy"
+      ],
+      "controls": [
+        {
+          "id": "ccpa-notice",
+          "title": "Privacy Notice",
+          "description": "Disclose AI processing of personal information",
+          "category": "privacy"
+        },
+        {
+          "id": "ccpa-rights",
+          "title": "Consumer Rights",
+          "description": "Support access/delete for AI-held personal data",
+          "category": "rights"
+        },
+        {
+          "id": "ccpa-optout",
+          "title": "Opt-Out of Sale/Share",
+          "description": "Honor opt-outs for AI data sharing",
+          "category": "rights"
+        }
+      ]
+    },
+    "internal_corporate": {
+      "name": "Internal Corporate Policies",
+      "version": "org",
+      "last_update": "2026-07-01",
+      "triggers": [
+        "internal",
+        "corporate policy",
+        "acceptable use"
+      ],
+      "controls": [
+        {
+          "id": "int-aup",
+          "title": "Acceptable Use of AI",
+          "description": "Employees follow approved AI usage policy",
+          "category": "policy"
+        },
+        {
+          "id": "int-shadow",
+          "title": "Shadow AI Prohibition",
+          "description": "No unsanctioned AI tools for sensitive data",
+          "category": "policy"
+        },
+        {
+          "id": "int-review",
+          "title": "AI Use Case Review",
+          "description": "Security/legal review before production AI",
+          "category": "govern"
+        }
+      ]
+    }
+  }
+}

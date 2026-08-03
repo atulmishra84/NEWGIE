@@ -1,0 +1,6 @@
+apiVersion: v2
+name: risk-intelligence
+description: GIE Risk Intelligence Agent
+type: application
+version: 1.0.0
+appVersion: "1.0.0"

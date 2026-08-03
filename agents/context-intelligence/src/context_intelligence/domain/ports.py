@@ -127,6 +127,44 @@ class CacheStore(Protocol):
 
 
 @runtime_checkable
+class IdempotencyCache(Protocol):
+    """Maps tenant idempotency keys to scan ids."""
+
+    async def get(self, tenant_id: str, key: str) -> str | None: ...
+
+    async def set(self, tenant_id: str, key: str, scan_id: str) -> None: ...
+
+
+@runtime_checkable
+class ModelCache(Protocol):
+    """Caches serialized context models."""
+
+    async def get(self, tenant_id: str, model_id: UUID, version: int | None) -> str | None: ...
+
+    async def set(
+        self,
+        tenant_id: str,
+        model_id: UUID,
+        version: int | None,
+        payload: str,
+    ) -> None: ...
+
+
+@runtime_checkable
+class OutboxWriter(Protocol):
+    """Persists domain events for reliable publish."""
+
+    async def enqueue(self, event: EventEnvelope) -> UUID: ...
+
+
+@runtime_checkable
+class RateLimiter(Protocol):
+    """Tenant/action rate limiting."""
+
+    async def allow(self, tenant_id: str, action: str, limit: int, window_seconds: int) -> bool: ...
+
+
+@runtime_checkable
 class ScanEnqueuer(Protocol):
     """Background job enqueue port (Celery / worker)."""
 

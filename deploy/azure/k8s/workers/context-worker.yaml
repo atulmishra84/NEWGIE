@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: context-worker
+  namespace: gie
+  labels:
+    app: context-worker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: context-worker
+  template:
+    metadata:
+      labels:
+        app: context-worker
+    spec:
+      containers:
+        - name: worker
+          image: REPLACE_IMAGE
+          imagePullPolicy: IfNotPresent
+          command:
+            - celery
+            - -A
+            - context_intelligence.infrastructure.celery_app.app
+            - worker
+            - -l
+            - INFO
+            - -Q
+            - scans
+          envFrom:
+            - configMapRef:
+                name: context-intelligence-config
+            - secretRef:
+                name: context-intelligence-secrets
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              cpu: "1"
+              memory: 1Gi

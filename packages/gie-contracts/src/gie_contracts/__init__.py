@@ -1,4 +1,4 @@
-"""GIE shared contracts — Context Model, events, envelopes."""
+"""GIE shared contracts — Context Model, Knowledge Model, events, envelopes."""
 
 from gie_contracts.context_model import (
     CONTEXT_MODEL_SCHEMA,
@@ -24,6 +24,149 @@ from gie_contracts.events import (
     ContextScanStarted,
 )
 from gie_contracts.envelope import ErrorBody, ObservabilityEnvelope, ResponseMeta
+from gie_contracts.knowledge import (
+    KNOWLEDGE_SCHEMA,
+    ExplainableRetrievalResult,
+    KnowledgeDiff,
+    KnowledgeDomain,
+    KnowledgeEdge,
+    KnowledgeGraphSnapshot,
+    KnowledgeNode,
+    KnowledgeQueryRequest,
+    KnowledgeUpsertRequest,
+    NodeKind,
+    RelationType,
+    RetrievalHit,
+)
+from gie_contracts.knowledge_events import (
+    KnowledgeEdgeUpserted,
+    KnowledgeNodeUpserted,
+    KnowledgeQueryExecuted,
+    KnowledgeReindexRequested,
+    KnowledgeVersionPublished,
+)
+from gie_contracts.policy import (
+    POLICY_SCHEMA,
+    GeneratedArtifact,
+    GuardrailRecommendation,
+    OutputFormat,
+    PolicyDecision,
+    PolicyGenerateRequest,
+    PolicyInputBundle,
+    PolicyTarget,
+)
+from gie_contracts.policy_events import (
+    PolicyGenerationCompleted,
+    PolicyGenerationFailed,
+    PolicyGenerationRequested,
+)
+from gie_contracts.risk import (
+    RISK_SCHEMA,
+    RiskCalculateRequest,
+    RiskCategory,
+    RiskInputBundle,
+    RiskRecalculateRequest,
+    RiskReport,
+)
+from gie_contracts.risk_events import (
+    RiskCalculationCompleted,
+    RiskCalculationFailed,
+    RiskCalculationRequested,
+)
+from gie_contracts.compliance import (
+    COMPLIANCE_SCHEMA,
+    ComplianceAnalyzeRequest,
+    ComplianceInputBundle,
+    ComplianceReport,
+    ComplianceValidateRequest,
+    FrameworkId,
+)
+from gie_contracts.compliance_events import (
+    ComplianceAnalysisCompleted,
+    ComplianceValidationCompleted,
+)
+from gie_contracts.recommendation import (
+    RECOMMENDATION_SCHEMA,
+    RecommendationApproveRequest,
+    RecommendationGenerateRequest,
+    RecommendationInputBundle,
+    RecommendationReport,
+)
+from gie_contracts.recommendation_events import (
+    RecommendationApproved,
+    RecommendationGenerated,
+)
+from gie_contracts.policy_generator import (
+    POLICYGEN_SCHEMA,
+    PolicyPackageGenerateRequest,
+    PolicyGeneratorInputBundle,
+    PolicyPackage,
+    PolicyPackageValidateRequest,
+)
+from gie_contracts.policy_generator_events import (
+    PolicyPackageGenerationCompleted,
+    PolicyPackageValidationCompleted,
+)
+from gie_contracts.explainability import (
+    EXPLAINABILITY_SCHEMA,
+    ExplainRequest,
+    ExplainabilityInputBundle,
+    ExplanationReport,
+    ReasoningPathRequest,
+)
+from gie_contracts.explainability_events import (
+    ExplanationGenerated,
+    ReasoningPathBuilt,
+)
+from gie_contracts.validation import (
+    VALIDATION_SCHEMA,
+    SimulateRequest,
+    ValidateRequest,
+    ValidationInputBundle,
+    ValidationReport,
+)
+from gie_contracts.validation_events import (
+    SimulationCompleted,
+    ValidationCompleted,
+)
+from gie_contracts.learning import (
+    LEARNING_SCHEMA,
+    ApproveKnowledgeRequest,
+    FeedbackRequest,
+    LearnRequest,
+    LearningInputBundle,
+    LearningReport,
+)
+from gie_contracts.learning_events import (
+    FeedbackAccepted,
+    KnowledgeChangeApproved,
+    LearningCycleCompleted,
+)
+from gie_contracts.integration import (
+    INTEGRATION_SCHEMA,
+    AuthTokenRequest,
+    ConnectRequest,
+    IntegrationCatalogResponse,
+    IntegrationConnection,
+    SyncRequest,
+)
+from gie_contracts.integration_events import (
+    CircuitBreakerOpened,
+    IntegrationConnected,
+    IntegrationSyncCompleted,
+    WebhookReceived,
+)
+from gie_contracts.orchestrator import (
+    ORCHESTRATOR_SCHEMA,
+    AnalyzeRequest,
+    ExecutionRecord,
+    WorkflowRequest,
+)
+from gie_contracts.orchestrator_events import (
+    ExecutionCompleted,
+    ExecutionStarted,
+    StepCompleted,
+)
 from gie_contracts.sources import ScanSource, SourceType
 from gie_contracts.fleet import (
     FULL_GIE_AGENT_IDS,
@@ -49,6 +192,90 @@ from gie_contracts.fleet import (
 
 __all__ = [
     "CONTEXT_MODEL_SCHEMA",
+    "KNOWLEDGE_SCHEMA",
+    "POLICY_SCHEMA",
+    "RISK_SCHEMA",
+    "COMPLIANCE_SCHEMA",
+    "RECOMMENDATION_SCHEMA",
+    "POLICYGEN_SCHEMA",
+    "EXPLAINABILITY_SCHEMA",
+    "VALIDATION_SCHEMA",
+    "LEARNING_SCHEMA",
+    "INTEGRATION_SCHEMA",
+    "ORCHESTRATOR_SCHEMA",
+    "ApproveKnowledgeRequest",
+    "FeedbackAccepted",
+    "FeedbackRequest",
+    "KnowledgeChangeApproved",
+    "LearnRequest",
+    "LearningCycleCompleted",
+    "LearningInputBundle",
+    "LearningReport",
+    "AuthTokenRequest",
+    "CircuitBreakerOpened",
+    "ConnectRequest",
+    "IntegrationCatalogResponse",
+    "IntegrationConnected",
+    "IntegrationConnection",
+    "IntegrationSyncCompleted",
+    "SyncRequest",
+    "WebhookReceived",
+    "AnalyzeRequest",
+    "ExecutionCompleted",
+    "ExecutionRecord",
+    "ExecutionStarted",
+    "StepCompleted",
+    "WorkflowRequest",
+    "SimulateRequest",
+    "SimulationCompleted",
+    "ValidateRequest",
+    "ValidationCompleted",
+    "ValidationInputBundle",
+    "ValidationReport",
+    "ExplainRequest",
+    "ExplainabilityInputBundle",
+    "ExplanationGenerated",
+    "ExplanationReport",
+    "ReasoningPathBuilt",
+    "ReasoningPathRequest",
+    "PolicyPackageGenerateRequest",
+    "PolicyPackageGenerationCompleted",
+    "PolicyGeneratorInputBundle",
+    "PolicyPackage",
+    "PolicyPackageValidateRequest",
+    "PolicyPackageValidationCompleted",
+    "RecommendationApproveRequest",
+    "RecommendationApproved",
+    "RecommendationGenerateRequest",
+    "RecommendationGenerated",
+    "RecommendationInputBundle",
+    "RecommendationReport",
+    "ComplianceAnalyzeRequest",
+    "ComplianceAnalysisCompleted",
+    "ComplianceInputBundle",
+    "ComplianceReport",
+    "ComplianceValidateRequest",
+    "ComplianceValidationCompleted",
+    "FrameworkId",
+    "RiskCalculateRequest",
+    "RiskCalculationCompleted",
+    "RiskCalculationFailed",
+    "RiskCalculationRequested",
+    "RiskCategory",
+    "RiskInputBundle",
+    "RiskRecalculateRequest",
+    "RiskReport",
+
+    "GeneratedArtifact",
+    "GuardrailRecommendation",
+    "OutputFormat",
+    "PolicyDecision",
+    "PolicyGenerateRequest",
+    "PolicyGenerationCompleted",
+    "PolicyGenerationFailed",
+    "PolicyGenerationRequested",
+    "PolicyInputBundle",
+    "PolicyTarget",
     "AiSection",
     "Confidence",
     "ContextModel",
@@ -61,14 +288,30 @@ __all__ = [
     "DeploymentSection",
     "ErrorBody",
     "EvidenceRef",
+    "ExplainableRetrievalResult",
     "GraphEdge",
     "GraphNode",
     "GraphSection",
     "IdentitySection",
     "InterfacesSection",
+    "KnowledgeDiff",
+    "KnowledgeDomain",
+    "KnowledgeEdge",
+    "KnowledgeEdgeUpserted",
+    "KnowledgeGraphSnapshot",
+    "KnowledgeNode",
+    "KnowledgeNodeUpserted",
+    "KnowledgeQueryExecuted",
+    "KnowledgeQueryRequest",
+    "KnowledgeReindexRequested",
+    "KnowledgeUpsertRequest",
+    "KnowledgeVersionPublished",
+    "NodeKind",
     "ObservabilityEnvelope",
     "ProvenanceSection",
+    "RelationType",
     "ResponseMeta",
+    "RetrievalHit",
     "ScanSource",
     "SecuritySection",
     "SourceType",

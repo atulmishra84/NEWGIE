@@ -1,7 +1,7 @@
-replicaCount: 2
+replicaCount: 1
 
 image:
-  repository: ghcr.io/gie/context-intelligence
+  repository: gie/context-intelligence
   tag: "1.0.0"
   pullPolicy: IfNotPresent
 
@@ -61,29 +61,30 @@ resources:
     memory: 2Gi
 
 autoscaling:
-  enabled: true
-  minReplicas: 2
-  maxReplicas: 10
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 4
   targetCPUUtilizationPercentage: 70
   targetMemoryUtilizationPercentage: 80
 
 env:
-  GIE_ENV: production
-  FLAG_ENABLE_CLOUD_SCANNERS: "true"
+  GIE_ENV: docker
+  REQUIRE_AUTH: "false"
+  FLAG_ENABLE_CLOUD_SCANNERS: "false"
   SCAN_MAX_FILE_BYTES: "1048576"
   SCAN_MAX_FILES: "10000"
   OTEL_EXPORTER_OTLP_ENDPOINT: ""
   KAFKA_BOOTSTRAP_SERVERS: kafka.gie.svc.cluster.local:9092
   QDRANT_URL: http://qdrant.gie.svc.cluster.local:6333
   NEO4J_URI: bolt://neo4j.gie.svc.cluster.local:7687
-  REDIS_URL: redis://redis.gie.svc.cluster.local:6379/0
 
 secrets:
-  databaseUrl: "postgresql+asyncpg://gie:CHANGE_ME@postgres:5432/gie_context"
-  jwtSecret: "replace-with-32-byte-random"
-  apiKeyPepper: "replace-with-random-pepper"
+  databaseUrl: ""
+  redisUrl: ""
+  jwtSecret: ""
+  apiKeyPepper: ""
   neo4jUser: neo4j
-  neo4jPassword: "replace-neo4j-password"
+  neo4jPassword: ""
 
 nodeSelector: {}
 tolerations: []

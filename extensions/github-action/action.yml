@@ -1,0 +1,28 @@
+name: "GIE Guardrails"
+description: "Run GIE policy validation / sync via Integration Intelligence Agent"
+inputs:
+  base_url:
+    description: "Integration agent base URL"
+    required: false
+    default: "http://localhost:8090"
+  api_key:
+    description: "GIE API key"
+    required: true
+  tenant_id:
+    description: "Tenant id"
+    required: false
+    default: "default"
+  connection_id:
+    description: "Existing connection id to sync"
+    required: false
+runs:
+  using: "composite"
+  steps:
+    - name: Sync GIE
+      shell: bash
+      run: |
+        curl -fsS -X POST "${{ inputs.base_url }}/v1/integrations/${{ inputs.connection_id }}/sync" \
+          -H "Content-Type: application/json" \
+          -H "X-API-Key: ${{ inputs.api_key }}" \
+          -H "x-tenant-id: ${{ inputs.tenant_id }}" \
+          -d "{\"tenant_id\":\"${{ inputs.tenant_id }}\",\"payload\":{\"kind\":\"ci_sync\",\"count\":1}}"

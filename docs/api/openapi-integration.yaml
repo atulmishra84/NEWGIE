@@ -1,0 +1,43 @@
+openapi: 3.1.0
+info:
+  title: GIE Integration Intelligence Agent API
+  version: 1.0.0
+servers:
+  - url: http://localhost:8090
+paths:
+  /integrations:
+    get:
+      summary: List supported platforms
+      responses:
+        "200":
+          description: Platform catalog
+  /integrations/connect:
+    post:
+      summary: Connect a platform
+      responses:
+        "200":
+          description: IntegrationConnection
+  /integrations/{connection_id}/sync:
+    post:
+      summary: Sync connection
+      responses:
+        "200":
+          description: SyncResult
+  /webhooks/{platform_id}:
+    post:
+      summary: Ingest webhook
+      responses:
+        "200":
+          description: WebhookEvent
+  /auth/token:
+    post:
+      summary: Issue auth token
+      responses:
+        "200":
+          description: AuthTokenResponse
+  /audit:
+    get:
+      summary: Audit logs
+      responses:
+        "200":
+          description: Audit list

@@ -1,0 +1,23 @@
+{
+  "name": "gie-vscode",
+  "displayName": "GIE Guardrails",
+  "description": "Guardrails Intelligence Engine integration for VS Code",
+  "version": "1.0.0",
+  "engines": { "vscode": "^1.85.0" },
+  "categories": ["Other"],
+  "activationEvents": ["onCommand:gie.scan", "onCommand:gie.connect"],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      { "command": "gie.scan", "title": "GIE: Scan Workspace" },
+      { "command": "gie.connect", "title": "GIE: Connect Integration" }
+    ],
+    "configuration": {
+      "title": "GIE",
+      "properties": {
+        "gie.baseUrl": { "type": "string", "default": "http://localhost:8090" },
+        "gie.apiKey": { "type": "string", "default": "" }
+      }
+    }
+  }
+}

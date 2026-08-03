@@ -1,0 +1,156 @@
+"""Built-in policy templates catalog."""
+
+from __future__ import annotations
+
+from gie_contracts.policy_generator import PolicyFormat, PolicyTemplate
+
+TEMPLATES: list[PolicyTemplate] = [
+    PolicyTemplate(
+        template_id="tpl-guardrails-yaml",
+        name="Universal Guardrails YAML",
+        format=PolicyFormat.YAML,
+        description="Cross-platform guardrails.yaml",
+        filename="guardrails.yaml",
+        tags=["baseline", "yaml"],
+    ),
+    PolicyTemplate(
+        template_id="tpl-guardrails-json",
+        name="Universal Guardrails JSON",
+        format=PolicyFormat.JSON,
+        description="Cross-platform guardrails.json",
+        filename="guardrails.json",
+        tags=["baseline", "json"],
+    ),
+    PolicyTemplate(
+        template_id="tpl-opa",
+        name="OPA Rego Admission",
+        format=PolicyFormat.OPA_REGO,
+        description="opa.rego runtime policy",
+        filename="opa.rego",
+        tags=["opa", "runtime"],
+    ),
+    PolicyTemplate(
+        template_id="tpl-foundry",
+        name="Azure AI Foundry Policy",
+        format=PolicyFormat.AZURE_AI_FOUNDRY,
+        description="azure-foundry-policy.json",
+        filename="azure-foundry-policy.json",
+        tags=["azure"],
+    ),
+    PolicyTemplate(
+        template_id="tpl-openai",
+        name="OpenAI Guardrails Policy",
+        format=PolicyFormat.OPENAI_GUARDRAILS,
+        description="openai-policy.json",
+        filename="openai-policy.json",
+        tags=["openai"],
+    ),
+    PolicyTemplate(
+        template_id="tpl-langgraph",
+        name="LangGraph Guardrails",
+        format=PolicyFormat.LANGGRAPH,
+        description="langgraph-policy.json",
+        filename="langgraph-policy.json",
+        tags=["langgraph"],
+    ),
+    PolicyTemplate(
+        template_id="tpl-crewai",
+        name="CrewAI Policies",
+        format=PolicyFormat.CREWAI,
+        description="crewai-policy.json",
+        filename="crewai-policy.json",
+        tags=["crewai"],
+    ),
+    PolicyTemplate(
+        template_id="tpl-autogen",
+        name="AutoGen Policies",
+        format=PolicyFormat.AUTOGEN,
+        description="autogen-policy.json",
+        filename="autogen-policy.json",
+        tags=["autogen"],
+    ),
+    PolicyTemplate(
+        template_id="tpl-sk",
+        name="Semantic Kernel Policies",
+        format=PolicyFormat.SEMANTIC_KERNEL,
+        description="semantic-kernel-policy.json",
+        filename="semantic-kernel-policy.json",
+        tags=["semantic-kernel"],
+    ),
+    PolicyTemplate(
+        template_id="tpl-nemo",
+        name="NVIDIA NeMo Guardrails",
+        format=PolicyFormat.NVIDIA_NEMO,
+        description="nemo-rails.co",
+        filename="nemo-rails.co",
+        tags=["nemo"],
+    ),
+    PolicyTemplate(
+        template_id="tpl-tf",
+        name="Terraform Modules",
+        format=PolicyFormat.TERRAFORM,
+        description="guardrails.tf",
+        filename="guardrails.tf",
+        tags=["terraform", "iac"],
+    ),
+    PolicyTemplate(
+        template_id="tpl-k8s",
+        name="Kubernetes Policies",
+        format=PolicyFormat.KUBERNETES,
+        description="k8s-network-policy.yaml",
+        filename="k8s-network-policy.yaml",
+        tags=["kubernetes"],
+    ),
+    PolicyTemplate(
+        template_id="tpl-admission",
+        name="Admission Controllers",
+        format=PolicyFormat.ADMISSION_CONTROLLER,
+        description="validating-admission-policy.yaml",
+        filename="validating-admission-policy.yaml",
+        tags=["admission"],
+    ),
+    PolicyTemplate(
+        template_id="tpl-gateway",
+        name="API Gateway Policies",
+        format=PolicyFormat.API_GATEWAY,
+        description="api-gateway-policy.json",
+        filename="api-gateway-policy.json",
+        tags=["gateway"],
+    ),
+    PolicyTemplate(
+        template_id="tpl-prompt",
+        name="Prompt Policies",
+        format=PolicyFormat.PROMPT,
+        description="prompt-policy.json",
+        filename="prompt-policy.json",
+        tags=["prompt"],
+    ),
+    PolicyTemplate(
+        template_id="tpl-identity",
+        name="Identity Policies",
+        format=PolicyFormat.IDENTITY,
+        description="identity-policy.json",
+        filename="identity-policy.json",
+        tags=["identity"],
+    ),
+    PolicyTemplate(
+        template_id="tpl-runtime",
+        name="Runtime Policies",
+        format=PolicyFormat.RUNTIME,
+        description="runtime-policy.json",
+        filename="runtime-policy.json",
+        tags=["runtime"],
+    ),
+    PolicyTemplate(
+        template_id="tpl-dlp",
+        name="DLP Policies",
+        format=PolicyFormat.DLP,
+        description="dlp-policy.json",
+        filename="dlp-policy.json",
+        tags=["dlp", "privacy"],
+    ),
+]
+
+
+def list_templates() -> list[PolicyTemplate]:
+    return list(TEMPLATES)

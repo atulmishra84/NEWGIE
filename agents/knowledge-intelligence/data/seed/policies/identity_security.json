@@ -1,0 +1,136 @@
+{
+  "domain": "identity_security",
+  "nodes": [
+    {
+      "node_id": "fw-identity_security",
+      "kind": "Framework",
+      "domain": "identity_security",
+      "title": "Identity Security Best Practices",
+      "summary": "Enterprise identity security patterns for AI systems",
+      "body": "Enterprise identity security patterns for AI systems",
+      "tags": [
+        "framework",
+        "root"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-fw-identity_security",
+          "source_title": "Identity Security Best Practices",
+          "citation": "identity_security",
+          "excerpt": "Enterprise identity security patterns for AI systems"
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "id-least-privilege",
+      "kind": "Policy",
+      "domain": "identity_security",
+      "title": "Least Privilege for Agents",
+      "summary": "Grant AI agents minimal tool and data permissions.",
+      "body": "Grant AI agents minimal tool and data permissions.",
+      "tags": [
+        "identity"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-id-least-privilege",
+          "source_title": "Least Privilege for Agents",
+          "citation": "identity_security",
+          "excerpt": "Grant AI agents minimal tool and data permissions."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "id-workload-identity",
+      "kind": "Policy",
+      "domain": "identity_security",
+      "title": "Workload Identity",
+      "summary": "Use SPIFFE/OIDC workload identity instead of long-lived secrets.",
+      "body": "Use SPIFFE/OIDC workload identity instead of long-lived secrets.",
+      "tags": [
+        "identity"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-id-workload-identity",
+          "source_title": "Workload Identity",
+          "citation": "identity_security",
+          "excerpt": "Use SPIFFE/OIDC workload identity instead of long-lived secrets."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "id-human-in-loop",
+      "kind": "Policy",
+      "domain": "identity_security",
+      "title": "Human-in-the-Loop Approvals",
+      "summary": "Require human approval for high-impact agent actions.",
+      "body": "Require human approval for high-impact agent actions.",
+      "tags": [
+        "identity"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-id-human-in-loop",
+          "source_title": "Human-in-the-Loop Approvals",
+          "citation": "identity_security",
+          "excerpt": "Require human approval for high-impact agent actions."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "id-mfa-admin",
+      "kind": "Policy",
+      "domain": "identity_security",
+      "title": "MFA for Admin Surfaces",
+      "summary": "Enforce MFA on AI platform admin and policy consoles.",
+      "body": "Enforce MFA on AI platform admin and policy consoles.",
+      "tags": [
+        "identity"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-id-mfa-admin",
+          "source_title": "MFA for Admin Surfaces",
+          "citation": "identity_security",
+          "excerpt": "Enforce MFA on AI platform admin and policy consoles."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    }
+  ]
+}

@@ -1,0 +1,86 @@
+{
+  "domain": "soc2",
+  "nodes": [
+    {
+      "node_id": "fw-soc2",
+      "kind": "Framework",
+      "domain": "soc2",
+      "title": "SOC 2",
+      "summary": "Service Organization Control 2 Trust Services Criteria",
+      "body": "Service Organization Control 2 Trust Services Criteria",
+      "tags": [
+        "framework",
+        "root"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-fw-soc2",
+          "source_title": "SOC 2",
+          "citation": "soc2",
+          "excerpt": "Service Organization Control 2 Trust Services Criteria"
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "soc2-cc6",
+      "kind": "Control",
+      "domain": "soc2",
+      "title": "Logical Access (CC6)",
+      "summary": "Enforce least privilege for AI agent identities and tools.",
+      "body": "Enforce least privilege for AI agent identities and tools.",
+      "tags": [
+        "compliance",
+        "soc2"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-soc2-cc6",
+          "source_title": "Logical Access (CC6)",
+          "citation": "soc2",
+          "excerpt": "Enforce least privilege for AI agent identities and tools."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "soc2-cc7",
+      "kind": "Control",
+      "domain": "soc2",
+      "title": "System Monitoring (CC7)",
+      "summary": "Monitor AI runtime for anomalies and security events.",
+      "body": "Monitor AI runtime for anomalies and security events.",
+      "tags": [
+        "compliance",
+        "soc2"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-soc2-cc7",
+          "source_title": "System Monitoring (CC7)",
+          "citation": "soc2",
+          "excerpt": "Monitor AI runtime for anomalies and security events."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    }
+  ]
+}

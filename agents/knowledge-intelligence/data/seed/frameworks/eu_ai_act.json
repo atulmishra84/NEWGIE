@@ -1,0 +1,86 @@
+{
+  "domain": "eu_ai_act",
+  "nodes": [
+    {
+      "node_id": "fw-eu_ai_act",
+      "kind": "Framework",
+      "domain": "eu_ai_act",
+      "title": "EU AI Act",
+      "summary": "European Union Artificial Intelligence Act risk tiers and obligations",
+      "body": "European Union Artificial Intelligence Act risk tiers and obligations",
+      "tags": [
+        "framework",
+        "root"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-fw-eu_ai_act",
+          "source_title": "EU AI Act",
+          "citation": "eu_ai_act",
+          "excerpt": "European Union Artificial Intelligence Act risk tiers and obligations"
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "euai-high-risk",
+      "kind": "Control",
+      "domain": "eu_ai_act",
+      "title": "High-Risk AI Obligations",
+      "summary": "Risk management, data governance, transparency for high-risk AI.",
+      "body": "Risk management, data governance, transparency for high-risk AI.",
+      "tags": [
+        "compliance",
+        "eu_ai_act"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-euai-high-risk",
+          "source_title": "High-Risk AI Obligations",
+          "citation": "eu_ai_act",
+          "excerpt": "Risk management, data governance, transparency for high-risk AI."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "euai-transparency",
+      "kind": "Control",
+      "domain": "eu_ai_act",
+      "title": "Transparency Obligations",
+      "summary": "Disclose AI interactions and synthetic content where required.",
+      "body": "Disclose AI interactions and synthetic content where required.",
+      "tags": [
+        "compliance",
+        "eu_ai_act"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-euai-transparency",
+          "source_title": "Transparency Obligations",
+          "citation": "eu_ai_act",
+          "excerpt": "Disclose AI interactions and synthetic content where required."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    }
+  ]
+}

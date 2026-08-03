@@ -1,0 +1,113 @@
+{
+  "domain": "prompt_injection",
+  "nodes": [
+    {
+      "node_id": "fw-prompt_injection",
+      "kind": "Framework",
+      "domain": "prompt_injection",
+      "title": "Prompt Injection Attacks",
+      "summary": "Direct/indirect prompt injection techniques and defenses",
+      "body": "Direct/indirect prompt injection techniques and defenses",
+      "tags": [
+        "framework",
+        "root"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-fw-prompt_injection",
+          "source_title": "Prompt Injection Attacks",
+          "citation": "prompt_injection",
+          "excerpt": "Direct/indirect prompt injection techniques and defenses"
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "pi-direct",
+      "kind": "Attack",
+      "domain": "prompt_injection",
+      "title": "Direct Prompt Injection",
+      "summary": "User message overrides system instructions.",
+      "body": "User message overrides system instructions.",
+      "tags": [
+        "attack",
+        "prompt_injection"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-pi-direct",
+          "source_title": "Direct Prompt Injection",
+          "citation": "prompt_injection",
+          "excerpt": "User message overrides system instructions."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "pi-indirect",
+      "kind": "Attack",
+      "domain": "prompt_injection",
+      "title": "Indirect Prompt Injection",
+      "summary": "Malicious content in retrieved docs manipulates the model.",
+      "body": "Malicious content in retrieved docs manipulates the model.",
+      "tags": [
+        "attack",
+        "prompt_injection"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-pi-indirect",
+          "source_title": "Indirect Prompt Injection",
+          "citation": "prompt_injection",
+          "excerpt": "Malicious content in retrieved docs manipulates the model."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "pi-tool-smuggle",
+      "kind": "Attack",
+      "domain": "prompt_injection",
+      "title": "Tool Argument Smuggling",
+      "summary": "Payloads hide instructions inside tool parameters.",
+      "body": "Payloads hide instructions inside tool parameters.",
+      "tags": [
+        "attack",
+        "prompt_injection"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-pi-tool-smuggle",
+          "source_title": "Tool Argument Smuggling",
+          "citation": "prompt_injection",
+          "excerpt": "Payloads hide instructions inside tool parameters."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    }
+  ]
+}

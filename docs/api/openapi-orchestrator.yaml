@@ -1,0 +1,37 @@
+openapi: 3.1.0
+info:
+  title: GIE Orchestrator Agent API
+  version: 1.0.0
+servers:
+  - url: http://localhost:8091
+paths:
+  /analyze:
+    post:
+      summary: Unified analysis (sync/async/streaming)
+      responses:
+        "200":
+          description: ExecutionRecord or SSE stream
+  /workflow:
+    post:
+      summary: Custom workflow
+      responses:
+        "200":
+          description: ExecutionRecord
+  /status:
+    get:
+      summary: Health and agent status
+      responses:
+        "200":
+          description: OrchestratorStatus
+  /execution/{id}:
+    get:
+      summary: Execution state
+      responses:
+        "200":
+          description: ExecutionRecord
+  /trace/{id}:
+    get:
+      summary: Distributed trace
+      responses:
+        "200":
+          description: ExecutionTrace

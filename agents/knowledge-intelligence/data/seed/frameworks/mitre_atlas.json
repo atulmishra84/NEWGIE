@@ -1,0 +1,148 @@
+{
+  "domain": "mitre_atlas",
+  "nodes": [
+    {
+      "node_id": "fw-mitre_atlas",
+      "kind": "Framework",
+      "domain": "mitre_atlas",
+      "title": "MITRE ATLAS",
+      "summary": "Adversarial Threat Landscape for AI Systems",
+      "body": "Adversarial Threat Landscape for AI Systems",
+      "tags": [
+        "framework",
+        "root"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-fw-mitre_atlas",
+          "source_title": "MITRE ATLAS",
+          "citation": "mitre_atlas",
+          "excerpt": "Adversarial Threat Landscape for AI Systems"
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "atlas-aml-t0043",
+      "kind": "Technique",
+      "domain": "mitre_atlas",
+      "title": "AML.T0043: Craft Adversarial Data",
+      "summary": "Create adversarial examples to evade or manipulate models.",
+      "body": "Create adversarial examples to evade or manipulate models.",
+      "tags": [
+        "atlas",
+        "aml.t0043"
+      ],
+      "attributes": {
+        "technique_id": "AML.T0043"
+      },
+      "evidence": [
+        {
+          "evidence_id": "ev-atlas-aml-t0043",
+          "source_title": "AML.T0043: Craft Adversarial Data",
+          "citation": "mitre_atlas",
+          "excerpt": "Create adversarial examples to evade or manipulate models."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "atlas-aml-t0051",
+      "kind": "Technique",
+      "domain": "mitre_atlas",
+      "title": "AML.T0051: LLM Prompt Injection",
+      "summary": "Inject instructions via prompts to subvert model objectives.",
+      "body": "Inject instructions via prompts to subvert model objectives.",
+      "tags": [
+        "atlas",
+        "aml.t0051"
+      ],
+      "attributes": {
+        "technique_id": "AML.T0051"
+      },
+      "evidence": [
+        {
+          "evidence_id": "ev-atlas-aml-t0051",
+          "source_title": "AML.T0051: LLM Prompt Injection",
+          "citation": "mitre_atlas",
+          "excerpt": "Inject instructions via prompts to subvert model objectives."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "atlas-aml-t0054",
+      "kind": "Technique",
+      "domain": "mitre_atlas",
+      "title": "AML.T0054: LLM Jailbreak",
+      "summary": "Bypass safety alignment via roleplay or encoding tricks.",
+      "body": "Bypass safety alignment via roleplay or encoding tricks.",
+      "tags": [
+        "atlas",
+        "aml.t0054"
+      ],
+      "attributes": {
+        "technique_id": "AML.T0054"
+      },
+      "evidence": [
+        {
+          "evidence_id": "ev-atlas-aml-t0054",
+          "source_title": "AML.T0054: LLM Jailbreak",
+          "citation": "mitre_atlas",
+          "excerpt": "Bypass safety alignment via roleplay or encoding tricks."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "atlas-aml-t0048",
+      "kind": "Technique",
+      "domain": "mitre_atlas",
+      "title": "AML.T0048: Exfiltration via ML Inference API",
+      "summary": "Extract sensitive data through inference APIs.",
+      "body": "Extract sensitive data through inference APIs.",
+      "tags": [
+        "atlas",
+        "aml.t0048"
+      ],
+      "attributes": {
+        "technique_id": "AML.T0048"
+      },
+      "evidence": [
+        {
+          "evidence_id": "ev-atlas-aml-t0048",
+          "source_title": "AML.T0048: Exfiltration via ML Inference API",
+          "citation": "mitre_atlas",
+          "excerpt": "Extract sensitive data through inference APIs."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    }
+  ]
+}

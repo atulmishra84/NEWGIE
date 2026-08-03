@@ -1,0 +1,37 @@
+openapi: 3.1.0
+info:
+  title: GIE Policy Generator Agent API
+  version: 1.0.0
+servers:
+  - url: http://localhost:8086
+paths:
+  /policy/generate:
+    post:
+      summary: Generate deployment-ready policies from recommendations
+      responses:
+        "200":
+          description: PolicyPackage
+  /policy/validate:
+    post:
+      summary: Validate a policy package or raw content
+      responses:
+        "200":
+          description: Validation result
+  /policy/templates:
+    get:
+      summary: List policy templates
+      responses:
+        "200":
+          description: Template catalog
+  /policy/{id}:
+    get:
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: PolicyPackage

@@ -1,0 +1,1 @@
+from knowledge_intelligence.application.commands.upsert_knowledge import UpsertKnowledgeHandler

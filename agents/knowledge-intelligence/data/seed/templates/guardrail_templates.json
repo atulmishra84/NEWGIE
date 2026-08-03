@@ -1,0 +1,167 @@
+{
+  "domain": "guardrail_templates",
+  "nodes": [
+    {
+      "node_id": "fw-guardrail_templates",
+      "kind": "Framework",
+      "domain": "guardrail_templates",
+      "title": "Guardrail Templates",
+      "summary": "Reusable runtime guardrail policy templates",
+      "body": "Reusable runtime guardrail policy templates",
+      "tags": [
+        "framework",
+        "root"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-fw-guardrail_templates",
+          "source_title": "Guardrail Templates",
+          "citation": "guardrail_templates",
+          "excerpt": "Reusable runtime guardrail policy templates"
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "gr-input-filter",
+      "kind": "Guardrail",
+      "domain": "guardrail_templates",
+      "title": "Input Filter Guardrail",
+      "summary": "Block or rewrite prompts matching injection/PII patterns.",
+      "body": "Block or rewrite prompts matching injection/PII patterns.",
+      "tags": [
+        "guardrail",
+        "template"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-gr-input-filter",
+          "source_title": "Input Filter Guardrail",
+          "citation": "guardrail_templates",
+          "excerpt": "Block or rewrite prompts matching injection/PII patterns."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "gr-output-filter",
+      "kind": "Guardrail",
+      "domain": "guardrail_templates",
+      "title": "Output Filter Guardrail",
+      "summary": "Scan model outputs for secrets, toxic content, policy violations.",
+      "body": "Scan model outputs for secrets, toxic content, policy violations.",
+      "tags": [
+        "guardrail",
+        "template"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-gr-output-filter",
+          "source_title": "Output Filter Guardrail",
+          "citation": "guardrail_templates",
+          "excerpt": "Scan model outputs for secrets, toxic content, policy violations."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "gr-tool-allowlist",
+      "kind": "Guardrail",
+      "domain": "guardrail_templates",
+      "title": "Tool Allowlist Guardrail",
+      "summary": "Permit only registered tools with schema validation.",
+      "body": "Permit only registered tools with schema validation.",
+      "tags": [
+        "guardrail",
+        "template"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-gr-tool-allowlist",
+          "source_title": "Tool Allowlist Guardrail",
+          "citation": "guardrail_templates",
+          "excerpt": "Permit only registered tools with schema validation."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "gr-rate-limit",
+      "kind": "Guardrail",
+      "domain": "guardrail_templates",
+      "title": "Rate Limit Guardrail",
+      "summary": "Throttle abusive or costly model/tool invocations.",
+      "body": "Throttle abusive or costly model/tool invocations.",
+      "tags": [
+        "guardrail",
+        "template"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-gr-rate-limit",
+          "source_title": "Rate Limit Guardrail",
+          "citation": "guardrail_templates",
+          "excerpt": "Throttle abusive or costly model/tool invocations."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "gr-topic-block",
+      "kind": "Guardrail",
+      "domain": "guardrail_templates",
+      "title": "Topic Blocklist Guardrail",
+      "summary": "Refuse disallowed topics per policy.",
+      "body": "Refuse disallowed topics per policy.",
+      "tags": [
+        "guardrail",
+        "template"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-gr-topic-block",
+          "source_title": "Topic Blocklist Guardrail",
+          "citation": "guardrail_templates",
+          "excerpt": "Refuse disallowed topics per policy."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    }
+  ]
+}

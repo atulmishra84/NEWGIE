@@ -1,0 +1,39 @@
+from __future__ import annotations
+from abc import ABC, abstractmethod
+from typing import Any
+from uuid import UUID
+from gie_contracts.learning import FeedbackEvent, KnowledgeChange, LearningReport
+
+class FeedbackRepository(ABC):
+    @abstractmethod
+    async def save(self, event: FeedbackEvent) -> None: ...
+    @abstractmethod
+    async def list(self, tenant_id: str, limit: int = 100, offset: int = 0) -> list[FeedbackEvent]: ...
+
+class LearningReportRepository(ABC):
+    @abstractmethod
+    async def save(self, report: LearningReport) -> None: ...
+    @abstractmethod
+    async def get(self, learning_id: UUID) -> LearningReport | None: ...
+    @abstractmethod
+    async def history(self, tenant_id: str, agent_id: str | None = None, limit: int = 50, offset: int = 0) -> list[LearningReport]: ...
+
+class KnowledgeChangeRepository(ABC):
+    @abstractmethod
+    async def save(self, change: KnowledgeChange) -> None: ...
+    @abstractmethod
+    async def get(self, change_id: UUID) -> KnowledgeChange | None: ...
+    @abstractmethod
+    async def list(self, tenant_id: str, status: str | None = None, limit: int = 100, offset: int = 0) -> list[KnowledgeChange]: ...
+    @abstractmethod
+    async def save_many(self, changes: list[KnowledgeChange]) -> None: ...
+
+class CacheStore(ABC):
+    @abstractmethod
+    async def get_json(self, key: str) -> dict[str, Any] | None: ...
+    @abstractmethod
+    async def set_json(self, key: str, value: dict[str, Any], ttl: int) -> None: ...
+
+class EventPublisher(ABC):
+    @abstractmethod
+    async def publish(self, topic: str, event: dict[str, Any], key: str | None = None) -> None: ...

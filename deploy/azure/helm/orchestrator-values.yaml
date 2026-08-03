@@ -1,0 +1,43 @@
+# Azure full sandbox values for Orchestrator (SIMULATE_AGENTS=false)
+# Secrets injected by scripts/04-deploy-app.sh
+
+replicaCount: 1
+
+image:
+  repository: REPLACE_ACR_LOGIN_SERVER/gie-orchestrator
+  tag: "1.0.0"
+  pullPolicy: IfNotPresent
+
+service:
+  type: LoadBalancer
+  port: 8091
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 256Mi
+  limits:
+    cpu: "1"
+    memory: 1Gi
+
+env:
+  GIE_ENV: azure
+  REQUIRE_AUTH: "false"
+  SIMULATE_AGENTS: "false"
+  OTEL_EXPORTER_OTLP_ENDPOINT: ""
+  CONTEXT_URL: http://context-intelligence.gie.svc.cluster.local:8080
+  KNOWLEDGE_URL: http://knowledge-intelligence.gie.svc.cluster.local:8081
+  POLICY_URL: http://policy-intelligence.gie.svc.cluster.local:8082
+  RISK_URL: http://risk-intelligence.gie.svc.cluster.local:8083
+  COMPLIANCE_URL: http://compliance-intelligence.gie.svc.cluster.local:8084
+  RECOMMENDATION_URL: http://recommendation-intelligence.gie.svc.cluster.local:8085
+  GENERATOR_URL: http://policy-generator.gie.svc.cluster.local:8086
+  EXPLAINABILITY_URL: http://explainability-intelligence.gie.svc.cluster.local:8087
+  VALIDATION_URL: http://validation-intelligence.gie.svc.cluster.local:8088
+  LEARNING_URL: http://learning-intelligence.gie.svc.cluster.local:8089
+  INTEGRATION_URL: http://integration-intelligence.gie.svc.cluster.local:8090
+
+secrets:
+  databaseUrl: ""
+  redisUrl: ""
+  jwtSecret: ""

@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>GIE — Guardrail &amp; Policy Orchestration Layer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --ink: #0a1628;
+      --navy: #102a43;
+      --teal: #0f766e;
+      --teal-bright: #14b8a6;
+      --mist: #9fb3c8;
+      --fog: #d9e2ec;
+      --paper: #f0f4f8;
+      --white: #fafbfc;
+      --slate: #486581;
+      --amber: #b45309;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; height: 100%; background: #0a1628; color: var(--ink); font-family: Manrope, sans-serif; }
+    .deck { height: 100%; display: grid; place-items: center; }
+    .slide {
+      width: min(1100px, 96vw);
+      aspect-ratio: 16 / 9;
+      background: var(--paper);
+      border-radius: 8px;
+      padding: 2.2rem 2.5rem;
+      overflow: hidden;
+      display: none;
+      flex-direction: column;
+      box-shadow: 0 20px 60px rgba(0,0,0,.45);
+    }
+    .slide.on { display: flex; }
+    .slide.title-slide {
+      background: linear-gradient(145deg, #07131f, #102a43 48%, #0a3d3a);
+      color: var(--white);
+      justify-content: flex-end;
+    }
+    .brand { font-family: Syne, sans-serif; font-size: clamp(3.2rem, 7vw, 4.8rem); font-weight: 800; color: var(--teal-bright); line-height: .92; margin: 0; }
+    .brand small { display: block; font-size: .22em; letter-spacing: .12em; text-transform: uppercase; color: rgba(255,255,255,.7); margin-top: .55rem; }
+    h1 { font-family: Syne, sans-serif; font-size: 1.7rem; margin: 0 0 .75rem; color: var(--navy); }
+    .title-slide h1 { color: var(--white); font-size: 1.35rem; font-weight: 700; max-width: 28ch; }
+    .lede { color: var(--mist); max-width: 48ch; margin: 0; line-height: 1.45; }
+    .bar {
+      background: var(--navy); color: var(--white); margin: -2.2rem -2.5rem 1.15rem;
+      padding: .95rem 2.5rem; border-bottom: 4px solid var(--teal-bright);
+      font-family: Syne, sans-serif; font-size: 1.4rem;
+    }
+    ul { margin: 0; padding-left: 1.1rem; }
+    ul.two { columns: 2; column-gap: 2rem; }
+    li { margin: 0 0 .5rem; color: var(--ink); break-inside: avoid; line-height: 1.35; }
+    .grid { display: grid; gap: .85rem; grid-template-columns: repeat(3, 1fr); }
+    .grid.two { grid-template-columns: 1fr 1fr; }
+    .grid.four { grid-template-columns: repeat(4, 1fr); }
+    .grid.five { grid-template-columns: repeat(5, 1fr); }
+    .card { background: var(--white); border: 1px solid var(--fog); border-radius: 6px; padding: .9rem 1rem; }
+    .card h3 { margin: 0 0 .4rem; color: var(--teal); font-family: Syne, sans-serif; font-size: .98rem; }
+    .card p, .card li { margin: 0; color: var(--slate); font-size: .9rem; line-height: 1.35; }
+    .card.highlight { border-color: var(--teal-bright); box-shadow: inset 0 0 0 1px rgba(20,184,166,.25); }
+    .card.muted { background: #e8eef4; }
+    table { width: 100%; border-collapse: collapse; font-size: .8rem; }
+    th, td { text-align: left; padding: .42rem .5rem; border-bottom: 1px solid var(--fog); vertical-align: top; }
+    th { background: var(--navy); color: var(--white); font-weight: 700; }
+    tr:nth-child(even) td { background: #e8eef4; }
+    .flow {
+      display: flex; gap: .4rem; align-items: stretch; flex-wrap: nowrap;
+      margin-top: .25rem;
+    }
+    .flow .step {
+      flex: 1; background: var(--white); border: 1px solid var(--fog); border-radius: 6px;
+      padding: .7rem .55rem; text-align: center; min-width: 0;
+    }
+    .flow .step strong { display: block; font-family: Syne, sans-serif; color: var(--navy); font-size: .85rem; margin-bottom: .25rem; }
+    .flow .step span { color: var(--slate); font-size: .72rem; line-height: 1.25; display: block; }
+    .flow .arrow { align-self: center; color: var(--teal); font-weight: 800; font-size: 1.1rem; }
+    .callout {
+      margin-top: auto; background: var(--navy); color: var(--white);
+      padding: .75rem 1rem; border-radius: 6px; border-left: 4px solid var(--teal-bright);
+      font-size: .95rem; line-height: 1.4;
+    }
+    .tag {
+      display: inline-block; background: rgba(20,184,166,.15); color: var(--teal);
+      font-size: .72rem; font-weight: 700; letter-spacing: .04em; text-transform: uppercase;
+      padding: .15rem .45rem; border-radius: 4px; margin-bottom: .35rem;
+    }
+    .nav {
+      position: fixed; bottom: 1rem; left: 50%; transform: translateX(-50%);
+      display: flex; gap: .5rem; align-items: center;
+      background: rgba(10,22,40,.92); color: #fff; padding: .5rem .75rem; border-radius: 8px;
+      font-size: .85rem; z-index: 5;
+    }
+    .nav button {
+      background: var(--teal); color: #fff; border: 0; border-radius: 4px;
+      padding: .4rem .75rem; font-weight: 700; cursor: pointer;
+    }
+    .hint { color: var(--mist); font-size: .78rem; margin-top: auto; padding-top: .75rem; }
+    .pitch { font-size: 1.15rem; color: var(--navy); font-weight: 700; line-height: 1.4; margin: 0 0 1rem; max-width: 48ch; }
+  </style>
+</head>
+<body>
+  <div class="deck" id="deck">
+
+    <section class="slide title-slide on">
+      <p class="brand">GIE<small>Guardrails Intelligence Engine</small></p>
+      <h1>Orchestration layer for choosing the right guardrails &amp; policies</h1>
+      <p class="lede">Management review — how GIE helps the agentic enterprise select, generate, and gate controls before AI agents ship.</p>
+    </section>
+
+    <section class="slide">
+      <div class="bar">Agenda</div>
+      <ul class="two">
+        <li>Problem in today’s agentic world</li>
+        <li>What GIE is (management view)</li>
+        <li>How it chooses the right controls</li>
+        <li><strong>Where to leverage it (layers)</strong></li>
+        <li>Business outcomes &amp; USP</li>
+        <li>What it is / is not</li>
+        <li>Adoption path</li>
+        <li>Likely questions &amp; next steps</li>
+      </ul>
+      <p class="hint">Target audience: CTO / CISO / AI Platform / Security Architecture / Product leadership</p>
+    </section>
+
+    <section class="slide">
+      <div class="bar">The management problem</div>
+      <div class="grid">
+        <div class="card"><h3>Agents are proliferating</h3><p>Teams build autonomous agents with tools, MCP, memory, and multi-agent graphs — faster than policy teams can keep up.</p></div>
+        <div class="card"><h3>One-size policies fail</h3><p>A chatbot and a tool-using ops agent need different guardrails. Generic packs over-block or under-protect.</p></div>
+        <div class="card"><h3>No release decision</h3><p>Organizations lack a standard answer to: “Is this agent clear to ship — and with which controls?”</p></div>
+      </div>
+      <div class="callout">Without an orchestration layer, policy selection stays manual, inconsistent, and hard to audit.</div>
+    </section>
+
+    <section class="slide">
+      <div class="bar">What GIE is</div>
+      <p class="pitch">GIE is the governance orchestration layer that helps the organization choose the right guardrails and policies for every AI agent.</p>
+      <div class="grid two">
+        <div class="card highlight">
+          <h3>For leadership</h3>
+          <p>One control plane: discover → risk → recommend → generate policies → validate → explain → release decision.</p>
+        </div>
+        <div class="card">
+          <h3>For builders &amp; security</h3>
+          <p>Context-aware controls based on what the agent actually is and what it can do — not questionnaires alone.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="bar">How GIE chooses the right guardrails</div>
+      <div class="flow">
+        <div class="step"><strong>1. Discover</strong><span>Agent inventory: frameworks, models, tools, MCP, data signals</span></div>
+        <div class="arrow">→</div>
+        <div class="step"><strong>2. Assess</strong><span>Risk + compliance gaps for that agent</span></div>
+        <div class="arrow">→</div>
+        <div class="step"><strong>3. Recommend</strong><span>Prioritized guardrails matched to findings</span></div>
+        <div class="arrow">→</div>
+        <div class="step"><strong>4. Generate</strong><span>Deployment-ready policy artifacts</span></div>
+        <div class="arrow">→</div>
+        <div class="step"><strong>5. Validate</strong><span>Pre-deploy checks + release posture</span></div>
+      </div>
+      <div class="callout" style="margin-top:1rem">Output: right controls for <em>this</em> agent + audit ID + hold / conditional / clear decision.</div>
+    </section>
+
+    <section class="slide">
+      <div class="bar">Where to leverage GIE — enterprise layers</div>
+      <table>
+        <thead>
+          <tr><th>Layer</th><th>What happens there</th><th>How GIE is leveraged</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Build</strong><br/>IDE / repo</td>
+            <td>Developers create agents</td>
+            <td>Early discovery + policy hints while coding</td>
+          </tr>
+          <tr>
+            <td><strong>CI / CD</strong><br/>pipeline</td>
+            <td>PR / build / release gates</td>
+            <td><strong>Primary leverage:</strong> analyze every agent change; block unsafe releases</td>
+          </tr>
+          <tr>
+            <td><strong>Pre-prod governance</strong></td>
+            <td>Security / compliance review</td>
+            <td>Risk brief, gap list, recommended + generated policies</td>
+          </tr>
+          <tr>
+            <td><strong>Runtime / ops</strong></td>
+            <td>Agent serving, tools, MCP</td>
+            <td>Feeds the right firewall/DLP/policy packs to enforce (partner/native path)</td>
+          </tr>
+          <tr>
+            <td><strong>GRC / audit</strong></td>
+            <td>Frameworks, evidence, boards</td>
+            <td>Evidence pack, audit IDs, explainability for NIST/SOC2-style reviews</td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="hint">Best first placement: CI/CD + pre-prod governance as the mandatory checkpoint.</p>
+    </section>
+
+    <section class="slide">
+      <div class="bar">Stack view — where GIE sits</div>
+      <div class="grid five">
+        <div class="card muted"><span class="tag">Above</span><h3>Business / GRC</h3><p>Policy intent, frameworks, audit asks</p></div>
+        <div class="card highlight"><span class="tag">GIE</span><h3>Orchestration</h3><p>Choose &amp; generate the right guardrails per agent</p></div>
+        <div class="card muted"><span class="tag">Beside</span><h3>Build tools</h3><p>IDE, Git, CI, ticketing</p></div>
+        <div class="card muted"><span class="tag">Below</span><h3>Agent runtime</h3><p>LangGraph, CrewAI, MCP, tools</p></div>
+        <div class="card muted"><span class="tag">Below</span><h3>Models / cloud</h3><p>LLM providers, infra</p></div>
+      </div>
+      <div class="callout" style="margin-top:1rem">GIE is not “another agent.” It is the middle governance layer that decides which controls apply before agents go live.</div>
+    </section>
+
+    <section class="slide">
+      <div class="bar">Business outcomes</div>
+      <div class="grid two">
+        <div class="card"><h3>Faster safe adoption</h3><p>Teams ship agents with matched controls instead of waiting on ad-hoc policy reviews.</p></div>
+        <div class="card"><h3>Lower residual risk</h3><p>Tool abuse, leakage, weak identity, and over-autonomy are scored before production.</p></div>
+        <div class="card"><h3>Audit-ready decisions</h3><p>Every run leaves an execution/audit trail and plain-English release posture.</p></div>
+        <div class="card"><h3>Consistent org standard</h3><p>One orchestration path for all agent teams — same language for Sec, Platform, and Compliance.</p></div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="bar">USP for customer conversations</div>
+      <ul>
+        <li><strong>Context-aware policy selection</strong> — controls matched to the agent’s real capabilities</li>
+        <li><strong>End-to-end orchestration</strong> — discover → risk → recommend → generate → validate → explain</li>
+        <li><strong>Deployable artifacts</strong> — not only findings; policies ready for enforcement paths</li>
+        <li><strong>Auditable by design</strong> — deterministic scoring + execution evidence for CISO/auditor trust</li>
+        <li><strong>Agentic-native</strong> — tools, MCP, autonomy, multi-agent patterns in scope</li>
+      </ul>
+      <div class="callout">Pitch: “One orchestration layer so every AI agent gets the right guardrails before it ships.”</div>
+    </section>
+
+    <section class="slide">
+      <div class="bar">What it is / is not</div>
+      <div class="grid two">
+        <div class="card highlight">
+          <h3>Is</h3>
+          <ul>
+            <li>Governance / orchestration middle layer</li>
+            <li>Release checkpoint for agentic apps</li>
+            <li>Selector + generator of guardrails/policies</li>
+            <li>Evidence plane for leadership &amp; audit</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Is not (today)</h3>
+          <ul>
+            <li>Inline runtime proxy for every user↔agent call</li>
+            <li>Replacement for SIEM / CSPM / classic GRC suites</li>
+            <li>A single chatbot “doing security”</li>
+            <li>Deep live PII redaction engine (signals today; DLP path next)</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="bar">Recommended leverage path</div>
+      <div class="grid">
+        <div class="card highlight"><h3>Phase 1</h3><p><strong>CI + pre-prod gate</strong><br/>Mandatory analyze on agent repos; hold/conditional/clear.</p></div>
+        <div class="card"><h3>Phase 2</h3><p><strong>Policy pack handoff</strong><br/>Push generated guardrails into runtime firewalls / platform policy stores.</p></div>
+        <div class="card"><h3>Phase 3</h3><p><strong>Org standard</strong><br/>All new agents register through GIE; GRC consumes evidence automatically.</p></div>
+      </div>
+      <p class="hint">Start where decisions already happen: release. Expand to runtime enforcement once selection quality is trusted.</p>
+    </section>
+
+    <section class="slide">
+      <div class="bar">Likely management questions</div>
+      <table>
+        <thead><tr><th>Question</th><th>Answer</th></tr></thead>
+        <tbody>
+          <tr><td>Which layer first?</td><td>CI/CD + pre-prod governance (highest ROI).</td></tr>
+          <tr><td>Does this replace runtime security?</td><td>No — it chooses/feeds the right controls for runtime tools.</td></tr>
+          <tr><td>Who owns it?</td><td>AI Platform + Security Architecture; Compliance consumes evidence.</td></tr>
+          <tr><td>How do we measure success?</td><td>% agents gated, time-to-policy, high-risk releases blocked, audit readiness.</td></tr>
+          <tr><td>Data leaving our boundary?</td><td>Core path is customer-controlled; no external LLM required for scoring.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="slide">
+      <div class="bar">Ask of this review</div>
+      <div class="grid two">
+        <div class="card highlight">
+          <h3>Decision needed</h3>
+          <p>Confirm GIE as the organization’s <strong>guardrail/policy orchestration layer</strong> for agentic systems.</p>
+        </div>
+        <div class="card">
+          <h3>Next 30 days</h3>
+          <ul>
+            <li>Pilot 2–3 priority agent apps in CI gate</li>
+            <li>Define release postures with Security</li>
+            <li>Map generated policies to current enforcement stack</li>
+          </ul>
+        </div>
+      </div>
+      <div class="callout">Management takeaway: leverage GIE first as the release orchestration layer; then connect it to runtime and GRC.</div>
+    </section>
+
+  </div>
+
+  <div class="nav">
+    <button type="button" id="prev">Prev</button>
+    <span id="pos">1 / 1</span>
+    <button type="button" id="next">Next</button>
+  </div>
+
+  <script>
+    const slides = [...document.querySelectorAll(".slide")];
+    let i = 0;
+    const pos = document.getElementById("pos");
+    function show(n) {
+      i = (n + slides.length) % slides.length;
+      slides.forEach((s, idx) => s.classList.toggle("on", idx === i));
+      pos.textContent = `${i + 1} / ${slides.length}`;
+    }
+    document.getElementById("prev").onclick = () => show(i - 1);
+    document.getElementById("next").onclick = () => show(i + 1);
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowRight" || e.key === " ") { e.preventDefault(); show(i + 1); }
+      if (e.key === "ArrowLeft") { e.preventDefault(); show(i - 1); }
+    });
+    show(0);
+  </script>
+</body>
+</html>

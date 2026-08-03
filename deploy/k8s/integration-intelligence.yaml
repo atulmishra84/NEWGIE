@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: integration-intelligence
+  namespace: gie
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: integration-intelligence
+  template:
+    metadata:
+      labels:
+        app: integration-intelligence
+    spec:
+      containers:
+        - name: api
+          image: gie/integration-intelligence:1.0.0
+          ports:
+            - containerPort: 8090
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: integration-intelligence
+  namespace: gie
+spec:
+  selector:
+    app: integration-intelligence
+  ports:
+    - port: 8090
+      targetPort: 8090

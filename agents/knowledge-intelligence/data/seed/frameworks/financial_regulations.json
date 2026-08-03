@@ -1,0 +1,86 @@
+{
+  "domain": "financial_regulations",
+  "nodes": [
+    {
+      "node_id": "fw-financial_regulations",
+      "kind": "Framework",
+      "domain": "financial_regulations",
+      "title": "Financial Regulations",
+      "summary": "Financial services AI and data regulations (GLBA, FFIEC, SOX overlays)",
+      "body": "Financial services AI and data regulations (GLBA, FFIEC, SOX overlays)",
+      "tags": [
+        "framework",
+        "root"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-fw-financial_regulations",
+          "source_title": "Financial Regulations",
+          "citation": "financial_regulations",
+          "excerpt": "Financial services AI and data regulations (GLBA, FFIEC, SOX overlays)"
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "fin-model-risk",
+      "kind": "Control",
+      "domain": "financial_regulations",
+      "title": "Model Risk Management",
+      "summary": "SR 11-7 style model risk controls for AI models.",
+      "body": "SR 11-7 style model risk controls for AI models.",
+      "tags": [
+        "compliance",
+        "financial_regulations"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-fin-model-risk",
+          "source_title": "Model Risk Management",
+          "citation": "financial_regulations",
+          "excerpt": "SR 11-7 style model risk controls for AI models."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "fin-consumer",
+      "kind": "Control",
+      "domain": "financial_regulations",
+      "title": "Consumer Protection",
+      "summary": "Fair lending / UDAAP considerations for AI decisions.",
+      "body": "Fair lending / UDAAP considerations for AI decisions.",
+      "tags": [
+        "compliance",
+        "financial_regulations"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-fin-consumer",
+          "source_title": "Consumer Protection",
+          "citation": "financial_regulations",
+          "excerpt": "Fair lending / UDAAP considerations for AI decisions."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    }
+  ]
+}

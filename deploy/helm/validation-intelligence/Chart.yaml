@@ -1,0 +1,6 @@
+apiVersion: v2
+name: validation-intelligence
+description: GIE Validation Intelligence Agent
+type: application
+version: 1.0.0
+appVersion: "1.0.0"

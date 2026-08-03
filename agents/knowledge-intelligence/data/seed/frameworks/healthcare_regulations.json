@@ -1,0 +1,86 @@
+{
+  "domain": "healthcare_regulations",
+  "nodes": [
+    {
+      "node_id": "fw-healthcare_regulations",
+      "kind": "Framework",
+      "domain": "healthcare_regulations",
+      "title": "Healthcare Regulations",
+      "summary": "Healthcare AI regulatory controls beyond HIPAA (FDA SaMD, HITRUST)",
+      "body": "Healthcare AI regulatory controls beyond HIPAA (FDA SaMD, HITRUST)",
+      "tags": [
+        "framework",
+        "root"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-fw-healthcare_regulations",
+          "source_title": "Healthcare Regulations",
+          "citation": "healthcare_regulations",
+          "excerpt": "Healthcare AI regulatory controls beyond HIPAA (FDA SaMD, HITRUST)"
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "hc-samd",
+      "kind": "Control",
+      "domain": "healthcare_regulations",
+      "title": "SaMD Quality System",
+      "summary": "FDA quality system expectations for software as medical device AI.",
+      "body": "FDA quality system expectations for software as medical device AI.",
+      "tags": [
+        "compliance",
+        "healthcare_regulations"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-hc-samd",
+          "source_title": "SaMD Quality System",
+          "citation": "healthcare_regulations",
+          "excerpt": "FDA quality system expectations for software as medical device AI."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "hc-hitrust",
+      "kind": "Control",
+      "domain": "healthcare_regulations",
+      "title": "HITRUST Overlays",
+      "summary": "HITRUST CSF controls applied to AI healthcare workloads.",
+      "body": "HITRUST CSF controls applied to AI healthcare workloads.",
+      "tags": [
+        "compliance",
+        "healthcare_regulations"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-hc-hitrust",
+          "source_title": "HITRUST Overlays",
+          "citation": "healthcare_regulations",
+          "excerpt": "HITRUST CSF controls applied to AI healthcare workloads."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    }
+  ]
+}

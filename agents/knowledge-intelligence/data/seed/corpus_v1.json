@@ -1,0 +1,3635 @@
+{
+  "schema_version": "gie.knowledge.v1",
+  "version": "1.0.0",
+  "nodes": [
+    {
+      "node_id": "fw-owasp_llm",
+      "kind": "Framework",
+      "domain": "owasp_llm",
+      "title": "OWASP LLM Top 10",
+      "summary": "OWASP Top 10 for Large Language Model Applications",
+      "body": "OWASP Top 10 for Large Language Model Applications",
+      "tags": [
+        "framework",
+        "root"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-fw-owasp_llm",
+          "source_title": "OWASP LLM Top 10",
+          "citation": "owasp_llm",
+          "excerpt": "OWASP Top 10 for Large Language Model Applications"
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "fw-mitre_atlas",
+      "kind": "Framework",
+      "domain": "mitre_atlas",
+      "title": "MITRE ATLAS",
+      "summary": "Adversarial Threat Landscape for AI Systems",
+      "body": "Adversarial Threat Landscape for AI Systems",
+      "tags": [
+        "framework",
+        "root"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-fw-mitre_atlas",
+          "source_title": "MITRE ATLAS",
+          "citation": "mitre_atlas",
+          "excerpt": "Adversarial Threat Landscape for AI Systems"
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "fw-nist_ai_rmf",
+      "kind": "Framework",
+      "domain": "nist_ai_rmf",
+      "title": "NIST AI RMF",
+      "summary": "NIST AI Risk Management Framework",
+      "body": "NIST AI Risk Management Framework",
+      "tags": [
+        "framework",
+        "root"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-fw-nist_ai_rmf",
+          "source_title": "NIST AI RMF",
+          "citation": "nist_ai_rmf",
+          "excerpt": "NIST AI Risk Management Framework"
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "fw-hipaa",
+      "kind": "Framework",
+      "domain": "hipaa",
+      "title": "HIPAA",
+      "summary": "Health Insurance Portability and Accountability Act security/privacy rules",
+      "body": "Health Insurance Portability and Accountability Act security/privacy rules",
+      "tags": [
+        "framework",
+        "root"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-fw-hipaa",
+          "source_title": "HIPAA",
+          "citation": "hipaa",
+          "excerpt": "Health Insurance Portability and Accountability Act security/privacy rules"
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "fw-pci_dss",
+      "kind": "Framework",
+      "domain": "pci_dss",
+      "title": "PCI DSS",
+      "summary": "Payment Card Industry Data Security Standard",
+      "body": "Payment Card Industry Data Security Standard",
+      "tags": [
+        "framework",
+        "root"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-fw-pci_dss",
+          "source_title": "PCI DSS",
+          "citation": "pci_dss",
+          "excerpt": "Payment Card Industry Data Security Standard"
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "fw-soc2",
+      "kind": "Framework",
+      "domain": "soc2",
+      "title": "SOC 2",
+      "summary": "Service Organization Control 2 Trust Services Criteria",
+      "body": "Service Organization Control 2 Trust Services Criteria",
+      "tags": [
+        "framework",
+        "root"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-fw-soc2",
+          "source_title": "SOC 2",
+          "citation": "soc2",
+          "excerpt": "Service Organization Control 2 Trust Services Criteria"
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "fw-iso27001",
+      "kind": "Framework",
+      "domain": "iso27001",
+      "title": "ISO/IEC 27001",
+      "summary": "Information security management systems requirements",
+      "body": "Information security management systems requirements",
+      "tags": [
+        "framework",
+        "root"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-fw-iso27001",
+          "source_title": "ISO/IEC 27001",
+          "citation": "iso27001",
+          "excerpt": "Information security management systems requirements"
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "fw-gdpr",
+      "kind": "Framework",
+      "domain": "gdpr",
+      "title": "GDPR",
+      "summary": "EU General Data Protection Regulation",
+      "body": "EU General Data Protection Regulation",
+      "tags": [
+        "framework",
+        "root"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-fw-gdpr",
+          "source_title": "GDPR",
+          "citation": "gdpr",
+          "excerpt": "EU General Data Protection Regulation"
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "fw-eu_ai_act",
+      "kind": "Framework",
+      "domain": "eu_ai_act",
+      "title": "EU AI Act",
+      "summary": "European Union Artificial Intelligence Act risk tiers and obligations",
+      "body": "European Union Artificial Intelligence Act risk tiers and obligations",
+      "tags": [
+        "framework",
+        "root"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-fw-eu_ai_act",
+          "source_title": "EU AI Act",
+          "citation": "eu_ai_act",
+          "excerpt": "European Union Artificial Intelligence Act risk tiers and obligations"
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "fw-financial_regulations",
+      "kind": "Framework",
+      "domain": "financial_regulations",
+      "title": "Financial Regulations",
+      "summary": "Financial services AI and data regulations (GLBA, FFIEC, SOX overlays)",
+      "body": "Financial services AI and data regulations (GLBA, FFIEC, SOX overlays)",
+      "tags": [
+        "framework",
+        "root"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-fw-financial_regulations",
+          "source_title": "Financial Regulations",
+          "citation": "financial_regulations",
+          "excerpt": "Financial services AI and data regulations (GLBA, FFIEC, SOX overlays)"
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "fw-healthcare_regulations",
+      "kind": "Framework",
+      "domain": "healthcare_regulations",
+      "title": "Healthcare Regulations",
+      "summary": "Healthcare AI regulatory controls beyond HIPAA (FDA SaMD, HITRUST)",
+      "body": "Healthcare AI regulatory controls beyond HIPAA (FDA SaMD, HITRUST)",
+      "tags": [
+        "framework",
+        "root"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-fw-healthcare_regulations",
+          "source_title": "Healthcare Regulations",
+          "citation": "healthcare_regulations",
+          "excerpt": "Healthcare AI regulatory controls beyond HIPAA (FDA SaMD, HITRUST)"
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "fw-identity_security",
+      "kind": "Framework",
+      "domain": "identity_security",
+      "title": "Identity Security Best Practices",
+      "summary": "Enterprise identity security patterns for AI systems",
+      "body": "Enterprise identity security patterns for AI systems",
+      "tags": [
+        "framework",
+        "root"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-fw-identity_security",
+          "source_title": "Identity Security Best Practices",
+          "citation": "identity_security",
+          "excerpt": "Enterprise identity security patterns for AI systems"
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "fw-prompt_injection",
+      "kind": "Framework",
+      "domain": "prompt_injection",
+      "title": "Prompt Injection Attacks",
+      "summary": "Direct/indirect prompt injection techniques and defenses",
+      "body": "Direct/indirect prompt injection techniques and defenses",
+      "tags": [
+        "framework",
+        "root"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-fw-prompt_injection",
+          "source_title": "Prompt Injection Attacks",
+          "citation": "prompt_injection",
+          "excerpt": "Direct/indirect prompt injection techniques and defenses"
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "fw-jailbreak",
+      "kind": "Framework",
+      "domain": "jailbreak",
+      "title": "Jailbreak Techniques",
+      "summary": "Model jailbreak and safety-bypass techniques",
+      "body": "Model jailbreak and safety-bypass techniques",
+      "tags": [
+        "framework",
+        "root"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-fw-jailbreak",
+          "source_title": "Jailbreak Techniques",
+          "citation": "jailbreak",
+          "excerpt": "Model jailbreak and safety-bypass techniques"
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "fw-guardrail_templates",
+      "kind": "Framework",
+      "domain": "guardrail_templates",
+      "title": "Guardrail Templates",
+      "summary": "Reusable runtime guardrail policy templates",
+      "body": "Reusable runtime guardrail policy templates",
+      "tags": [
+        "framework",
+        "root"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-fw-guardrail_templates",
+          "source_title": "Guardrail Templates",
+          "citation": "guardrail_templates",
+          "excerpt": "Reusable runtime guardrail policy templates"
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "fw-vendor_capabilities",
+      "kind": "Framework",
+      "domain": "vendor_capabilities",
+      "title": "Vendor Capabilities",
+      "summary": "AI platform vendor security/guardrail capabilities",
+      "body": "AI platform vendor security/guardrail capabilities",
+      "tags": [
+        "framework",
+        "root"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-fw-vendor_capabilities",
+          "source_title": "Vendor Capabilities",
+          "citation": "vendor_capabilities",
+          "excerpt": "AI platform vendor security/guardrail capabilities"
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "fw-runtime_restrictions",
+      "kind": "Framework",
+      "domain": "runtime_restrictions",
+      "title": "Runtime Restrictions",
+      "summary": "Runtime policy restrictions for AI agents",
+      "body": "Runtime policy restrictions for AI agents",
+      "tags": [
+        "framework",
+        "root"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-fw-runtime_restrictions",
+          "source_title": "Runtime Restrictions",
+          "citation": "runtime_restrictions",
+          "excerpt": "Runtime policy restrictions for AI agents"
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "fw-identity_policies",
+      "kind": "Framework",
+      "domain": "identity_policies",
+      "title": "Identity Policies",
+      "summary": "Identity and access policies for AI workloads",
+      "body": "Identity and access policies for AI workloads",
+      "tags": [
+        "framework",
+        "root"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-fw-identity_policies",
+          "source_title": "Identity Policies",
+          "citation": "identity_policies",
+          "excerpt": "Identity and access policies for AI workloads"
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "fw-policy_mappings",
+      "kind": "Framework",
+      "domain": "policy_mappings",
+      "title": "Policy Mappings",
+      "summary": "Crosswalk mappings between frameworks and controls",
+      "body": "Crosswalk mappings between frameworks and controls",
+      "tags": [
+        "framework",
+        "root"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-fw-policy_mappings",
+          "source_title": "Policy Mappings",
+          "citation": "policy_mappings",
+          "excerpt": "Crosswalk mappings between frameworks and controls"
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "owasp-llm01",
+      "kind": "Threat",
+      "domain": "owasp_llm",
+      "title": "LLM01: Prompt Injection",
+      "summary": "Attacker crafts inputs that manipulate LLM behavior beyond intended instructions.",
+      "body": "Attacker crafts inputs that manipulate LLM behavior beyond intended instructions.",
+      "tags": [
+        "owasp",
+        "llm01"
+      ],
+      "attributes": {
+        "code": "LLM01"
+      },
+      "evidence": [
+        {
+          "evidence_id": "ev-owasp-llm01",
+          "source_title": "LLM01: Prompt Injection",
+          "citation": "owasp_llm",
+          "excerpt": "Attacker crafts inputs that manipulate LLM behavior beyond intended instructions."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "owasp-llm02",
+      "kind": "Threat",
+      "domain": "owasp_llm",
+      "title": "LLM02: Insecure Output Handling",
+      "summary": "Unvalidated LLM outputs lead to XSS, SSRF, or remote code execution.",
+      "body": "Unvalidated LLM outputs lead to XSS, SSRF, or remote code execution.",
+      "tags": [
+        "owasp",
+        "llm02"
+      ],
+      "attributes": {
+        "code": "LLM02"
+      },
+      "evidence": [
+        {
+          "evidence_id": "ev-owasp-llm02",
+          "source_title": "LLM02: Insecure Output Handling",
+          "citation": "owasp_llm",
+          "excerpt": "Unvalidated LLM outputs lead to XSS, SSRF, or remote code execution."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "owasp-llm03",
+      "kind": "Threat",
+      "domain": "owasp_llm",
+      "title": "LLM03: Training Data Poisoning",
+      "summary": "Tampered training/fine-tuning data introduces backdoors or bias.",
+      "body": "Tampered training/fine-tuning data introduces backdoors or bias.",
+      "tags": [
+        "owasp",
+        "llm03"
+      ],
+      "attributes": {
+        "code": "LLM03"
+      },
+      "evidence": [
+        {
+          "evidence_id": "ev-owasp-llm03",
+          "source_title": "LLM03: Training Data Poisoning",
+          "citation": "owasp_llm",
+          "excerpt": "Tampered training/fine-tuning data introduces backdoors or bias."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "owasp-llm04",
+      "kind": "Threat",
+      "domain": "owasp_llm",
+      "title": "LLM04: Model Denial of Service",
+      "summary": "Resource-exhausting prompts degrade availability.",
+      "body": "Resource-exhausting prompts degrade availability.",
+      "tags": [
+        "owasp",
+        "llm04"
+      ],
+      "attributes": {
+        "code": "LLM04"
+      },
+      "evidence": [
+        {
+          "evidence_id": "ev-owasp-llm04",
+          "source_title": "LLM04: Model Denial of Service",
+          "citation": "owasp_llm",
+          "excerpt": "Resource-exhausting prompts degrade availability."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "owasp-llm05",
+      "kind": "Threat",
+      "domain": "owasp_llm",
+      "title": "LLM05: Supply Chain Vulnerabilities",
+      "summary": "Compromised models, plugins, datasets, or vendors.",
+      "body": "Compromised models, plugins, datasets, or vendors.",
+      "tags": [
+        "owasp",
+        "llm05"
+      ],
+      "attributes": {
+        "code": "LLM05"
+      },
+      "evidence": [
+        {
+          "evidence_id": "ev-owasp-llm05",
+          "source_title": "LLM05: Supply Chain Vulnerabilities",
+          "citation": "owasp_llm",
+          "excerpt": "Compromised models, plugins, datasets, or vendors."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "owasp-llm06",
+      "kind": "Threat",
+      "domain": "owasp_llm",
+      "title": "LLM06: Sensitive Information Disclosure",
+      "summary": "Model leaks secrets, PII, or proprietary data.",
+      "body": "Model leaks secrets, PII, or proprietary data.",
+      "tags": [
+        "owasp",
+        "llm06"
+      ],
+      "attributes": {
+        "code": "LLM06"
+      },
+      "evidence": [
+        {
+          "evidence_id": "ev-owasp-llm06",
+          "source_title": "LLM06: Sensitive Information Disclosure",
+          "citation": "owasp_llm",
+          "excerpt": "Model leaks secrets, PII, or proprietary data."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "owasp-llm07",
+      "kind": "Threat",
+      "domain": "owasp_llm",
+      "title": "LLM07: Insecure Plugin Design",
+      "summary": "Unsafe tool/plugin interfaces grant excess privilege.",
+      "body": "Unsafe tool/plugin interfaces grant excess privilege.",
+      "tags": [
+        "owasp",
+        "llm07"
+      ],
+      "attributes": {
+        "code": "LLM07"
+      },
+      "evidence": [
+        {
+          "evidence_id": "ev-owasp-llm07",
+          "source_title": "LLM07: Insecure Plugin Design",
+          "citation": "owasp_llm",
+          "excerpt": "Unsafe tool/plugin interfaces grant excess privilege."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "owasp-llm08",
+      "kind": "Threat",
+      "domain": "owasp_llm",
+      "title": "LLM08: Excessive Agency",
+      "summary": "Agents take damaging autonomous actions without controls.",
+      "body": "Agents take damaging autonomous actions without controls.",
+      "tags": [
+        "owasp",
+        "llm08"
+      ],
+      "attributes": {
+        "code": "LLM08"
+      },
+      "evidence": [
+        {
+          "evidence_id": "ev-owasp-llm08",
+          "source_title": "LLM08: Excessive Agency",
+          "citation": "owasp_llm",
+          "excerpt": "Agents take damaging autonomous actions without controls."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "owasp-llm09",
+      "kind": "Threat",
+      "domain": "owasp_llm",
+      "title": "LLM09: Overreliance",
+      "summary": "Users trust incorrect LLM outputs without verification.",
+      "body": "Users trust incorrect LLM outputs without verification.",
+      "tags": [
+        "owasp",
+        "llm09"
+      ],
+      "attributes": {
+        "code": "LLM09"
+      },
+      "evidence": [
+        {
+          "evidence_id": "ev-owasp-llm09",
+          "source_title": "LLM09: Overreliance",
+          "citation": "owasp_llm",
+          "excerpt": "Users trust incorrect LLM outputs without verification."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "owasp-llm10",
+      "kind": "Threat",
+      "domain": "owasp_llm",
+      "title": "LLM10: Model Theft",
+      "summary": "Unauthorized extraction or exfiltration of model weights/IP.",
+      "body": "Unauthorized extraction or exfiltration of model weights/IP.",
+      "tags": [
+        "owasp",
+        "llm10"
+      ],
+      "attributes": {
+        "code": "LLM10"
+      },
+      "evidence": [
+        {
+          "evidence_id": "ev-owasp-llm10",
+          "source_title": "LLM10: Model Theft",
+          "citation": "owasp_llm",
+          "excerpt": "Unauthorized extraction or exfiltration of model weights/IP."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "atlas-aml-t0043",
+      "kind": "Technique",
+      "domain": "mitre_atlas",
+      "title": "AML.T0043: Craft Adversarial Data",
+      "summary": "Create adversarial examples to evade or manipulate models.",
+      "body": "Create adversarial examples to evade or manipulate models.",
+      "tags": [
+        "atlas",
+        "aml.t0043"
+      ],
+      "attributes": {
+        "technique_id": "AML.T0043"
+      },
+      "evidence": [
+        {
+          "evidence_id": "ev-atlas-aml-t0043",
+          "source_title": "AML.T0043: Craft Adversarial Data",
+          "citation": "mitre_atlas",
+          "excerpt": "Create adversarial examples to evade or manipulate models."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "atlas-aml-t0051",
+      "kind": "Technique",
+      "domain": "mitre_atlas",
+      "title": "AML.T0051: LLM Prompt Injection",
+      "summary": "Inject instructions via prompts to subvert model objectives.",
+      "body": "Inject instructions via prompts to subvert model objectives.",
+      "tags": [
+        "atlas",
+        "aml.t0051"
+      ],
+      "attributes": {
+        "technique_id": "AML.T0051"
+      },
+      "evidence": [
+        {
+          "evidence_id": "ev-atlas-aml-t0051",
+          "source_title": "AML.T0051: LLM Prompt Injection",
+          "citation": "mitre_atlas",
+          "excerpt": "Inject instructions via prompts to subvert model objectives."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "atlas-aml-t0054",
+      "kind": "Technique",
+      "domain": "mitre_atlas",
+      "title": "AML.T0054: LLM Jailbreak",
+      "summary": "Bypass safety alignment via roleplay or encoding tricks.",
+      "body": "Bypass safety alignment via roleplay or encoding tricks.",
+      "tags": [
+        "atlas",
+        "aml.t0054"
+      ],
+      "attributes": {
+        "technique_id": "AML.T0054"
+      },
+      "evidence": [
+        {
+          "evidence_id": "ev-atlas-aml-t0054",
+          "source_title": "AML.T0054: LLM Jailbreak",
+          "citation": "mitre_atlas",
+          "excerpt": "Bypass safety alignment via roleplay or encoding tricks."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "atlas-aml-t0048",
+      "kind": "Technique",
+      "domain": "mitre_atlas",
+      "title": "AML.T0048: Exfiltration via ML Inference API",
+      "summary": "Extract sensitive data through inference APIs.",
+      "body": "Extract sensitive data through inference APIs.",
+      "tags": [
+        "atlas",
+        "aml.t0048"
+      ],
+      "attributes": {
+        "technique_id": "AML.T0048"
+      },
+      "evidence": [
+        {
+          "evidence_id": "ev-atlas-aml-t0048",
+          "source_title": "AML.T0048: Exfiltration via ML Inference API",
+          "citation": "mitre_atlas",
+          "excerpt": "Extract sensitive data through inference APIs."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "nist-govern",
+      "kind": "Control",
+      "domain": "nist_ai_rmf",
+      "title": "NIST AI RMF \u2014 Govern",
+      "summary": "Cultivate a culture of risk management across AI lifecycle.",
+      "body": "Cultivate a culture of risk management across AI lifecycle.",
+      "tags": [
+        "nist",
+        "govern"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-nist-govern",
+          "source_title": "NIST AI RMF \u2014 Govern",
+          "citation": "nist_ai_rmf",
+          "excerpt": "Cultivate a culture of risk management across AI lifecycle."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "nist-map",
+      "kind": "Control",
+      "domain": "nist_ai_rmf",
+      "title": "NIST AI RMF \u2014 Map",
+      "summary": "Identify context and risks related to AI system.",
+      "body": "Identify context and risks related to AI system.",
+      "tags": [
+        "nist",
+        "map"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-nist-map",
+          "source_title": "NIST AI RMF \u2014 Map",
+          "citation": "nist_ai_rmf",
+          "excerpt": "Identify context and risks related to AI system."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "nist-measure",
+      "kind": "Control",
+      "domain": "nist_ai_rmf",
+      "title": "NIST AI RMF \u2014 Measure",
+      "summary": "Analyze, assess, and track AI risks.",
+      "body": "Analyze, assess, and track AI risks.",
+      "tags": [
+        "nist",
+        "measure"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-nist-measure",
+          "source_title": "NIST AI RMF \u2014 Measure",
+          "citation": "nist_ai_rmf",
+          "excerpt": "Analyze, assess, and track AI risks."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "nist-manage",
+      "kind": "Control",
+      "domain": "nist_ai_rmf",
+      "title": "NIST AI RMF \u2014 Manage",
+      "summary": "Prioritize and respond to AI risks.",
+      "body": "Prioritize and respond to AI risks.",
+      "tags": [
+        "nist",
+        "manage"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-nist-manage",
+          "source_title": "NIST AI RMF \u2014 Manage",
+          "citation": "nist_ai_rmf",
+          "excerpt": "Prioritize and respond to AI risks."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "hipaa-phi-min",
+      "kind": "Control",
+      "domain": "hipaa",
+      "title": "PHI Minimum Necessary",
+      "summary": "Limit PHI exposure to AI systems to minimum necessary.",
+      "body": "Limit PHI exposure to AI systems to minimum necessary.",
+      "tags": [
+        "compliance",
+        "hipaa"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-hipaa-phi-min",
+          "source_title": "PHI Minimum Necessary",
+          "citation": "hipaa",
+          "excerpt": "Limit PHI exposure to AI systems to minimum necessary."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "hipaa-baa",
+      "kind": "Control",
+      "domain": "hipaa",
+      "title": "Business Associate Agreements",
+      "summary": "Ensure BAAs cover AI vendors processing ePHI.",
+      "body": "Ensure BAAs cover AI vendors processing ePHI.",
+      "tags": [
+        "compliance",
+        "hipaa"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-hipaa-baa",
+          "source_title": "Business Associate Agreements",
+          "citation": "hipaa",
+          "excerpt": "Ensure BAAs cover AI vendors processing ePHI."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "pci-pan-mask",
+      "kind": "Control",
+      "domain": "pci_dss",
+      "title": "PAN Masking",
+      "summary": "Mask payment card data in prompts, logs, and model outputs.",
+      "body": "Mask payment card data in prompts, logs, and model outputs.",
+      "tags": [
+        "compliance",
+        "pci_dss"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-pci-pan-mask",
+          "source_title": "PAN Masking",
+          "citation": "pci_dss",
+          "excerpt": "Mask payment card data in prompts, logs, and model outputs."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "pci-key-mgmt",
+      "kind": "Control",
+      "domain": "pci_dss",
+      "title": "Cryptographic Key Management",
+      "summary": "Protect keys used by AI services under PCI DSS req 3/4.",
+      "body": "Protect keys used by AI services under PCI DSS req 3/4.",
+      "tags": [
+        "compliance",
+        "pci_dss"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-pci-key-mgmt",
+          "source_title": "Cryptographic Key Management",
+          "citation": "pci_dss",
+          "excerpt": "Protect keys used by AI services under PCI DSS req 3/4."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "soc2-cc6",
+      "kind": "Control",
+      "domain": "soc2",
+      "title": "Logical Access (CC6)",
+      "summary": "Enforce least privilege for AI agent identities and tools.",
+      "body": "Enforce least privilege for AI agent identities and tools.",
+      "tags": [
+        "compliance",
+        "soc2"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-soc2-cc6",
+          "source_title": "Logical Access (CC6)",
+          "citation": "soc2",
+          "excerpt": "Enforce least privilege for AI agent identities and tools."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "soc2-cc7",
+      "kind": "Control",
+      "domain": "soc2",
+      "title": "System Monitoring (CC7)",
+      "summary": "Monitor AI runtime for anomalies and security events.",
+      "body": "Monitor AI runtime for anomalies and security events.",
+      "tags": [
+        "compliance",
+        "soc2"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-soc2-cc7",
+          "source_title": "System Monitoring (CC7)",
+          "citation": "soc2",
+          "excerpt": "Monitor AI runtime for anomalies and security events."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "iso-a5",
+      "kind": "Control",
+      "domain": "iso27001",
+      "title": "Organizational Controls (A.5)",
+      "summary": "Policies governing AI information security.",
+      "body": "Policies governing AI information security.",
+      "tags": [
+        "compliance",
+        "iso27001"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-iso-a5",
+          "source_title": "Organizational Controls (A.5)",
+          "citation": "iso27001",
+          "excerpt": "Policies governing AI information security."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "iso-a8",
+      "kind": "Control",
+      "domain": "iso27001",
+      "title": "Asset Management (A.8)",
+      "summary": "Inventory models, prompts, datasets as information assets.",
+      "body": "Inventory models, prompts, datasets as information assets.",
+      "tags": [
+        "compliance",
+        "iso27001"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-iso-a8",
+          "source_title": "Asset Management (A.8)",
+          "citation": "iso27001",
+          "excerpt": "Inventory models, prompts, datasets as information assets."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "gdpr-art5",
+      "kind": "Control",
+      "domain": "gdpr",
+      "title": "Purpose Limitation (Art.5)",
+      "summary": "Process personal data in AI only for specified purposes.",
+      "body": "Process personal data in AI only for specified purposes.",
+      "tags": [
+        "compliance",
+        "gdpr"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-gdpr-art5",
+          "source_title": "Purpose Limitation (Art.5)",
+          "citation": "gdpr",
+          "excerpt": "Process personal data in AI only for specified purposes."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "gdpr-art22",
+      "kind": "Control",
+      "domain": "gdpr",
+      "title": "Automated Decision-Making (Art.22)",
+      "summary": "Controls for solely automated decisions with legal effects.",
+      "body": "Controls for solely automated decisions with legal effects.",
+      "tags": [
+        "compliance",
+        "gdpr"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-gdpr-art22",
+          "source_title": "Automated Decision-Making (Art.22)",
+          "citation": "gdpr",
+          "excerpt": "Controls for solely automated decisions with legal effects."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "gdpr-art32",
+      "kind": "Control",
+      "domain": "gdpr",
+      "title": "Security of Processing (Art.32)",
+      "summary": "Technical/organizational measures for AI processing.",
+      "body": "Technical/organizational measures for AI processing.",
+      "tags": [
+        "compliance",
+        "gdpr"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-gdpr-art32",
+          "source_title": "Security of Processing (Art.32)",
+          "citation": "gdpr",
+          "excerpt": "Technical/organizational measures for AI processing."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "euai-high-risk",
+      "kind": "Control",
+      "domain": "eu_ai_act",
+      "title": "High-Risk AI Obligations",
+      "summary": "Risk management, data governance, transparency for high-risk AI.",
+      "body": "Risk management, data governance, transparency for high-risk AI.",
+      "tags": [
+        "compliance",
+        "eu_ai_act"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-euai-high-risk",
+          "source_title": "High-Risk AI Obligations",
+          "citation": "eu_ai_act",
+          "excerpt": "Risk management, data governance, transparency for high-risk AI."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "euai-transparency",
+      "kind": "Control",
+      "domain": "eu_ai_act",
+      "title": "Transparency Obligations",
+      "summary": "Disclose AI interactions and synthetic content where required.",
+      "body": "Disclose AI interactions and synthetic content where required.",
+      "tags": [
+        "compliance",
+        "eu_ai_act"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-euai-transparency",
+          "source_title": "Transparency Obligations",
+          "citation": "eu_ai_act",
+          "excerpt": "Disclose AI interactions and synthetic content where required."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "fin-model-risk",
+      "kind": "Control",
+      "domain": "financial_regulations",
+      "title": "Model Risk Management",
+      "summary": "SR 11-7 style model risk controls for AI models.",
+      "body": "SR 11-7 style model risk controls for AI models.",
+      "tags": [
+        "compliance",
+        "financial_regulations"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-fin-model-risk",
+          "source_title": "Model Risk Management",
+          "citation": "financial_regulations",
+          "excerpt": "SR 11-7 style model risk controls for AI models."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "fin-consumer",
+      "kind": "Control",
+      "domain": "financial_regulations",
+      "title": "Consumer Protection",
+      "summary": "Fair lending / UDAAP considerations for AI decisions.",
+      "body": "Fair lending / UDAAP considerations for AI decisions.",
+      "tags": [
+        "compliance",
+        "financial_regulations"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-fin-consumer",
+          "source_title": "Consumer Protection",
+          "citation": "financial_regulations",
+          "excerpt": "Fair lending / UDAAP considerations for AI decisions."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "hc-samd",
+      "kind": "Control",
+      "domain": "healthcare_regulations",
+      "title": "SaMD Quality System",
+      "summary": "FDA quality system expectations for software as medical device AI.",
+      "body": "FDA quality system expectations for software as medical device AI.",
+      "tags": [
+        "compliance",
+        "healthcare_regulations"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-hc-samd",
+          "source_title": "SaMD Quality System",
+          "citation": "healthcare_regulations",
+          "excerpt": "FDA quality system expectations for software as medical device AI."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "hc-hitrust",
+      "kind": "Control",
+      "domain": "healthcare_regulations",
+      "title": "HITRUST Overlays",
+      "summary": "HITRUST CSF controls applied to AI healthcare workloads.",
+      "body": "HITRUST CSF controls applied to AI healthcare workloads.",
+      "tags": [
+        "compliance",
+        "healthcare_regulations"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-hc-hitrust",
+          "source_title": "HITRUST Overlays",
+          "citation": "healthcare_regulations",
+          "excerpt": "HITRUST CSF controls applied to AI healthcare workloads."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "id-least-privilege",
+      "kind": "Policy",
+      "domain": "identity_security",
+      "title": "Least Privilege for Agents",
+      "summary": "Grant AI agents minimal tool and data permissions.",
+      "body": "Grant AI agents minimal tool and data permissions.",
+      "tags": [
+        "identity"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-id-least-privilege",
+          "source_title": "Least Privilege for Agents",
+          "citation": "identity_security",
+          "excerpt": "Grant AI agents minimal tool and data permissions."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "id-workload-identity",
+      "kind": "Policy",
+      "domain": "identity_security",
+      "title": "Workload Identity",
+      "summary": "Use SPIFFE/OIDC workload identity instead of long-lived secrets.",
+      "body": "Use SPIFFE/OIDC workload identity instead of long-lived secrets.",
+      "tags": [
+        "identity"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-id-workload-identity",
+          "source_title": "Workload Identity",
+          "citation": "identity_security",
+          "excerpt": "Use SPIFFE/OIDC workload identity instead of long-lived secrets."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "id-human-in-loop",
+      "kind": "Policy",
+      "domain": "identity_security",
+      "title": "Human-in-the-Loop Approvals",
+      "summary": "Require human approval for high-impact agent actions.",
+      "body": "Require human approval for high-impact agent actions.",
+      "tags": [
+        "identity"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-id-human-in-loop",
+          "source_title": "Human-in-the-Loop Approvals",
+          "citation": "identity_security",
+          "excerpt": "Require human approval for high-impact agent actions."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "id-mfa-admin",
+      "kind": "Policy",
+      "domain": "identity_security",
+      "title": "MFA for Admin Surfaces",
+      "summary": "Enforce MFA on AI platform admin and policy consoles.",
+      "body": "Enforce MFA on AI platform admin and policy consoles.",
+      "tags": [
+        "identity"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-id-mfa-admin",
+          "source_title": "MFA for Admin Surfaces",
+          "citation": "identity_security",
+          "excerpt": "Enforce MFA on AI platform admin and policy consoles."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "pi-direct",
+      "kind": "Attack",
+      "domain": "prompt_injection",
+      "title": "Direct Prompt Injection",
+      "summary": "User message overrides system instructions.",
+      "body": "User message overrides system instructions.",
+      "tags": [
+        "attack",
+        "prompt_injection"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-pi-direct",
+          "source_title": "Direct Prompt Injection",
+          "citation": "prompt_injection",
+          "excerpt": "User message overrides system instructions."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "pi-indirect",
+      "kind": "Attack",
+      "domain": "prompt_injection",
+      "title": "Indirect Prompt Injection",
+      "summary": "Malicious content in retrieved docs manipulates the model.",
+      "body": "Malicious content in retrieved docs manipulates the model.",
+      "tags": [
+        "attack",
+        "prompt_injection"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-pi-indirect",
+          "source_title": "Indirect Prompt Injection",
+          "citation": "prompt_injection",
+          "excerpt": "Malicious content in retrieved docs manipulates the model."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "pi-tool-smuggle",
+      "kind": "Attack",
+      "domain": "prompt_injection",
+      "title": "Tool Argument Smuggling",
+      "summary": "Payloads hide instructions inside tool parameters.",
+      "body": "Payloads hide instructions inside tool parameters.",
+      "tags": [
+        "attack",
+        "prompt_injection"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-pi-tool-smuggle",
+          "source_title": "Tool Argument Smuggling",
+          "citation": "prompt_injection",
+          "excerpt": "Payloads hide instructions inside tool parameters."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "jb-dan",
+      "kind": "Attack",
+      "domain": "jailbreak",
+      "title": "DAN-style Jailbreak",
+      "summary": "Roleplay personas that ignore safety policies.",
+      "body": "Roleplay personas that ignore safety policies.",
+      "tags": [
+        "attack",
+        "jailbreak"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-jb-dan",
+          "source_title": "DAN-style Jailbreak",
+          "citation": "jailbreak",
+          "excerpt": "Roleplay personas that ignore safety policies."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "jb-encoding",
+      "kind": "Attack",
+      "domain": "jailbreak",
+      "title": "Encoding Jailbreak",
+      "summary": "Base64/ROT13 obfuscation to bypass filters.",
+      "body": "Base64/ROT13 obfuscation to bypass filters.",
+      "tags": [
+        "attack",
+        "jailbreak"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-jb-encoding",
+          "source_title": "Encoding Jailbreak",
+          "citation": "jailbreak",
+          "excerpt": "Base64/ROT13 obfuscation to bypass filters."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "jb-multi-turn",
+      "kind": "Attack",
+      "domain": "jailbreak",
+      "title": "Multi-turn Jailbreak",
+      "summary": "Gradual escalation across conversation turns.",
+      "body": "Gradual escalation across conversation turns.",
+      "tags": [
+        "attack",
+        "jailbreak"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-jb-multi-turn",
+          "source_title": "Multi-turn Jailbreak",
+          "citation": "jailbreak",
+          "excerpt": "Gradual escalation across conversation turns."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "gr-input-filter",
+      "kind": "Guardrail",
+      "domain": "guardrail_templates",
+      "title": "Input Filter Guardrail",
+      "summary": "Block or rewrite prompts matching injection/PII patterns.",
+      "body": "Block or rewrite prompts matching injection/PII patterns.",
+      "tags": [
+        "guardrail",
+        "template"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-gr-input-filter",
+          "source_title": "Input Filter Guardrail",
+          "citation": "guardrail_templates",
+          "excerpt": "Block or rewrite prompts matching injection/PII patterns."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "gr-output-filter",
+      "kind": "Guardrail",
+      "domain": "guardrail_templates",
+      "title": "Output Filter Guardrail",
+      "summary": "Scan model outputs for secrets, toxic content, policy violations.",
+      "body": "Scan model outputs for secrets, toxic content, policy violations.",
+      "tags": [
+        "guardrail",
+        "template"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-gr-output-filter",
+          "source_title": "Output Filter Guardrail",
+          "citation": "guardrail_templates",
+          "excerpt": "Scan model outputs for secrets, toxic content, policy violations."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "gr-tool-allowlist",
+      "kind": "Guardrail",
+      "domain": "guardrail_templates",
+      "title": "Tool Allowlist Guardrail",
+      "summary": "Permit only registered tools with schema validation.",
+      "body": "Permit only registered tools with schema validation.",
+      "tags": [
+        "guardrail",
+        "template"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-gr-tool-allowlist",
+          "source_title": "Tool Allowlist Guardrail",
+          "citation": "guardrail_templates",
+          "excerpt": "Permit only registered tools with schema validation."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "gr-rate-limit",
+      "kind": "Guardrail",
+      "domain": "guardrail_templates",
+      "title": "Rate Limit Guardrail",
+      "summary": "Throttle abusive or costly model/tool invocations.",
+      "body": "Throttle abusive or costly model/tool invocations.",
+      "tags": [
+        "guardrail",
+        "template"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-gr-rate-limit",
+          "source_title": "Rate Limit Guardrail",
+          "citation": "guardrail_templates",
+          "excerpt": "Throttle abusive or costly model/tool invocations."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "gr-topic-block",
+      "kind": "Guardrail",
+      "domain": "guardrail_templates",
+      "title": "Topic Blocklist Guardrail",
+      "summary": "Refuse disallowed topics per policy.",
+      "body": "Refuse disallowed topics per policy.",
+      "tags": [
+        "guardrail",
+        "template"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-gr-topic-block",
+          "source_title": "Topic Blocklist Guardrail",
+          "citation": "guardrail_templates",
+          "excerpt": "Refuse disallowed topics per policy."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "vendor-azure-ai",
+      "kind": "Vendor",
+      "domain": "vendor_capabilities",
+      "title": "Azure AI Foundry",
+      "summary": "Content safety, prompt shields, private networking, Entra ID.",
+      "body": "Content safety, prompt shields, private networking, Entra ID.",
+      "tags": [
+        "vendor"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-vendor-azure-ai",
+          "source_title": "Azure AI Foundry",
+          "citation": "vendor_capabilities",
+          "excerpt": "Content safety, prompt shields, private networking, Entra ID."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "vendor-azure-ai-cap-safety",
+      "kind": "Capability",
+      "domain": "vendor_capabilities",
+      "title": "Azure AI Foundry Safety Filters",
+      "summary": "Native content/safety filtering for Azure AI Foundry",
+      "body": "Native content/safety filtering for Azure AI Foundry",
+      "tags": [
+        "capability"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-vendor-azure-ai-cap-safety",
+          "source_title": "Azure AI Foundry Safety Filters",
+          "citation": "vendor_capabilities",
+          "excerpt": "Native content/safety filtering for Azure AI Foundry"
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "vendor-openai",
+      "kind": "Vendor",
+      "domain": "vendor_capabilities",
+      "title": "OpenAI Platform",
+      "summary": "Moderation API, org RBAC, data controls.",
+      "body": "Moderation API, org RBAC, data controls.",
+      "tags": [
+        "vendor"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-vendor-openai",
+          "source_title": "OpenAI Platform",
+          "citation": "vendor_capabilities",
+          "excerpt": "Moderation API, org RBAC, data controls."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "vendor-openai-cap-safety",
+      "kind": "Capability",
+      "domain": "vendor_capabilities",
+      "title": "OpenAI Platform Safety Filters",
+      "summary": "Native content/safety filtering for OpenAI Platform",
+      "body": "Native content/safety filtering for OpenAI Platform",
+      "tags": [
+        "capability"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-vendor-openai-cap-safety",
+          "source_title": "OpenAI Platform Safety Filters",
+          "citation": "vendor_capabilities",
+          "excerpt": "Native content/safety filtering for OpenAI Platform"
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "vendor-aws-bedrock",
+      "kind": "Vendor",
+      "domain": "vendor_capabilities",
+      "title": "AWS Bedrock",
+      "summary": "Guardrails for Amazon Bedrock, IAM, VPC endpoints.",
+      "body": "Guardrails for Amazon Bedrock, IAM, VPC endpoints.",
+      "tags": [
+        "vendor"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-vendor-aws-bedrock",
+          "source_title": "AWS Bedrock",
+          "citation": "vendor_capabilities",
+          "excerpt": "Guardrails for Amazon Bedrock, IAM, VPC endpoints."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "vendor-aws-bedrock-cap-safety",
+      "kind": "Capability",
+      "domain": "vendor_capabilities",
+      "title": "AWS Bedrock Safety Filters",
+      "summary": "Native content/safety filtering for AWS Bedrock",
+      "body": "Native content/safety filtering for AWS Bedrock",
+      "tags": [
+        "capability"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-vendor-aws-bedrock-cap-safety",
+          "source_title": "AWS Bedrock Safety Filters",
+          "citation": "vendor_capabilities",
+          "excerpt": "Native content/safety filtering for AWS Bedrock"
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "vendor-gcp-vertex",
+      "kind": "Vendor",
+      "domain": "vendor_capabilities",
+      "title": "Google Vertex AI",
+      "summary": "Model Armor / safety filters, VPC-SC, IAM.",
+      "body": "Model Armor / safety filters, VPC-SC, IAM.",
+      "tags": [
+        "vendor"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-vendor-gcp-vertex",
+          "source_title": "Google Vertex AI",
+          "citation": "vendor_capabilities",
+          "excerpt": "Model Armor / safety filters, VPC-SC, IAM."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "vendor-gcp-vertex-cap-safety",
+      "kind": "Capability",
+      "domain": "vendor_capabilities",
+      "title": "Google Vertex AI Safety Filters",
+      "summary": "Native content/safety filtering for Google Vertex AI",
+      "body": "Native content/safety filtering for Google Vertex AI",
+      "tags": [
+        "capability"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-vendor-gcp-vertex-cap-safety",
+          "source_title": "Google Vertex AI Safety Filters",
+          "citation": "vendor_capabilities",
+          "excerpt": "Native content/safety filtering for Google Vertex AI"
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "rt-no-shell",
+      "kind": "Restriction",
+      "domain": "runtime_restrictions",
+      "title": "Deny Shell Execution",
+      "summary": "Block shell/process tools unless explicitly approved.",
+      "body": "Block shell/process tools unless explicitly approved.",
+      "tags": [
+        "runtime"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-rt-no-shell",
+          "source_title": "Deny Shell Execution",
+          "citation": "runtime_restrictions",
+          "excerpt": "Block shell/process tools unless explicitly approved."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "rt-net-egress",
+      "kind": "Restriction",
+      "domain": "runtime_restrictions",
+      "title": "Egress Allowlist",
+      "summary": "Restrict network egress from agent sandboxes.",
+      "body": "Restrict network egress from agent sandboxes.",
+      "tags": [
+        "runtime"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-rt-net-egress",
+          "source_title": "Egress Allowlist",
+          "citation": "runtime_restrictions",
+          "excerpt": "Restrict network egress from agent sandboxes."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "rt-data-residency",
+      "kind": "Restriction",
+      "domain": "runtime_restrictions",
+      "title": "Data Residency",
+      "summary": "Keep prompts/completions within approved regions.",
+      "body": "Keep prompts/completions within approved regions.",
+      "tags": [
+        "runtime"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-rt-data-residency",
+          "source_title": "Data Residency",
+          "citation": "runtime_restrictions",
+          "excerpt": "Keep prompts/completions within approved regions."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "rt-max-tokens",
+      "kind": "Restriction",
+      "domain": "runtime_restrictions",
+      "title": "Max Token Budgets",
+      "summary": "Enforce token and cost budgets per tenant/agent.",
+      "body": "Enforce token and cost budgets per tenant/agent.",
+      "tags": [
+        "runtime"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-rt-max-tokens",
+          "source_title": "Max Token Budgets",
+          "citation": "runtime_restrictions",
+          "excerpt": "Enforce token and cost budgets per tenant/agent."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "pol-agent-rbac",
+      "kind": "Policy",
+      "domain": "identity_policies",
+      "title": "Agent RBAC Policy",
+      "summary": "Map agent actions to RBAC roles and deny-by-default.",
+      "body": "Map agent actions to RBAC roles and deny-by-default.",
+      "tags": [
+        "policy",
+        "identity"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-pol-agent-rbac",
+          "source_title": "Agent RBAC Policy",
+          "citation": "identity_policies",
+          "excerpt": "Map agent actions to RBAC roles and deny-by-default."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "pol-token-exchange",
+      "kind": "Policy",
+      "domain": "identity_policies",
+      "title": "Token Exchange Policy",
+      "summary": "Short-lived tokens via OAuth token exchange for tools.",
+      "body": "Short-lived tokens via OAuth token exchange for tools.",
+      "tags": [
+        "policy",
+        "identity"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-pol-token-exchange",
+          "source_title": "Token Exchange Policy",
+          "citation": "identity_policies",
+          "excerpt": "Short-lived tokens via OAuth token exchange for tools."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "pol-breakglass",
+      "kind": "Policy",
+      "domain": "identity_policies",
+      "title": "Break-glass Access Policy",
+      "summary": "Time-bound emergency access with audit.",
+      "body": "Time-bound emergency access with audit.",
+      "tags": [
+        "policy",
+        "identity"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-pol-breakglass",
+          "source_title": "Break-glass Access Policy",
+          "citation": "identity_policies",
+          "excerpt": "Time-bound emergency access with audit."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "map-owasp-nist",
+      "kind": "Mapping",
+      "domain": "policy_mappings",
+      "title": "OWASP LLM01 \u2192 NIST Map/Manage",
+      "summary": "Prompt injection risks map to NIST Map and Manage functions.",
+      "body": "Prompt injection risks map to NIST Map and Manage functions.",
+      "tags": [
+        "mapping"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-map-owasp-nist",
+          "source_title": "OWASP LLM01 \u2192 NIST Map/Manage",
+          "citation": "policy_mappings",
+          "excerpt": "Prompt injection risks map to NIST Map and Manage functions."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "map-gdpr-hipaa",
+      "kind": "Mapping",
+      "domain": "policy_mappings",
+      "title": "GDPR Art.32 \u2194 HIPAA Security",
+      "summary": "Security of processing aligns with HIPAA administrative/technical safeguards.",
+      "body": "Security of processing aligns with HIPAA administrative/technical safeguards.",
+      "tags": [
+        "mapping"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-map-gdpr-hipaa",
+          "source_title": "GDPR Art.32 \u2194 HIPAA Security",
+          "citation": "policy_mappings",
+          "excerpt": "Security of processing aligns with HIPAA administrative/technical safeguards."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "map-soc2-iso",
+      "kind": "Mapping",
+      "domain": "policy_mappings",
+      "title": "SOC2 CC6 \u2194 ISO A.5/A.8",
+      "summary": "Access control criteria map to ISO organizational/asset controls.",
+      "body": "Access control criteria map to ISO organizational/asset controls.",
+      "tags": [
+        "mapping"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-map-soc2-iso",
+          "source_title": "SOC2 CC6 \u2194 ISO A.5/A.8",
+          "citation": "policy_mappings",
+          "excerpt": "Access control criteria map to ISO organizational/asset controls."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "map-euai-nist",
+      "kind": "Mapping",
+      "domain": "policy_mappings",
+      "title": "EU AI Act High-Risk \u2192 NIST Govern",
+      "summary": "High-risk obligations align with NIST Govern function.",
+      "body": "High-risk obligations align with NIST Govern function.",
+      "tags": [
+        "mapping"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-map-euai-nist",
+          "source_title": "EU AI Act High-Risk \u2192 NIST Govern",
+          "citation": "policy_mappings",
+          "excerpt": "High-risk obligations align with NIST Govern function."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    }
+  ],
+  "edges": [
+    {
+      "edge_id": "e-fw-owasp_llm-OWNS-owasp-llm01",
+      "source_id": "fw-owasp_llm",
+      "target_id": "owasp-llm01",
+      "relationship": "OWNS",
+      "weight": 1.0,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-fw-owasp_llm-OWNS-owasp-llm02",
+      "source_id": "fw-owasp_llm",
+      "target_id": "owasp-llm02",
+      "relationship": "OWNS",
+      "weight": 1.0,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-fw-owasp_llm-OWNS-owasp-llm03",
+      "source_id": "fw-owasp_llm",
+      "target_id": "owasp-llm03",
+      "relationship": "OWNS",
+      "weight": 1.0,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-fw-owasp_llm-OWNS-owasp-llm04",
+      "source_id": "fw-owasp_llm",
+      "target_id": "owasp-llm04",
+      "relationship": "OWNS",
+      "weight": 1.0,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-fw-owasp_llm-OWNS-owasp-llm05",
+      "source_id": "fw-owasp_llm",
+      "target_id": "owasp-llm05",
+      "relationship": "OWNS",
+      "weight": 1.0,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-fw-owasp_llm-OWNS-owasp-llm06",
+      "source_id": "fw-owasp_llm",
+      "target_id": "owasp-llm06",
+      "relationship": "OWNS",
+      "weight": 1.0,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-fw-owasp_llm-OWNS-owasp-llm07",
+      "source_id": "fw-owasp_llm",
+      "target_id": "owasp-llm07",
+      "relationship": "OWNS",
+      "weight": 1.0,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-fw-owasp_llm-OWNS-owasp-llm08",
+      "source_id": "fw-owasp_llm",
+      "target_id": "owasp-llm08",
+      "relationship": "OWNS",
+      "weight": 1.0,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-fw-owasp_llm-OWNS-owasp-llm09",
+      "source_id": "fw-owasp_llm",
+      "target_id": "owasp-llm09",
+      "relationship": "OWNS",
+      "weight": 1.0,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-fw-owasp_llm-OWNS-owasp-llm10",
+      "source_id": "fw-owasp_llm",
+      "target_id": "owasp-llm10",
+      "relationship": "OWNS",
+      "weight": 1.0,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-fw-mitre_atlas-OWNS-atlas-aml-t0043",
+      "source_id": "fw-mitre_atlas",
+      "target_id": "atlas-aml-t0043",
+      "relationship": "OWNS",
+      "weight": 1.0,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-owasp-llm01-RELATED_TO-atlas-aml-t0043",
+      "source_id": "owasp-llm01",
+      "target_id": "atlas-aml-t0043",
+      "relationship": "RELATED_TO",
+      "weight": 0.8,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-fw-mitre_atlas-OWNS-atlas-aml-t0051",
+      "source_id": "fw-mitre_atlas",
+      "target_id": "atlas-aml-t0051",
+      "relationship": "OWNS",
+      "weight": 1.0,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-owasp-llm01-RELATED_TO-atlas-aml-t0051",
+      "source_id": "owasp-llm01",
+      "target_id": "atlas-aml-t0051",
+      "relationship": "RELATED_TO",
+      "weight": 0.8,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-fw-mitre_atlas-OWNS-atlas-aml-t0054",
+      "source_id": "fw-mitre_atlas",
+      "target_id": "atlas-aml-t0054",
+      "relationship": "OWNS",
+      "weight": 1.0,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-owasp-llm01-RELATED_TO-atlas-aml-t0054",
+      "source_id": "owasp-llm01",
+      "target_id": "atlas-aml-t0054",
+      "relationship": "RELATED_TO",
+      "weight": 0.8,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-fw-mitre_atlas-OWNS-atlas-aml-t0048",
+      "source_id": "fw-mitre_atlas",
+      "target_id": "atlas-aml-t0048",
+      "relationship": "OWNS",
+      "weight": 1.0,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-owasp-llm01-RELATED_TO-atlas-aml-t0048",
+      "source_id": "owasp-llm01",
+      "target_id": "atlas-aml-t0048",
+      "relationship": "RELATED_TO",
+      "weight": 0.8,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-fw-nist_ai_rmf-OWNS-nist-govern",
+      "source_id": "fw-nist_ai_rmf",
+      "target_id": "nist-govern",
+      "relationship": "OWNS",
+      "weight": 1.0,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-fw-nist_ai_rmf-OWNS-nist-map",
+      "source_id": "fw-nist_ai_rmf",
+      "target_id": "nist-map",
+      "relationship": "OWNS",
+      "weight": 1.0,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-fw-nist_ai_rmf-OWNS-nist-measure",
+      "source_id": "fw-nist_ai_rmf",
+      "target_id": "nist-measure",
+      "relationship": "OWNS",
+      "weight": 1.0,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-fw-nist_ai_rmf-OWNS-nist-manage",
+      "source_id": "fw-nist_ai_rmf",
+      "target_id": "nist-manage",
+      "relationship": "OWNS",
+      "weight": 1.0,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-fw-hipaa-OWNS-hipaa-phi-min",
+      "source_id": "fw-hipaa",
+      "target_id": "hipaa-phi-min",
+      "relationship": "OWNS",
+      "weight": 1.0,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-fw-hipaa-OWNS-hipaa-baa",
+      "source_id": "fw-hipaa",
+      "target_id": "hipaa-baa",
+      "relationship": "OWNS",
+      "weight": 1.0,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-fw-pci_dss-OWNS-pci-pan-mask",
+      "source_id": "fw-pci_dss",
+      "target_id": "pci-pan-mask",
+      "relationship": "OWNS",
+      "weight": 1.0,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-fw-pci_dss-OWNS-pci-key-mgmt",
+      "source_id": "fw-pci_dss",
+      "target_id": "pci-key-mgmt",
+      "relationship": "OWNS",
+      "weight": 1.0,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-fw-soc2-OWNS-soc2-cc6",
+      "source_id": "fw-soc2",
+      "target_id": "soc2-cc6",
+      "relationship": "OWNS",
+      "weight": 1.0,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-fw-soc2-OWNS-soc2-cc7",
+      "source_id": "fw-soc2",
+      "target_id": "soc2-cc7",
+      "relationship": "OWNS",
+      "weight": 1.0,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-fw-iso27001-OWNS-iso-a5",
+      "source_id": "fw-iso27001",
+      "target_id": "iso-a5",
+      "relationship": "OWNS",
+      "weight": 1.0,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-fw-iso27001-OWNS-iso-a8",
+      "source_id": "fw-iso27001",
+      "target_id": "iso-a8",
+      "relationship": "OWNS",
+      "weight": 1.0,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-fw-gdpr-OWNS-gdpr-art5",
+      "source_id": "fw-gdpr",
+      "target_id": "gdpr-art5",
+      "relationship": "OWNS",
+      "weight": 1.0,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-fw-gdpr-OWNS-gdpr-art22",
+      "source_id": "fw-gdpr",
+      "target_id": "gdpr-art22",
+      "relationship": "OWNS",
+      "weight": 1.0,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-fw-gdpr-OWNS-gdpr-art32",
+      "source_id": "fw-gdpr",
+      "target_id": "gdpr-art32",
+      "relationship": "OWNS",
+      "weight": 1.0,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-fw-eu_ai_act-OWNS-euai-high-risk",
+      "source_id": "fw-eu_ai_act",
+      "target_id": "euai-high-risk",
+      "relationship": "OWNS",
+      "weight": 1.0,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-fw-eu_ai_act-OWNS-euai-transparency",
+      "source_id": "fw-eu_ai_act",
+      "target_id": "euai-transparency",
+      "relationship": "OWNS",
+      "weight": 1.0,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-fw-financial_regulations-OWNS-fin-model-risk",
+      "source_id": "fw-financial_regulations",
+      "target_id": "fin-model-risk",
+      "relationship": "OWNS",
+      "weight": 1.0,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-fw-financial_regulations-OWNS-fin-consumer",
+      "source_id": "fw-financial_regulations",
+      "target_id": "fin-consumer",
+      "relationship": "OWNS",
+      "weight": 1.0,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-fw-healthcare_regulations-OWNS-hc-samd",
+      "source_id": "fw-healthcare_regulations",
+      "target_id": "hc-samd",
+      "relationship": "OWNS",
+      "weight": 1.0,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-fw-healthcare_regulations-OWNS-hc-hitrust",
+      "source_id": "fw-healthcare_regulations",
+      "target_id": "hc-hitrust",
+      "relationship": "OWNS",
+      "weight": 1.0,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-fw-identity_security-OWNS-id-least-privilege",
+      "source_id": "fw-identity_security",
+      "target_id": "id-least-privilege",
+      "relationship": "OWNS",
+      "weight": 1.0,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-fw-identity_security-OWNS-id-workload-identity",
+      "source_id": "fw-identity_security",
+      "target_id": "id-workload-identity",
+      "relationship": "OWNS",
+      "weight": 1.0,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-fw-identity_security-OWNS-id-human-in-loop",
+      "source_id": "fw-identity_security",
+      "target_id": "id-human-in-loop",
+      "relationship": "OWNS",
+      "weight": 1.0,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-fw-identity_security-OWNS-id-mfa-admin",
+      "source_id": "fw-identity_security",
+      "target_id": "id-mfa-admin",
+      "relationship": "OWNS",
+      "weight": 1.0,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-fw-prompt_injection-OWNS-pi-direct",
+      "source_id": "fw-prompt_injection",
+      "target_id": "pi-direct",
+      "relationship": "OWNS",
+      "weight": 1.0,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-pi-direct-RELATED_TO-owasp-llm01",
+      "source_id": "pi-direct",
+      "target_id": "owasp-llm01",
+      "relationship": "RELATED_TO",
+      "weight": 0.85,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-fw-prompt_injection-OWNS-pi-indirect",
+      "source_id": "fw-prompt_injection",
+      "target_id": "pi-indirect",
+      "relationship": "OWNS",
+      "weight": 1.0,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-pi-indirect-RELATED_TO-owasp-llm01",
+      "source_id": "pi-indirect",
+      "target_id": "owasp-llm01",
+      "relationship": "RELATED_TO",
+      "weight": 0.85,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-fw-prompt_injection-OWNS-pi-tool-smuggle",
+      "source_id": "fw-prompt_injection",
+      "target_id": "pi-tool-smuggle",
+      "relationship": "OWNS",
+      "weight": 1.0,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-pi-tool-smuggle-RELATED_TO-owasp-llm01",
+      "source_id": "pi-tool-smuggle",
+      "target_id": "owasp-llm01",
+      "relationship": "RELATED_TO",
+      "weight": 0.85,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-fw-jailbreak-OWNS-jb-dan",
+      "source_id": "fw-jailbreak",
+      "target_id": "jb-dan",
+      "relationship": "OWNS",
+      "weight": 1.0,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-jb-dan-RELATED_TO-owasp-llm01",
+      "source_id": "jb-dan",
+      "target_id": "owasp-llm01",
+      "relationship": "RELATED_TO",
+      "weight": 0.85,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-fw-jailbreak-OWNS-jb-encoding",
+      "source_id": "fw-jailbreak",
+      "target_id": "jb-encoding",
+      "relationship": "OWNS",
+      "weight": 1.0,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-jb-encoding-RELATED_TO-owasp-llm01",
+      "source_id": "jb-encoding",
+      "target_id": "owasp-llm01",
+      "relationship": "RELATED_TO",
+      "weight": 0.85,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-fw-jailbreak-OWNS-jb-multi-turn",
+      "source_id": "fw-jailbreak",
+      "target_id": "jb-multi-turn",
+      "relationship": "OWNS",
+      "weight": 1.0,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-jb-multi-turn-RELATED_TO-owasp-llm01",
+      "source_id": "jb-multi-turn",
+      "target_id": "owasp-llm01",
+      "relationship": "RELATED_TO",
+      "weight": 0.85,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-fw-guardrail_templates-OWNS-gr-input-filter",
+      "source_id": "fw-guardrail_templates",
+      "target_id": "gr-input-filter",
+      "relationship": "OWNS",
+      "weight": 1.0,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-gr-input-filter-MITIGATES-owasp-llm01",
+      "source_id": "gr-input-filter",
+      "target_id": "owasp-llm01",
+      "relationship": "MITIGATES",
+      "weight": 0.9,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-gr-input-filter-MITIGATES-pi-direct",
+      "source_id": "gr-input-filter",
+      "target_id": "pi-direct",
+      "relationship": "MITIGATES",
+      "weight": 0.8,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-fw-guardrail_templates-OWNS-gr-output-filter",
+      "source_id": "fw-guardrail_templates",
+      "target_id": "gr-output-filter",
+      "relationship": "OWNS",
+      "weight": 1.0,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-gr-output-filter-MITIGATES-owasp-llm01",
+      "source_id": "gr-output-filter",
+      "target_id": "owasp-llm01",
+      "relationship": "MITIGATES",
+      "weight": 0.9,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-gr-output-filter-MITIGATES-pi-direct",
+      "source_id": "gr-output-filter",
+      "target_id": "pi-direct",
+      "relationship": "MITIGATES",
+      "weight": 0.8,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-fw-guardrail_templates-OWNS-gr-tool-allowlist",
+      "source_id": "fw-guardrail_templates",
+      "target_id": "gr-tool-allowlist",
+      "relationship": "OWNS",
+      "weight": 1.0,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-gr-tool-allowlist-MITIGATES-owasp-llm01",
+      "source_id": "gr-tool-allowlist",
+      "target_id": "owasp-llm01",
+      "relationship": "MITIGATES",
+      "weight": 0.9,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-gr-tool-allowlist-MITIGATES-pi-direct",
+      "source_id": "gr-tool-allowlist",
+      "target_id": "pi-direct",
+      "relationship": "MITIGATES",
+      "weight": 0.8,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-fw-guardrail_templates-OWNS-gr-rate-limit",
+      "source_id": "fw-guardrail_templates",
+      "target_id": "gr-rate-limit",
+      "relationship": "OWNS",
+      "weight": 1.0,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-gr-rate-limit-MITIGATES-owasp-llm01",
+      "source_id": "gr-rate-limit",
+      "target_id": "owasp-llm01",
+      "relationship": "MITIGATES",
+      "weight": 0.9,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-gr-rate-limit-MITIGATES-pi-direct",
+      "source_id": "gr-rate-limit",
+      "target_id": "pi-direct",
+      "relationship": "MITIGATES",
+      "weight": 0.8,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-fw-guardrail_templates-OWNS-gr-topic-block",
+      "source_id": "fw-guardrail_templates",
+      "target_id": "gr-topic-block",
+      "relationship": "OWNS",
+      "weight": 1.0,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-gr-topic-block-MITIGATES-owasp-llm01",
+      "source_id": "gr-topic-block",
+      "target_id": "owasp-llm01",
+      "relationship": "MITIGATES",
+      "weight": 0.9,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-gr-topic-block-MITIGATES-pi-direct",
+      "source_id": "gr-topic-block",
+      "target_id": "pi-direct",
+      "relationship": "MITIGATES",
+      "weight": 0.8,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-fw-vendor_capabilities-OWNS-vendor-azure-ai",
+      "source_id": "fw-vendor_capabilities",
+      "target_id": "vendor-azure-ai",
+      "relationship": "OWNS",
+      "weight": 1.0,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-vendor-azure-ai-OWNS-vendor-azure-ai-cap-safety",
+      "source_id": "vendor-azure-ai",
+      "target_id": "vendor-azure-ai-cap-safety",
+      "relationship": "OWNS",
+      "weight": 1.0,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-fw-vendor_capabilities-OWNS-vendor-openai",
+      "source_id": "fw-vendor_capabilities",
+      "target_id": "vendor-openai",
+      "relationship": "OWNS",
+      "weight": 1.0,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-vendor-openai-OWNS-vendor-openai-cap-safety",
+      "source_id": "vendor-openai",
+      "target_id": "vendor-openai-cap-safety",
+      "relationship": "OWNS",
+      "weight": 1.0,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-fw-vendor_capabilities-OWNS-vendor-aws-bedrock",
+      "source_id": "fw-vendor_capabilities",
+      "target_id": "vendor-aws-bedrock",
+      "relationship": "OWNS",
+      "weight": 1.0,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-vendor-aws-bedrock-OWNS-vendor-aws-bedrock-cap-safety",
+      "source_id": "vendor-aws-bedrock",
+      "target_id": "vendor-aws-bedrock-cap-safety",
+      "relationship": "OWNS",
+      "weight": 1.0,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-fw-vendor_capabilities-OWNS-vendor-gcp-vertex",
+      "source_id": "fw-vendor_capabilities",
+      "target_id": "vendor-gcp-vertex",
+      "relationship": "OWNS",
+      "weight": 1.0,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-vendor-gcp-vertex-OWNS-vendor-gcp-vertex-cap-safety",
+      "source_id": "vendor-gcp-vertex",
+      "target_id": "vendor-gcp-vertex-cap-safety",
+      "relationship": "OWNS",
+      "weight": 1.0,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-fw-runtime_restrictions-OWNS-rt-no-shell",
+      "source_id": "fw-runtime_restrictions",
+      "target_id": "rt-no-shell",
+      "relationship": "OWNS",
+      "weight": 1.0,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-rt-no-shell-MITIGATES-owasp-llm08",
+      "source_id": "rt-no-shell",
+      "target_id": "owasp-llm08",
+      "relationship": "MITIGATES",
+      "weight": 0.75,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-fw-runtime_restrictions-OWNS-rt-net-egress",
+      "source_id": "fw-runtime_restrictions",
+      "target_id": "rt-net-egress",
+      "relationship": "OWNS",
+      "weight": 1.0,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-rt-net-egress-MITIGATES-owasp-llm08",
+      "source_id": "rt-net-egress",
+      "target_id": "owasp-llm08",
+      "relationship": "MITIGATES",
+      "weight": 0.75,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-fw-runtime_restrictions-OWNS-rt-data-residency",
+      "source_id": "fw-runtime_restrictions",
+      "target_id": "rt-data-residency",
+      "relationship": "OWNS",
+      "weight": 1.0,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-rt-data-residency-MITIGATES-owasp-llm08",
+      "source_id": "rt-data-residency",
+      "target_id": "owasp-llm08",
+      "relationship": "MITIGATES",
+      "weight": 0.75,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-fw-runtime_restrictions-OWNS-rt-max-tokens",
+      "source_id": "fw-runtime_restrictions",
+      "target_id": "rt-max-tokens",
+      "relationship": "OWNS",
+      "weight": 1.0,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-rt-max-tokens-MITIGATES-owasp-llm08",
+      "source_id": "rt-max-tokens",
+      "target_id": "owasp-llm08",
+      "relationship": "MITIGATES",
+      "weight": 0.75,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-fw-identity_policies-OWNS-pol-agent-rbac",
+      "source_id": "fw-identity_policies",
+      "target_id": "pol-agent-rbac",
+      "relationship": "OWNS",
+      "weight": 1.0,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-pol-agent-rbac-IMPLEMENTS-id-least-privilege",
+      "source_id": "pol-agent-rbac",
+      "target_id": "id-least-privilege",
+      "relationship": "IMPLEMENTS",
+      "weight": 1.0,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-fw-identity_policies-OWNS-pol-token-exchange",
+      "source_id": "fw-identity_policies",
+      "target_id": "pol-token-exchange",
+      "relationship": "OWNS",
+      "weight": 1.0,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-pol-token-exchange-IMPLEMENTS-id-least-privilege",
+      "source_id": "pol-token-exchange",
+      "target_id": "id-least-privilege",
+      "relationship": "IMPLEMENTS",
+      "weight": 1.0,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-fw-identity_policies-OWNS-pol-breakglass",
+      "source_id": "fw-identity_policies",
+      "target_id": "pol-breakglass",
+      "relationship": "OWNS",
+      "weight": 1.0,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-pol-breakglass-IMPLEMENTS-id-least-privilege",
+      "source_id": "pol-breakglass",
+      "target_id": "id-least-privilege",
+      "relationship": "IMPLEMENTS",
+      "weight": 1.0,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-fw-policy_mappings-OWNS-map-owasp-nist",
+      "source_id": "fw-policy_mappings",
+      "target_id": "map-owasp-nist",
+      "relationship": "OWNS",
+      "weight": 1.0,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-map-owasp-nist-MAPS_TO-owasp-llm01",
+      "source_id": "map-owasp-nist",
+      "target_id": "owasp-llm01",
+      "relationship": "MAPS_TO",
+      "weight": 1.0,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-map-owasp-nist-MAPS_TO-nist-map",
+      "source_id": "map-owasp-nist",
+      "target_id": "nist-map",
+      "relationship": "MAPS_TO",
+      "weight": 1.0,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-owasp-llm01-MAPS_TO-nist-map",
+      "source_id": "owasp-llm01",
+      "target_id": "nist-map",
+      "relationship": "MAPS_TO",
+      "weight": 0.7,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-fw-policy_mappings-OWNS-map-gdpr-hipaa",
+      "source_id": "fw-policy_mappings",
+      "target_id": "map-gdpr-hipaa",
+      "relationship": "OWNS",
+      "weight": 1.0,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-map-gdpr-hipaa-MAPS_TO-gdpr-art32",
+      "source_id": "map-gdpr-hipaa",
+      "target_id": "gdpr-art32",
+      "relationship": "MAPS_TO",
+      "weight": 1.0,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-map-gdpr-hipaa-MAPS_TO-hipaa-phi-min",
+      "source_id": "map-gdpr-hipaa",
+      "target_id": "hipaa-phi-min",
+      "relationship": "MAPS_TO",
+      "weight": 1.0,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-gdpr-art32-MAPS_TO-hipaa-phi-min",
+      "source_id": "gdpr-art32",
+      "target_id": "hipaa-phi-min",
+      "relationship": "MAPS_TO",
+      "weight": 0.7,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-fw-policy_mappings-OWNS-map-soc2-iso",
+      "source_id": "fw-policy_mappings",
+      "target_id": "map-soc2-iso",
+      "relationship": "OWNS",
+      "weight": 1.0,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-map-soc2-iso-MAPS_TO-soc2-cc6",
+      "source_id": "map-soc2-iso",
+      "target_id": "soc2-cc6",
+      "relationship": "MAPS_TO",
+      "weight": 1.0,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-map-soc2-iso-MAPS_TO-iso-a5",
+      "source_id": "map-soc2-iso",
+      "target_id": "iso-a5",
+      "relationship": "MAPS_TO",
+      "weight": 1.0,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-soc2-cc6-MAPS_TO-iso-a5",
+      "source_id": "soc2-cc6",
+      "target_id": "iso-a5",
+      "relationship": "MAPS_TO",
+      "weight": 0.7,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-fw-policy_mappings-OWNS-map-euai-nist",
+      "source_id": "fw-policy_mappings",
+      "target_id": "map-euai-nist",
+      "relationship": "OWNS",
+      "weight": 1.0,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-map-euai-nist-MAPS_TO-euai-high-risk",
+      "source_id": "map-euai-nist",
+      "target_id": "euai-high-risk",
+      "relationship": "MAPS_TO",
+      "weight": 1.0,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-map-euai-nist-MAPS_TO-nist-govern",
+      "source_id": "map-euai-nist",
+      "target_id": "nist-govern",
+      "relationship": "MAPS_TO",
+      "weight": 1.0,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-euai-high-risk-MAPS_TO-nist-govern",
+      "source_id": "euai-high-risk",
+      "target_id": "nist-govern",
+      "relationship": "MAPS_TO",
+      "weight": 0.7,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-gr-output-filter-MITIGATES-owasp-llm06",
+      "source_id": "gr-output-filter",
+      "target_id": "owasp-llm06",
+      "relationship": "MITIGATES",
+      "weight": 0.9,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-gr-tool-allowlist-MITIGATES-owasp-llm07",
+      "source_id": "gr-tool-allowlist",
+      "target_id": "owasp-llm07",
+      "relationship": "MITIGATES",
+      "weight": 0.9,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-gr-tool-allowlist-MITIGATES-owasp-llm08",
+      "source_id": "gr-tool-allowlist",
+      "target_id": "owasp-llm08",
+      "relationship": "MITIGATES",
+      "weight": 0.85,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-id-least-privilege-MITIGATES-owasp-llm08",
+      "source_id": "id-least-privilege",
+      "target_id": "owasp-llm08",
+      "relationship": "MITIGATES",
+      "weight": 0.8,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    },
+    {
+      "edge_id": "e-rt-no-shell-CONSTRAINS-owasp-llm08",
+      "source_id": "rt-no-shell",
+      "target_id": "owasp-llm08",
+      "relationship": "CONSTRAINS",
+      "weight": 0.9,
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.9
+      }
+    }
+  ]
+}

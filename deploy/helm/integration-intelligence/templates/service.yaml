@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: integration-intelligence
+  labels:
+    app: integration-intelligence
+spec:
+  type: {{ .Values.service.type | default "ClusterIP" }}
+  selector:
+    app: integration-intelligence
+  ports:
+    - name: http
+      port: {{ .Values.service.port }}
+      targetPort: http

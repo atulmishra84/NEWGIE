@@ -1,0 +1,168 @@
+/* GIE shared tokens — cool navy / teal, no purple bias */
+:root {
+  --ink: #0a1628;
+  --navy: #102a43;
+  --navy-mid: #243b53;
+  --slate: #486581;
+  --mist: #9fb3c8;
+  --fog: #d9e2ec;
+  --paper: #f0f4f8;
+  --white: #fafbfc;
+  --teal: #0f766e;
+  --teal-bright: #14b8a6;
+  --teal-soft: #ccfbf1;
+  --amber: #c2410c;
+  --amber-soft: #ffedd5;
+  --danger: #b91c1c;
+  --ok: #047857;
+  --warn: #b45309;
+  --font-display: "Syne", sans-serif;
+  --font-body: "Manrope", sans-serif;
+  --font-mono: "IBM Plex Mono", monospace;
+  --space: clamp(1rem, 2vw, 1.5rem);
+  --max: 1120px;
+  --radius: 6px;
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: 1.05rem;
+  line-height: 1.55;
+  color: var(--ink);
+  background: var(--paper);
+  -webkit-font-smoothing: antialiased;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: var(--teal);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
+}
+
+a:hover {
+  color: var(--navy);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 2.75rem;
+  padding: 0.65rem 1.35rem;
+  border-radius: var(--radius);
+  border: 1px solid transparent;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.25s var(--ease), background 0.25s var(--ease),
+    border-color 0.25s var(--ease), color 0.25s var(--ease);
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+.btn-primary {
+  background: var(--teal);
+  color: var(--white);
+}
+
+.btn-primary:hover {
+  background: #0d5f58;
+  color: var(--white);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--ink);
+  border-color: color-mix(in srgb, var(--ink) 22%, transparent);
+}
+
+.btn-ghost:hover {
+  border-color: var(--ink);
+  color: var(--ink);
+}
+
+.btn-light {
+  background: var(--white);
+  color: var(--ink);
+  border-color: color-mix(in srgb, var(--ink) 12%, transparent);
+}
+
+.btn-light:hover {
+  border-color: var(--teal);
+  color: var(--teal);
+}
+
+.mono {
+  font-family: var(--font-mono);
+  font-size: 0.86em;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.2rem 0.55rem;
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  background: var(--fog);
+  color: var(--navy-mid);
+}
+
+.badge-ok {
+  background: #d1fae5;
+  color: var(--ok);
+}
+
+.badge-warn {
+  background: var(--amber-soft);
+  color: var(--warn);
+}
+
+.badge-danger {
+  background: #fee2e2;
+  color: var(--danger);
+}
+
+.badge-teal {
+  background: var(--teal-soft);
+  color: var(--teal);
+}

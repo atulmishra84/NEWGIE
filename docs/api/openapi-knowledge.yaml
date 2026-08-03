@@ -1,0 +1,113 @@
+openapi: 3.1.0
+info:
+  title: GIE Knowledge Intelligence Agent API
+  version: 1.0.0
+  description: Query and update the versioned GIE knowledge graph (gie.knowledge.v1)
+servers:
+  - url: http://localhost:8081
+paths:
+  /health:
+    get:
+      summary: Liveness
+      responses:
+        "200":
+          description: OK
+  /v1/knowledge/query:
+    post:
+      summary: Explainable hybrid knowledge query
+      security:
+        - bearerAuth: []
+        - apiKeyAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/KnowledgeQueryRequest"
+      responses:
+        "200":
+          description: Explainable retrieval result
+  /v1/knowledge/nodes:
+    get:
+      summary: List knowledge nodes
+      responses:
+        "200":
+          description: Node list
+    post:
+      summary: Upsert nodes and edges
+      responses:
+        "200":
+          description: Upsert result
+  /v1/knowledge/nodes/{node_id}:
+    get:
+      summary: Get node by id
+      parameters:
+        - name: node_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Knowledge node
+  /v1/knowledge/versions:
+    get:
+      summary: Latest published version
+      responses:
+        "200":
+          description: Snapshot
+  /v1/knowledge/versions/diff:
+    get:
+      summary: Diff two versions
+      parameters:
+        - name: from_version
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: to_version
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Diff
+  /v1/knowledge/reindex:
+    post:
+      summary: Rebuild vector index
+      responses:
+        "200":
+          description: Reindex stats
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    apiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+  schemas:
+    KnowledgeQueryRequest:
+      type: object
+      required: [query]
+      properties:
+        query:
+          type: string
+        domains:
+          type: array
+          items:
+            type: string
+        top_k:
+          type: integer
+          default: 10
+        version:
+          type: string
+        include_graph:
+          type: boolean
+          default: true
+        hybrid:
+          type: boolean
+          default: true

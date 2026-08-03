@@ -1,0 +1,6 @@
+apiVersion: v2
+name: policy-generator
+description: GIE Policy Generator Agent
+type: application
+version: 1.0.0
+appVersion: "1.0.0"

@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gie-web
+  namespace: gie
+  labels:
+    app: gie-web
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gie-web
+  template:
+    metadata:
+      labels:
+        app: gie-web
+    spec:
+      containers:
+        - name: nginx
+          image: REPLACE_IMAGE
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 80
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 3
+            periodSeconds: 10
+          resources:
+            requests:
+              cpu: 25m
+              memory: 32Mi
+            limits:
+              cpu: 200m
+              memory: 128Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: gie-web
+  namespace: gie
+  labels:
+    app: gie-web
+spec:
+  type: LoadBalancer
+  selector:
+    app: gie-web
+  ports:
+    - name: http
+      port: 80
+      targetPort: http

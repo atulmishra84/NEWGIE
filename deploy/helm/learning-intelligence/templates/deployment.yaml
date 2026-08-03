@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: learning-intelligence
+  labels:
+    app: learning-intelligence
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: learning-intelligence
+  template:
+    metadata:
+      labels:
+        app: learning-intelligence
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8089"
+        prometheus.io/path: "/metrics"
+    spec:
+      containers:
+        - name: api
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy | default "IfNotPresent" }}
+          ports:
+            - name: http
+              containerPort: 8089
+          env:
+            {{- range $k, $v := .Values.env }}
+            - name: {{ $k }}
+              value: {{ $v | quote }}
+            {{- end }}
+            {{- if .Values.secrets.databaseUrl }}
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: learning-intelligence-secrets
+                  key: database-url
+            {{- end }}
+            {{- if .Values.secrets.redisUrl }}
+            - name: REDIS_URL
+              valueFrom:
+                secretKeyRef:
+                  name: learning-intelligence-secrets
+                  key: redis-url
+            {{- end }}
+            {{- if .Values.secrets.jwtSecret }}
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: learning-intelligence-secrets
+                  key: jwt-secret
+            {{- end }}
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}

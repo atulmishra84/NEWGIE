@@ -1,0 +1,13 @@
+<idea-plugin>
+  <id>com.gie.integration</id>
+  <name>GIE Guardrails</name>
+  <vendor>GIE</vendor>
+  <description>Guardrails Intelligence Engine JetBrains plugin</description>
+  <depends>com.intellij.modules.platform</depends>
+  <extensions defaultExtensionNs="com.intellij">
+    <applicationService serviceImplementation="com.gie.integration.GieSettings"/>
+  </extensions>
+  <actions>
+    <action id="Gie.Connect" class="com.gie.integration.ConnectAction" text="GIE: Connect" description="Connect to GIE Integration Agent"/>
+  </actions>
+</idea-plugin>

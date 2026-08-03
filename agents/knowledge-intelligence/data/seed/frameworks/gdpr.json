@@ -1,0 +1,113 @@
+{
+  "domain": "gdpr",
+  "nodes": [
+    {
+      "node_id": "fw-gdpr",
+      "kind": "Framework",
+      "domain": "gdpr",
+      "title": "GDPR",
+      "summary": "EU General Data Protection Regulation",
+      "body": "EU General Data Protection Regulation",
+      "tags": [
+        "framework",
+        "root"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-fw-gdpr",
+          "source_title": "GDPR",
+          "citation": "gdpr",
+          "excerpt": "EU General Data Protection Regulation"
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "gdpr-art5",
+      "kind": "Control",
+      "domain": "gdpr",
+      "title": "Purpose Limitation (Art.5)",
+      "summary": "Process personal data in AI only for specified purposes.",
+      "body": "Process personal data in AI only for specified purposes.",
+      "tags": [
+        "compliance",
+        "gdpr"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-gdpr-art5",
+          "source_title": "Purpose Limitation (Art.5)",
+          "citation": "gdpr",
+          "excerpt": "Process personal data in AI only for specified purposes."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "gdpr-art22",
+      "kind": "Control",
+      "domain": "gdpr",
+      "title": "Automated Decision-Making (Art.22)",
+      "summary": "Controls for solely automated decisions with legal effects.",
+      "body": "Controls for solely automated decisions with legal effects.",
+      "tags": [
+        "compliance",
+        "gdpr"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-gdpr-art22",
+          "source_title": "Automated Decision-Making (Art.22)",
+          "citation": "gdpr",
+          "excerpt": "Controls for solely automated decisions with legal effects."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "gdpr-art32",
+      "kind": "Control",
+      "domain": "gdpr",
+      "title": "Security of Processing (Art.32)",
+      "summary": "Technical/organizational measures for AI processing.",
+      "body": "Technical/organizational measures for AI processing.",
+      "tags": [
+        "compliance",
+        "gdpr"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-gdpr-art32",
+          "source_title": "Security of Processing (Art.32)",
+          "citation": "gdpr",
+          "excerpt": "Technical/organizational measures for AI processing."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+replicaCount: 2
+
+image:
+  repository: gie/orchestrator
+  tag: "1.0.0"
+  pullPolicy: IfNotPresent
+
+imagePullSecrets: []
+
+nameOverride: ""
+fullnameOverride: ""
+
+service:
+  type: ClusterIP
+  port: 8091
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 256Mi
+  limits:
+    cpu: "1"
+    memory: 1Gi
+
+env:
+  GIE_ENV: production
+  REQUIRE_AUTH: "true"
+  SIMULATE_AGENTS: "true"
+  OTEL_EXPORTER_OTLP_ENDPOINT: ""
+
+secrets:
+  databaseUrl: ""
+  redisUrl: ""
+  jwtSecret: ""

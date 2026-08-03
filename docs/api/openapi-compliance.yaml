@@ -1,0 +1,51 @@
+openapi: 3.1.0
+info:
+  title: GIE Compliance Intelligence Agent API
+  version: 1.0.0
+servers:
+  - url: http://localhost:8084
+paths:
+  /compliance/analyze:
+    post:
+      summary: Analyze applicable regulations and gaps
+      responses:
+        "200":
+          description: ComplianceReport with matrix, gaps, evidence, audit package
+  /compliance/validate:
+    post:
+      summary: Validate controls with new evidence
+      responses:
+        "200":
+          description: Updated ComplianceReport
+  /compliance/report:
+    get:
+      parameters:
+        - name: application_id
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Compliance dashboard (matrix, gaps, evidence, audit, score)
+  /compliance/evidence:
+    get:
+      parameters:
+        - name: application_id
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: control_id
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Evidence report
+  /frameworks:
+    get:
+      summary: List supported frameworks
+      responses:
+        "200":
+          description: Framework catalog summary

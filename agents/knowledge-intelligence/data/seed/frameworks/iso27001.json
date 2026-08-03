@@ -1,0 +1,86 @@
+{
+  "domain": "iso27001",
+  "nodes": [
+    {
+      "node_id": "fw-iso27001",
+      "kind": "Framework",
+      "domain": "iso27001",
+      "title": "ISO/IEC 27001",
+      "summary": "Information security management systems requirements",
+      "body": "Information security management systems requirements",
+      "tags": [
+        "framework",
+        "root"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-fw-iso27001",
+          "source_title": "ISO/IEC 27001",
+          "citation": "iso27001",
+          "excerpt": "Information security management systems requirements"
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "iso-a5",
+      "kind": "Control",
+      "domain": "iso27001",
+      "title": "Organizational Controls (A.5)",
+      "summary": "Policies governing AI information security.",
+      "body": "Policies governing AI information security.",
+      "tags": [
+        "compliance",
+        "iso27001"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-iso-a5",
+          "source_title": "Organizational Controls (A.5)",
+          "citation": "iso27001",
+          "excerpt": "Policies governing AI information security."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "iso-a8",
+      "kind": "Control",
+      "domain": "iso27001",
+      "title": "Asset Management (A.8)",
+      "summary": "Inventory models, prompts, datasets as information assets.",
+      "body": "Inventory models, prompts, datasets as information assets.",
+      "tags": [
+        "compliance",
+        "iso27001"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-iso-a8",
+          "source_title": "Asset Management (A.8)",
+          "citation": "iso27001",
+          "excerpt": "Inventory models, prompts, datasets as information assets."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    }
+  ]
+}

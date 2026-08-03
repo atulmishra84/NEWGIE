@@ -1,0 +1,136 @@
+{
+  "domain": "runtime_restrictions",
+  "nodes": [
+    {
+      "node_id": "fw-runtime_restrictions",
+      "kind": "Framework",
+      "domain": "runtime_restrictions",
+      "title": "Runtime Restrictions",
+      "summary": "Runtime policy restrictions for AI agents",
+      "body": "Runtime policy restrictions for AI agents",
+      "tags": [
+        "framework",
+        "root"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-fw-runtime_restrictions",
+          "source_title": "Runtime Restrictions",
+          "citation": "runtime_restrictions",
+          "excerpt": "Runtime policy restrictions for AI agents"
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "rt-no-shell",
+      "kind": "Restriction",
+      "domain": "runtime_restrictions",
+      "title": "Deny Shell Execution",
+      "summary": "Block shell/process tools unless explicitly approved.",
+      "body": "Block shell/process tools unless explicitly approved.",
+      "tags": [
+        "runtime"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-rt-no-shell",
+          "source_title": "Deny Shell Execution",
+          "citation": "runtime_restrictions",
+          "excerpt": "Block shell/process tools unless explicitly approved."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "rt-net-egress",
+      "kind": "Restriction",
+      "domain": "runtime_restrictions",
+      "title": "Egress Allowlist",
+      "summary": "Restrict network egress from agent sandboxes.",
+      "body": "Restrict network egress from agent sandboxes.",
+      "tags": [
+        "runtime"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-rt-net-egress",
+          "source_title": "Egress Allowlist",
+          "citation": "runtime_restrictions",
+          "excerpt": "Restrict network egress from agent sandboxes."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "rt-data-residency",
+      "kind": "Restriction",
+      "domain": "runtime_restrictions",
+      "title": "Data Residency",
+      "summary": "Keep prompts/completions within approved regions.",
+      "body": "Keep prompts/completions within approved regions.",
+      "tags": [
+        "runtime"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-rt-data-residency",
+          "source_title": "Data Residency",
+          "citation": "runtime_restrictions",
+          "excerpt": "Keep prompts/completions within approved regions."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "rt-max-tokens",
+      "kind": "Restriction",
+      "domain": "runtime_restrictions",
+      "title": "Max Token Budgets",
+      "summary": "Enforce token and cost budgets per tenant/agent.",
+      "body": "Enforce token and cost budgets per tenant/agent.",
+      "tags": [
+        "runtime"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-rt-max-tokens",
+          "source_title": "Max Token Budgets",
+          "citation": "runtime_restrictions",
+          "excerpt": "Enforce token and cost budgets per tenant/agent."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    }
+  ]
+}

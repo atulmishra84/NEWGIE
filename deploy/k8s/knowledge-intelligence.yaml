@@ -1,0 +1,44 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: gie
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: knowledge-intelligence
+  namespace: gie
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: knowledge-intelligence
+  template:
+    metadata:
+      labels:
+        app: knowledge-intelligence
+    spec:
+      containers:
+        - name: api
+          image: gie/knowledge-intelligence:1.0.0
+          ports:
+            - containerPort: 8081
+          env:
+            - name: GIE_ENV
+              value: prod
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: 8081
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: knowledge-intelligence
+  namespace: gie
+spec:
+  selector:
+    app: knowledge-intelligence
+  ports:
+    - port: 8081
+      targetPort: 8081

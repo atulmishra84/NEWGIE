@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: validation-intelligence
+  namespace: gie
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: validation-intelligence
+  template:
+    metadata:
+      labels:
+        app: validation-intelligence
+    spec:
+      containers:
+        - name: api
+          image: gie/validation-intelligence:1.0.0
+          ports:
+            - containerPort: 8088
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: validation-intelligence
+  namespace: gie
+spec:
+  selector:
+    app: validation-intelligence
+  ports:
+    - port: 8088
+      targetPort: 8088

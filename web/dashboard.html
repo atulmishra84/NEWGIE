@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>GIE · AI Governance Console</title>
+    <meta name="description" content="Operate GIE Orchestrator analyses, status, and approvals." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Manrope:wght@400;550;650;700&family=Syne:wght@700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="assets/css/shared.css" />
+    <link rel="stylesheet" href="assets/css/dashboard.css" />
+  </head>
+  <body class="dashboard">
+    <div class="dash-shell">
+      <aside class="side">
+        <a class="wordmark" href="index.html">
+          GIE
+          <small>Governance</small>
+        </a>
+        <nav aria-label="Dashboard">
+          <a href="#analyze" class="active">Run analysis</a>
+          <a href="#reportPanel">Governance brief</a>
+          <a href="#status">Platform health</a>
+          <a href="#history">Recent briefs</a>
+          <a href="index.html">Landing</a>
+        </nav>
+        <div class="meta">
+          Executive-ready<br />
+          plain-English brief<br />
+          + audit evidence
+        </div>
+      </aside>
+
+      <div class="main">
+        <header class="topbar">
+          <h1>AI governance console</h1>
+          <div class="api-row">
+            <label for="apiBase">API base</label>
+            <input
+              id="apiBase"
+              type="url"
+              value="/api"
+              autocomplete="off"
+              spellcheck="false"
+            />
+            <button type="button" class="btn btn-light" id="btnPing">Ping</button>
+          </div>
+          <p class="api-hint" id="apiHint">Resolving API base…</p>
+        </header>
+
+        <div class="content">
+          <section class="panel analyze-panel" id="analyze">
+            <h2>Run analysis</h2>
+            <p class="hint">
+              Produce an executive governance brief: inventory, risk, policy
+              alignment, audit evidence, and recommended guardrails.
+            </p>
+            <form class="form-grid compact-form" id="analyzeForm">
+              <label>
+                Tenant ID
+                <input name="tenant_id" type="text" required value="acme" />
+              </label>
+              <label>
+                Source path
+                <input
+                  name="source_path"
+                  type="text"
+                  required
+                  value="/demo/acme-ai-assistant"
+                  placeholder="/demo/acme-ai-assistant"
+                />
+              </label>
+              <label>
+                Source type
+                <select name="source_type">
+                  <option value="folder" selected>folder</option>
+                  <option value="repo">repo</option>
+                  <option value="zip">zip</option>
+                </select>
+              </label>
+              <label>
+                Mode
+                <select name="mode">
+                  <option value="sync" selected>sync</option>
+                  <option value="async">async</option>
+                </select>
+              </label>
+              <label class="span-2">
+                Options (JSON)
+                <textarea name="options" spellcheck="false">
+{
+  "parallel": true,
+  "audience": "engineering",
+  "demo": true
+}</textarea
+                >
+              </label>
+              <label class="check">
+                <input name="cache" type="checkbox" checked />
+                Use response cache
+              </label>
+              <label class="check">
+                <input name="require_human_approval" type="checkbox" />
+                Require human approval gate
+              </label>
+              <div class="form-actions span-2">
+                <button type="submit" class="btn btn-primary">Generate brief</button>
+                <button type="button" class="btn btn-ghost" id="btnSample">
+                  Load ACME demo
+                </button>
+              </div>
+            </form>
+            <div class="result-meta" id="resultMeta" hidden></div>
+            <div class="steps-strip" id="stepsStrip" hidden></div>
+            <details class="raw-json" id="rawJsonWrap" hidden>
+              <summary>Technical JSON (for engineers)</summary>
+              <pre class="result-box" id="resultBox"></pre>
+            </details>
+          </section>
+
+          <section class="panel full-span report-panel" id="reportPanel" hidden>
+            <article class="plain-report" id="plainReport" aria-live="polite"></article>
+          </section>
+
+          <section class="panel" id="status">
+            <h2>Platform health</h2>
+            <p class="hint">
+              Reads <span class="mono">GET /</span> and
+              <span class="mono">GET /status</span>.
+            </p>
+            <div class="status-grid" id="statusGrid">
+              <div class="status-item">
+                <div class="label">Orchestrator</div>
+                <div class="value">—</div>
+              </div>
+            </div>
+            <div class="form-actions" style="margin-top: 1rem">
+              <button type="button" class="btn btn-light" id="btnRefreshStatus">
+                Refresh status
+              </button>
+              <a
+                class="btn btn-ghost"
+                id="docsLink"
+                href="http://127.0.0.1:8091/docs"
+                target="_blank"
+                rel="noopener"
+                >Open API docs</a
+              >
+            </div>
+          </section>
+
+          <section class="panel full-span" id="history">
+            <h2>Recent briefs</h2>
+            <p class="hint">
+              Stored in this browser. Open brief reloads the audit record from
+              the Orchestrator.
+            </p>
+            <div class="table-wrap">
+              <table class="exec">
+                <thead>
+                  <tr>
+                    <th>When</th>
+                    <th>Tenant</th>
+                    <th>Source</th>
+                    <th>Mode</th>
+                    <th>Execution</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody id="historyBody">
+                  <tr>
+                    <td colspan="6">No runs yet.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="form-actions" style="margin-top: 0.75rem">
+              <button type="button" class="btn btn-ghost" id="btnClearHistory">
+                Clear history
+              </button>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script src="config.js"></script>
+    <script src="assets/js/dashboard.js"></script>
+  </body>
+</html>

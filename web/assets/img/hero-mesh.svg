@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" role="img" aria-label="GIE agent mesh">
+  <defs>
+    <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#14b8a6" stop-opacity="0.55"/>
+      <stop offset="100%" stop-color="#9fb3c8" stop-opacity="0.15"/>
+    </linearGradient>
+  </defs>
+  <g fill="none" stroke="url(#g)" stroke-width="1.25">
+    <path class="flow" d="M180 620 C320 480, 420 520, 560 400 S820 280, 980 340"/>
+    <path class="flow" d="M240 720 C400 640, 520 700, 700 560 S980 420, 1180 480"/>
+    <path class="flow" d="M120 380 C280 300, 480 260, 720 220 S1100 180, 1320 260"/>
+    <path class="flow" d="M420 780 C560 640, 680 600, 860 520 S1120 460, 1300 380"/>
+  </g>
+  <g fill="#14b8a6">
+    <circle class="node" cx="180" cy="620" r="5" opacity="0.7"/>
+    <circle class="node" cx="560" cy="400" r="6" opacity="0.85"/>
+    <circle class="node" cx="980" cy="340" r="5" opacity="0.7"/>
+    <circle class="node" cx="700" cy="560" r="7" opacity="0.9"/>
+    <circle class="node" cx="1180" cy="480" r="5" opacity="0.65"/>
+    <circle class="node" cx="720" cy="220" r="6" opacity="0.8"/>
+    <circle class="node" cx="1320" cy="260" r="4" opacity="0.55"/>
+    <circle class="node" cx="860" cy="520" r="5" opacity="0.75"/>
+    <circle class="node" cx="420" cy="780" r="4" opacity="0.5"/>
+    <circle class="node" cx="1300" cy="380" r="6" opacity="0.8"/>
+  </g>
+  <g fill="#fafbfc" fill-opacity="0.08">
+    <rect x="920" y="120" width="380" height="220" rx="2"/>
+    <rect x="980" y="560" width="280" height="160" rx="2"/>
+  </g>
+</svg>

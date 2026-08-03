@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: gie
+  labels:
+    app.kubernetes.io/part-of: gie
+    environment: azure-sandbox

@@ -1,0 +1,127 @@
+# Single-node Kafka (KRaft) for GIE sandbox — not production HA
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: kafka-data
+  namespace: gie
+spec:
+  accessModes: ["ReadWriteOnce"]
+  resources:
+    requests:
+      storage: 20Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kafka
+  namespace: gie
+  labels:
+    app: kafka
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kafka
+  template:
+    metadata:
+      labels:
+        app: kafka
+    spec:
+      securityContext:
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+      initContainers:
+        - name: fix-data-perms
+          image: busybox:1.36
+          command:
+            - sh
+            - -c
+            - |
+              mkdir -p /var/lib/kafka/data/kafka
+              rm -rf /var/lib/kafka/data/lost+found || true
+              chown -R 1000:1000 /var/lib/kafka/data
+              chmod -R u+rwX /var/lib/kafka/data
+          securityContext:
+            runAsUser: 0
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/kafka/data
+      containers:
+        - name: kafka
+          image: apache/kafka:3.7.1
+          ports:
+            - name: kafka
+              containerPort: 9092
+            - name: controller
+              containerPort: 9093
+          env:
+            - name: KAFKA_NODE_ID
+              value: "1"
+            - name: KAFKA_PROCESS_ROLES
+              value: broker,controller
+            - name: KAFKA_LISTENERS
+              value: PLAINTEXT://0.0.0.0:9092,CONTROLLER://0.0.0.0:9093
+            - name: KAFKA_ADVERTISED_LISTENERS
+              value: PLAINTEXT://kafka.gie.svc.cluster.local:9092
+            - name: KAFKA_CONTROLLER_LISTENER_NAMES
+              value: CONTROLLER
+            - name: KAFKA_LISTENER_SECURITY_PROTOCOL_MAP
+              value: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
+            # localhost avoids ClusterIP hairpin deadlock before readiness
+            - name: KAFKA_CONTROLLER_QUORUM_VOTERS
+              value: 1@localhost:9093
+            - name: KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR
+              value: "1"
+            - name: KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR
+              value: "1"
+            - name: KAFKA_TRANSACTION_STATE_LOG_MIN_ISR
+              value: "1"
+            - name: KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS
+              value: "0"
+            - name: KAFKA_LOG_DIRS
+              value: /var/lib/kafka/data
+            - name: CLUSTER_ID
+              value: gieAzureKafkaCluster01
+          readinessProbe:
+            tcpSocket:
+              port: kafka
+            initialDelaySeconds: 40
+            periodSeconds: 10
+          livenessProbe:
+            tcpSocket:
+              port: kafka
+            initialDelaySeconds: 90
+            periodSeconds: 20
+          resources:
+            requests:
+              cpu: 250m
+              memory: 1Gi
+            limits:
+              cpu: "1"
+              memory: 2Gi
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/kafka/data
+              subPath: kafka
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: kafka-data
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kafka
+  namespace: gie
+  labels:
+    app: kafka
+spec:
+  selector:
+    app: kafka
+  ports:
+    - name: kafka
+      port: 9092
+      targetPort: kafka
+    - name: controller
+      port: 9093
+      targetPort: 9093

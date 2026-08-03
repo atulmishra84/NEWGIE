@@ -1,0 +1,322 @@
+{
+  "domain": "owasp_llm",
+  "nodes": [
+    {
+      "node_id": "fw-owasp_llm",
+      "kind": "Framework",
+      "domain": "owasp_llm",
+      "title": "OWASP LLM Top 10",
+      "summary": "OWASP Top 10 for Large Language Model Applications",
+      "body": "OWASP Top 10 for Large Language Model Applications",
+      "tags": [
+        "framework",
+        "root"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-fw-owasp_llm",
+          "source_title": "OWASP LLM Top 10",
+          "citation": "owasp_llm",
+          "excerpt": "OWASP Top 10 for Large Language Model Applications"
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "owasp-llm01",
+      "kind": "Threat",
+      "domain": "owasp_llm",
+      "title": "LLM01: Prompt Injection",
+      "summary": "Attacker crafts inputs that manipulate LLM behavior beyond intended instructions.",
+      "body": "Attacker crafts inputs that manipulate LLM behavior beyond intended instructions.",
+      "tags": [
+        "owasp",
+        "llm01"
+      ],
+      "attributes": {
+        "code": "LLM01"
+      },
+      "evidence": [
+        {
+          "evidence_id": "ev-owasp-llm01",
+          "source_title": "LLM01: Prompt Injection",
+          "citation": "owasp_llm",
+          "excerpt": "Attacker crafts inputs that manipulate LLM behavior beyond intended instructions."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "owasp-llm02",
+      "kind": "Threat",
+      "domain": "owasp_llm",
+      "title": "LLM02: Insecure Output Handling",
+      "summary": "Unvalidated LLM outputs lead to XSS, SSRF, or remote code execution.",
+      "body": "Unvalidated LLM outputs lead to XSS, SSRF, or remote code execution.",
+      "tags": [
+        "owasp",
+        "llm02"
+      ],
+      "attributes": {
+        "code": "LLM02"
+      },
+      "evidence": [
+        {
+          "evidence_id": "ev-owasp-llm02",
+          "source_title": "LLM02: Insecure Output Handling",
+          "citation": "owasp_llm",
+          "excerpt": "Unvalidated LLM outputs lead to XSS, SSRF, or remote code execution."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "owasp-llm03",
+      "kind": "Threat",
+      "domain": "owasp_llm",
+      "title": "LLM03: Training Data Poisoning",
+      "summary": "Tampered training/fine-tuning data introduces backdoors or bias.",
+      "body": "Tampered training/fine-tuning data introduces backdoors or bias.",
+      "tags": [
+        "owasp",
+        "llm03"
+      ],
+      "attributes": {
+        "code": "LLM03"
+      },
+      "evidence": [
+        {
+          "evidence_id": "ev-owasp-llm03",
+          "source_title": "LLM03: Training Data Poisoning",
+          "citation": "owasp_llm",
+          "excerpt": "Tampered training/fine-tuning data introduces backdoors or bias."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "owasp-llm04",
+      "kind": "Threat",
+      "domain": "owasp_llm",
+      "title": "LLM04: Model Denial of Service",
+      "summary": "Resource-exhausting prompts degrade availability.",
+      "body": "Resource-exhausting prompts degrade availability.",
+      "tags": [
+        "owasp",
+        "llm04"
+      ],
+      "attributes": {
+        "code": "LLM04"
+      },
+      "evidence": [
+        {
+          "evidence_id": "ev-owasp-llm04",
+          "source_title": "LLM04: Model Denial of Service",
+          "citation": "owasp_llm",
+          "excerpt": "Resource-exhausting prompts degrade availability."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "owasp-llm05",
+      "kind": "Threat",
+      "domain": "owasp_llm",
+      "title": "LLM05: Supply Chain Vulnerabilities",
+      "summary": "Compromised models, plugins, datasets, or vendors.",
+      "body": "Compromised models, plugins, datasets, or vendors.",
+      "tags": [
+        "owasp",
+        "llm05"
+      ],
+      "attributes": {
+        "code": "LLM05"
+      },
+      "evidence": [
+        {
+          "evidence_id": "ev-owasp-llm05",
+          "source_title": "LLM05: Supply Chain Vulnerabilities",
+          "citation": "owasp_llm",
+          "excerpt": "Compromised models, plugins, datasets, or vendors."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "owasp-llm06",
+      "kind": "Threat",
+      "domain": "owasp_llm",
+      "title": "LLM06: Sensitive Information Disclosure",
+      "summary": "Model leaks secrets, PII, or proprietary data.",
+      "body": "Model leaks secrets, PII, or proprietary data.",
+      "tags": [
+        "owasp",
+        "llm06"
+      ],
+      "attributes": {
+        "code": "LLM06"
+      },
+      "evidence": [
+        {
+          "evidence_id": "ev-owasp-llm06",
+          "source_title": "LLM06: Sensitive Information Disclosure",
+          "citation": "owasp_llm",
+          "excerpt": "Model leaks secrets, PII, or proprietary data."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "owasp-llm07",
+      "kind": "Threat",
+      "domain": "owasp_llm",
+      "title": "LLM07: Insecure Plugin Design",
+      "summary": "Unsafe tool/plugin interfaces grant excess privilege.",
+      "body": "Unsafe tool/plugin interfaces grant excess privilege.",
+      "tags": [
+        "owasp",
+        "llm07"
+      ],
+      "attributes": {
+        "code": "LLM07"
+      },
+      "evidence": [
+        {
+          "evidence_id": "ev-owasp-llm07",
+          "source_title": "LLM07: Insecure Plugin Design",
+          "citation": "owasp_llm",
+          "excerpt": "Unsafe tool/plugin interfaces grant excess privilege."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "owasp-llm08",
+      "kind": "Threat",
+      "domain": "owasp_llm",
+      "title": "LLM08: Excessive Agency",
+      "summary": "Agents take damaging autonomous actions without controls.",
+      "body": "Agents take damaging autonomous actions without controls.",
+      "tags": [
+        "owasp",
+        "llm08"
+      ],
+      "attributes": {
+        "code": "LLM08"
+      },
+      "evidence": [
+        {
+          "evidence_id": "ev-owasp-llm08",
+          "source_title": "LLM08: Excessive Agency",
+          "citation": "owasp_llm",
+          "excerpt": "Agents take damaging autonomous actions without controls."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "owasp-llm09",
+      "kind": "Threat",
+      "domain": "owasp_llm",
+      "title": "LLM09: Overreliance",
+      "summary": "Users trust incorrect LLM outputs without verification.",
+      "body": "Users trust incorrect LLM outputs without verification.",
+      "tags": [
+        "owasp",
+        "llm09"
+      ],
+      "attributes": {
+        "code": "LLM09"
+      },
+      "evidence": [
+        {
+          "evidence_id": "ev-owasp-llm09",
+          "source_title": "LLM09: Overreliance",
+          "citation": "owasp_llm",
+          "excerpt": "Users trust incorrect LLM outputs without verification."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "owasp-llm10",
+      "kind": "Threat",
+      "domain": "owasp_llm",
+      "title": "LLM10: Model Theft",
+      "summary": "Unauthorized extraction or exfiltration of model weights/IP.",
+      "body": "Unauthorized extraction or exfiltration of model weights/IP.",
+      "tags": [
+        "owasp",
+        "llm10"
+      ],
+      "attributes": {
+        "code": "LLM10"
+      },
+      "evidence": [
+        {
+          "evidence_id": "ev-owasp-llm10",
+          "source_title": "LLM10: Model Theft",
+          "citation": "owasp_llm",
+          "excerpt": "Unauthorized extraction or exfiltration of model weights/IP."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    }
+  ]
+}

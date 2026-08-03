@@ -14,6 +14,7 @@ from starlette.responses import Response
 from context_intelligence.adapters.rest.errors import register_exception_handlers
 from context_intelligence.adapters.rest.middleware import ObservabilityMiddleware
 from context_intelligence.adapters.rest.routes_models import router as models_router
+from context_intelligence.adapters.rest.routes_scans import router as scans_router
 from context_intelligence.adapters.webhooks.github import router as github_router
 from context_intelligence.infrastructure.cache.redis_cache import create_redis_client, ping_redis
 from context_intelligence.infrastructure.persistence.database import check_db, init_db

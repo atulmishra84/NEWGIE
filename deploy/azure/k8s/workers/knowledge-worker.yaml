@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: knowledge-worker
+  namespace: gie
+  labels:
+    app: knowledge-worker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: knowledge-worker
+  template:
+    metadata:
+      labels:
+        app: knowledge-worker
+    spec:
+      containers:
+        - name: worker
+          image: REPLACE_IMAGE
+          imagePullPolicy: IfNotPresent
+          command:
+            - celery
+            - -A
+            - knowledge_intelligence.infrastructure.celery_app.app
+            - worker
+            - -l
+            - INFO
+            - -Q
+            - knowledge
+          env:
+            - name: GIE_ENV
+              value: docker
+            - name: REQUIRE_AUTH
+              value: "false"
+            - name: KAFKA_BOOTSTRAP_SERVERS
+              value: kafka.gie.svc.cluster.local:9092
+            - name: QDRANT_URL
+              value: http://qdrant.gie.svc.cluster.local:6333
+            - name: NEO4J_URI
+              value: bolt://neo4j.gie.svc.cluster.local:7687
+            - name: QDRANT_COLLECTION
+              value: knowledge_embeddings
+          envFrom:
+            - secretRef:
+                name: knowledge-intelligence-secrets
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              cpu: "1"
+              memory: 1Gi

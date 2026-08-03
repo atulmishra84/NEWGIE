@@ -1,0 +1,136 @@
+{
+  "domain": "policy_mappings",
+  "nodes": [
+    {
+      "node_id": "fw-policy_mappings",
+      "kind": "Framework",
+      "domain": "policy_mappings",
+      "title": "Policy Mappings",
+      "summary": "Crosswalk mappings between frameworks and controls",
+      "body": "Crosswalk mappings between frameworks and controls",
+      "tags": [
+        "framework",
+        "root"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-fw-policy_mappings",
+          "source_title": "Policy Mappings",
+          "citation": "policy_mappings",
+          "excerpt": "Crosswalk mappings between frameworks and controls"
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "map-owasp-nist",
+      "kind": "Mapping",
+      "domain": "policy_mappings",
+      "title": "OWASP LLM01 \u2192 NIST Map/Manage",
+      "summary": "Prompt injection risks map to NIST Map and Manage functions.",
+      "body": "Prompt injection risks map to NIST Map and Manage functions.",
+      "tags": [
+        "mapping"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-map-owasp-nist",
+          "source_title": "OWASP LLM01 \u2192 NIST Map/Manage",
+          "citation": "policy_mappings",
+          "excerpt": "Prompt injection risks map to NIST Map and Manage functions."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "map-gdpr-hipaa",
+      "kind": "Mapping",
+      "domain": "policy_mappings",
+      "title": "GDPR Art.32 \u2194 HIPAA Security",
+      "summary": "Security of processing aligns with HIPAA administrative/technical safeguards.",
+      "body": "Security of processing aligns with HIPAA administrative/technical safeguards.",
+      "tags": [
+        "mapping"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-map-gdpr-hipaa",
+          "source_title": "GDPR Art.32 \u2194 HIPAA Security",
+          "citation": "policy_mappings",
+          "excerpt": "Security of processing aligns with HIPAA administrative/technical safeguards."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "map-soc2-iso",
+      "kind": "Mapping",
+      "domain": "policy_mappings",
+      "title": "SOC2 CC6 \u2194 ISO A.5/A.8",
+      "summary": "Access control criteria map to ISO organizational/asset controls.",
+      "body": "Access control criteria map to ISO organizational/asset controls.",
+      "tags": [
+        "mapping"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-map-soc2-iso",
+          "source_title": "SOC2 CC6 \u2194 ISO A.5/A.8",
+          "citation": "policy_mappings",
+          "excerpt": "Access control criteria map to ISO organizational/asset controls."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "map-euai-nist",
+      "kind": "Mapping",
+      "domain": "policy_mappings",
+      "title": "EU AI Act High-Risk \u2192 NIST Govern",
+      "summary": "High-risk obligations align with NIST Govern function.",
+      "body": "High-risk obligations align with NIST Govern function.",
+      "tags": [
+        "mapping"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-map-euai-nist",
+          "source_title": "EU AI Act High-Risk \u2192 NIST Govern",
+          "citation": "policy_mappings",
+          "excerpt": "High-risk obligations align with NIST Govern function."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    }
+  ]
+}

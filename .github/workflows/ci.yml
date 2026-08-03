@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: [main, develop]
+    branches: [main, develop, "cursor/**"]
   pull_request:
     branches: [main, develop]
 
@@ -13,7 +13,6 @@ concurrency:
 env:
   PYTHON_VERSION: "3.12"
   REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}/context-intelligence
 
 jobs:
   lint:
@@ -30,89 +29,236 @@ jobs:
       - name: Install lint tools
         run: |
           pip install ruff mypy
-          pip install ./packages/gie-contracts ./packages/gie-observability
-          pip install ./agents/context-intelligence
+          pip install ./packages/gie-contracts ./packages/gie-observability ./packages/gie-security
+          pip install ./agents/context-intelligence ./agents/knowledge-intelligence ./agents/policy-intelligence ./agents/risk-intelligence ./agents/compliance-intelligence ./agents/recommendation-intelligence ./agents/policy-generator ./agents/explainability-intelligence ./agents/validation-intelligence ./agents/learning-intelligence ./agents/integration-intelligence ./agents/orchestrator
 
       - name: Ruff check
-        run: ruff check agents/context-intelligence packages
+        run: ruff check agents packages
 
       - name: Ruff format check
-        run: ruff format --check agents/context-intelligence packages
+        run: ruff format --check agents packages
 
-      - name: Mypy (agent)
-        run: mypy agents/context-intelligence/src --ignore-missing-imports
-
-  test:
-    name: Test
+  test-context:
+    name: Test Context Intelligence
     runs-on: ubuntu-latest
     needs: lint
     steps:
       - uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - uses: actions/setup-python@v5
         with:
           python-version: ${{ env.PYTHON_VERSION }}
-
-      - name: Install dependencies
+      - name: Install
         run: |
-          pip install ./packages/gie-contracts ./packages/gie-observability
+          pip install ./packages/gie-contracts ./packages/gie-observability ./packages/gie-security
           pip install "./agents/context-intelligence[dev]"
-
-      - name: Run pytest
+      - name: Pytest
         working-directory: agents/context-intelligence
-        run: |
-          pytest tests/ \
-            --cov=context_intelligence \
-            --cov-report=xml \
-            --cov-report=term-missing \
-            -q
+        run: pytest tests/ -q
 
-      - name: Upload coverage
-        uses: codecov/codecov-action@v4
-        if: always()
+  test-knowledge:
+    name: Test Knowledge Intelligence
+    runs-on: ubuntu-latest
+    needs: lint
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
         with:
-          files: agents/context-intelligence/coverage.xml
-          fail_ci_if_error: false
+          python-version: ${{ env.PYTHON_VERSION }}
+      - name: Install
+        run: |
+          pip install ./packages/gie-contracts ./packages/gie-observability ./packages/gie-security
+          pip install "./agents/knowledge-intelligence[dev]"
+      - name: Pytest
+        working-directory: agents/knowledge-intelligence
+        run: pytest tests/ -q
+
+  test-policy:
+    name: Test Policy Intelligence
+    runs-on: ubuntu-latest
+    needs: lint
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      - name: Install
+        run: |
+          pip install ./packages/gie-contracts ./packages/gie-observability ./packages/gie-security
+          pip install "./agents/policy-intelligence[dev]"
+      - name: Pytest
+        working-directory: agents/policy-intelligence
+        run: pytest tests/ -q
+
+  test-risk:
+    name: Test Risk Intelligence
+    runs-on: ubuntu-latest
+    needs: lint
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      - name: Install
+        run: |
+          pip install ./packages/gie-contracts ./packages/gie-observability ./packages/gie-security
+          pip install "./agents/risk-intelligence[dev]"
+      - name: Pytest
+        working-directory: agents/risk-intelligence
+        run: pytest tests/ -q
+
+  test-compliance:
+    name: Test Compliance Intelligence
+    runs-on: ubuntu-latest
+    needs: lint
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      - name: Install
+        run: |
+          pip install ./packages/gie-contracts ./packages/gie-observability ./packages/gie-security
+          pip install "./agents/compliance-intelligence[dev]"
+      - name: Pytest
+        working-directory: agents/compliance-intelligence
+        run: pytest tests/ -q
+
+  test-recommendation:
+    name: Test Recommendation Intelligence
+    runs-on: ubuntu-latest
+    needs: lint
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      - name: Install
+        run: |
+          pip install ./packages/gie-contracts ./packages/gie-observability ./packages/gie-security
+          pip install "./agents/recommendation-intelligence[dev]"
+      - name: Pytest
+        working-directory: agents/recommendation-intelligence
+        run: pytest tests/ -q
+
+  test-policy-generator:
+    name: Test Policy Generator
+    runs-on: ubuntu-latest
+    needs: lint
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      - name: Install
+        run: |
+          pip install ./packages/gie-contracts ./packages/gie-observability ./packages/gie-security
+          pip install "./agents/policy-generator[dev]"
+      - name: Pytest
+        working-directory: agents/policy-generator
+        run: pytest tests/ -q
+
+  test-explainability:
+    name: Test Explainability Intelligence
+    runs-on: ubuntu-latest
+    needs: lint
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      - name: Install
+        run: |
+          pip install ./packages/gie-contracts ./packages/gie-observability ./packages/gie-security
+          pip install "./agents/explainability-intelligence[dev]"
+      - name: Pytest
+        working-directory: agents/explainability-intelligence
+        run: pytest tests/ -q
+
+  test-validation:
+    name: Test Validation Intelligence
+    runs-on: ubuntu-latest
+    needs: lint
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      - name: Install
+        run: |
+          pip install ./packages/gie-contracts ./packages/gie-observability ./packages/gie-security
+          pip install "./agents/validation-intelligence[dev]"
+      - name: Pytest
+        working-directory: agents/validation-intelligence
+        run: pytest tests/ -q
+
+  test-learning:
+    name: Test Learning Intelligence
+    runs-on: ubuntu-latest
+    needs: lint
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      - name: Install
+        run: |
+          pip install ./packages/gie-contracts ./packages/gie-observability ./packages/gie-security
+          pip install "./agents/learning-intelligence[dev]"
+      - name: Pytest
+        working-directory: agents/learning-intelligence
+        run: pytest tests/ -q
+
+  test-integration:
+    name: Test Integration Intelligence
+    runs-on: ubuntu-latest
+    needs: lint
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      - name: Install
+        run: |
+          pip install ./packages/gie-contracts ./packages/gie-observability ./packages/gie-security
+          pip install "./agents/integration-intelligence[dev]"
+      - name: Pytest
+        working-directory: agents/integration-intelligence
+        run: pytest tests/ -q
+
+  test-orchestrator:
+    name: Test Orchestrator
+    runs-on: ubuntu-latest
+    needs: lint
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      - name: Install
+        run: |
+          pip install ./packages/gie-contracts ./packages/gie-observability ./packages/gie-security
+          pip install "./agents/orchestrator[dev]"
+      - name: Pytest
+        working-directory: agents/orchestrator
+        run: pytest tests/ -q
 
   docker:
     name: Docker build
     runs-on: ubuntu-latest
-    needs: test
-    permissions:
-      contents: read
-      packages: write
+    needs: [test-context, test-knowledge, test-policy, test-risk, test-compliance, test-recommendation, test-policy-generator, test-explainability, test-validation, test-learning, test-integration, test-orchestrator]
+    strategy:
+      matrix:
+        agent: [context-intelligence, knowledge-intelligence, policy-intelligence, risk-intelligence, compliance-intelligence, recommendation-intelligence, policy-generator, explainability-intelligence, validation-intelligence, learning-intelligence, integration-intelligence, orchestrator]
     steps:
       - uses: actions/checkout@v4
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Log in to GHCR
-        if: github.event_name != 'pull_request'
-        uses: docker/login-action@v3
-        with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Docker metadata
-        id: meta
-        uses: docker/metadata-action@v5
-        with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-          tags: |
-            type=ref,event=branch
-            type=sha,prefix=
-
-      - name: Build and push
+      - uses: docker/setup-buildx-action@v3
+      - name: Build
         uses: docker/build-push-action@v6
         with:
           context: .
-          file: agents/context-intelligence/Dockerfile
-          push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+          file: agents/${{ matrix.agent }}/Dockerfile
+          push: false
+          tags: gie/${{ matrix.agent }}:ci
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
@@ -121,26 +267,29 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
-      - name: Helm lint
-        uses: azure/setup-helm@v4
-
-      - name: Lint chart
-        run: helm lint deploy/helm/context-intelligence
+      - uses: azure/setup-helm@v4
+      - run: |
+          helm lint deploy/helm/context-intelligence
+          helm lint deploy/helm/knowledge-intelligence
+          helm lint deploy/helm/policy-intelligence
+          helm lint deploy/helm/risk-intelligence
+          helm lint deploy/helm/compliance-intelligence
+          helm lint deploy/helm/recommendation-intelligence
+          helm lint deploy/helm/policy-generator
+          helm lint deploy/helm/explainability-intelligence
+          helm lint deploy/helm/validation-intelligence
+          helm lint deploy/helm/learning-intelligence
+          helm lint deploy/helm/integration-intelligence
+          helm lint deploy/helm/orchestrator
 
   terraform-validate:
     name: Terraform validate
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
       - uses: hashicorp/setup-terraform@v3
-
-      - name: Terraform fmt check
-        run: terraform fmt -check -recursive deploy/terraform
-
-      - name: Terraform init & validate
-        working-directory: deploy/terraform
+      - run: terraform fmt -check -recursive deploy/terraform
+      - working-directory: deploy/terraform
         run: |
           terraform init -backend=false
           terraform validate

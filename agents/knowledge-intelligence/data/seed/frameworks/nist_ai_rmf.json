@@ -1,0 +1,140 @@
+{
+  "domain": "nist_ai_rmf",
+  "nodes": [
+    {
+      "node_id": "fw-nist_ai_rmf",
+      "kind": "Framework",
+      "domain": "nist_ai_rmf",
+      "title": "NIST AI RMF",
+      "summary": "NIST AI Risk Management Framework",
+      "body": "NIST AI Risk Management Framework",
+      "tags": [
+        "framework",
+        "root"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-fw-nist_ai_rmf",
+          "source_title": "NIST AI RMF",
+          "citation": "nist_ai_rmf",
+          "excerpt": "NIST AI Risk Management Framework"
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "nist-govern",
+      "kind": "Control",
+      "domain": "nist_ai_rmf",
+      "title": "NIST AI RMF \u2014 Govern",
+      "summary": "Cultivate a culture of risk management across AI lifecycle.",
+      "body": "Cultivate a culture of risk management across AI lifecycle.",
+      "tags": [
+        "nist",
+        "govern"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-nist-govern",
+          "source_title": "NIST AI RMF \u2014 Govern",
+          "citation": "nist_ai_rmf",
+          "excerpt": "Cultivate a culture of risk management across AI lifecycle."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "nist-map",
+      "kind": "Control",
+      "domain": "nist_ai_rmf",
+      "title": "NIST AI RMF \u2014 Map",
+      "summary": "Identify context and risks related to AI system.",
+      "body": "Identify context and risks related to AI system.",
+      "tags": [
+        "nist",
+        "map"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-nist-map",
+          "source_title": "NIST AI RMF \u2014 Map",
+          "citation": "nist_ai_rmf",
+          "excerpt": "Identify context and risks related to AI system."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "nist-measure",
+      "kind": "Control",
+      "domain": "nist_ai_rmf",
+      "title": "NIST AI RMF \u2014 Measure",
+      "summary": "Analyze, assess, and track AI risks.",
+      "body": "Analyze, assess, and track AI risks.",
+      "tags": [
+        "nist",
+        "measure"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-nist-measure",
+          "source_title": "NIST AI RMF \u2014 Measure",
+          "citation": "nist_ai_rmf",
+          "excerpt": "Analyze, assess, and track AI risks."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "nist-manage",
+      "kind": "Control",
+      "domain": "nist_ai_rmf",
+      "title": "NIST AI RMF \u2014 Manage",
+      "summary": "Prioritize and respond to AI risks.",
+      "body": "Prioritize and respond to AI risks.",
+      "tags": [
+        "nist",
+        "manage"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-nist-manage",
+          "source_title": "NIST AI RMF \u2014 Manage",
+          "citation": "nist_ai_rmf",
+          "excerpt": "Prioritize and respond to AI risks."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    }
+  ]
+}

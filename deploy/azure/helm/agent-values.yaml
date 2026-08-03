@@ -1,0 +1,23 @@
+# Shared Azure sandbox defaults for peer agents (secrets set at deploy time)
+replicaCount: 1
+image:
+  pullPolicy: IfNotPresent
+resources:
+  requests:
+    cpu: 50m
+    memory: 128Mi
+  limits:
+    cpu: 500m
+    memory: 512Mi
+env:
+  GIE_ENV: docker
+  REQUIRE_AUTH: "false"
+  OTEL_EXPORTER_OTLP_ENDPOINT: ""
+  KAFKA_BOOTSTRAP_SERVERS: kafka.gie.svc.cluster.local:9092
+  GIE_COMPLIANCE_CATALOG_PATH: /app/data/frameworks/catalog_v1.json
+  ALLOW_AUTO_PUBLISH: "false"
+secrets:
+  databaseUrl: ""
+  redisUrl: ""
+  jwtSecret: ""
+  apiKeyPepper: ""

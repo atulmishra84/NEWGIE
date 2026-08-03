@@ -1,0 +1,86 @@
+{
+  "domain": "hipaa",
+  "nodes": [
+    {
+      "node_id": "fw-hipaa",
+      "kind": "Framework",
+      "domain": "hipaa",
+      "title": "HIPAA",
+      "summary": "Health Insurance Portability and Accountability Act security/privacy rules",
+      "body": "Health Insurance Portability and Accountability Act security/privacy rules",
+      "tags": [
+        "framework",
+        "root"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-fw-hipaa",
+          "source_title": "HIPAA",
+          "citation": "hipaa",
+          "excerpt": "Health Insurance Portability and Accountability Act security/privacy rules"
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "hipaa-phi-min",
+      "kind": "Control",
+      "domain": "hipaa",
+      "title": "PHI Minimum Necessary",
+      "summary": "Limit PHI exposure to AI systems to minimum necessary.",
+      "body": "Limit PHI exposure to AI systems to minimum necessary.",
+      "tags": [
+        "compliance",
+        "hipaa"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-hipaa-phi-min",
+          "source_title": "PHI Minimum Necessary",
+          "citation": "hipaa",
+          "excerpt": "Limit PHI exposure to AI systems to minimum necessary."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "hipaa-baa",
+      "kind": "Control",
+      "domain": "hipaa",
+      "title": "Business Associate Agreements",
+      "summary": "Ensure BAAs cover AI vendors processing ePHI.",
+      "body": "Ensure BAAs cover AI vendors processing ePHI.",
+      "tags": [
+        "compliance",
+        "hipaa"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-hipaa-baa",
+          "source_title": "Business Associate Agreements",
+          "citation": "hipaa",
+          "excerpt": "Ensure BAAs cover AI vendors processing ePHI."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    }
+  ]
+}

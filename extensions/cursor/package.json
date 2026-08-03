@@ -1,0 +1,20 @@
+{
+  "name": "gie-cursor",
+  "displayName": "GIE for Cursor",
+  "description": "Guardrails Intelligence Engine Cursor extension",
+  "version": "1.0.0",
+  "engines": { "vscode": "^1.85.0" },
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      { "command": "gie.cursor.connect", "title": "GIE: Connect Cursor" },
+      { "command": "gie.cursor.mcp", "title": "GIE: Open MCP Tools" }
+    ],
+    "configuration": {
+      "properties": {
+        "gie.baseUrl": { "type": "string", "default": "http://localhost:8090" },
+        "gie.mcpEndpoint": { "type": "string", "default": "http://localhost:8090/mcp" }
+      }
+    }
+  }
+}

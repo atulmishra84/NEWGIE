@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: learning-intelligence
+  namespace: gie
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: learning-intelligence
+  template:
+    metadata:
+      labels:
+        app: learning-intelligence
+    spec:
+      containers:
+        - name: api
+          image: gie/learning-intelligence:1.0.0
+          ports:
+            - containerPort: 8089
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: learning-intelligence
+  namespace: gie
+spec:
+  selector:
+    app: learning-intelligence
+  ports:
+    - port: 8089
+      targetPort: 8089

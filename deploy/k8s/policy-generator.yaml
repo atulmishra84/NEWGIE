@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: policy-generator
+  namespace: gie
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: policy-generator
+  template:
+    metadata:
+      labels:
+        app: policy-generator
+    spec:
+      containers:
+        - name: api
+          image: gie/policy-generator:1.0.0
+          ports:
+            - containerPort: 8086
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: policy-generator
+  namespace: gie
+spec:
+  selector:
+    app: policy-generator
+  ports:
+    - port: 8086
+      targetPort: 8086

@@ -3,7 +3,25 @@
 ```
 GIE/
 ├── agents/
-│   └── context-intelligence/          # Context Intelligence Agent
+│   ├── context-intelligence/          # Context Intelligence Agent
+│   ├── knowledge-intelligence/        # Knowledge Intelligence Agent (platform brain)
+│   ├── …                              # policy / risk / compliance / recommendation / policy-generator
+│   ├── explainability-intelligence/   # Explainability Agent
+│   ├── validation-intelligence/       # Validation Agent
+│   ├── learning-intelligence/         # Learning Agent (gie.learning.v1, :8089)
+│   ├── integration-intelligence/      # Integration Agent (gie.integration.v1, :8090)
+│   └── orchestrator/                  # Orchestrator Agent (gie.orchestrator.v1, :8091)
+│       ├── data/seed/                 # OWASP/MITRE/NIST/compliance corpora
+│       ├── src/knowledge_intelligence/
+│       │   ├── adapters/              # REST, MCP, CLI, Kafka, webhooks
+│       │   ├── application/           # CQRS query engine + upsert/reindex
+│       │   ├── domain/                # ports, RBAC, reasoning
+│       │   ├── infrastructure/        # Postgres, Neo4j, Qdrant, embeddings
+│       │   └── seed/                  # corpus loader
+│       └── tests/
+│
+│   # --- context-intelligence detail ---
+│   # context-intelligence/
 │       ├── Dockerfile
 │       ├── pyproject.toml
 │       ├── infrastructure/
@@ -53,6 +71,7 @@ GIE/
 │   └── gie-security/                    # Auth utilities (planned)
 │
 ├── deploy/
+│   ├── azure/                           # Azure minimal sandbox (AKS + Postgres + Redis)
 │   ├── k8s/
 │   │   └── context-intelligence.yaml    # Raw Kubernetes manifests
 │   ├── helm/

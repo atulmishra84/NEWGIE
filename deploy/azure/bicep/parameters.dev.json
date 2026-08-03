@@ -1,0 +1,34 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "namePrefix": {
+      "value": "gie"
+    },
+    "aksNodeCount": {
+      "value": 3
+    },
+    "aksNodeVmSize": {
+      "value": "Standard_D4s_v3"
+    },
+    "postgresAdminLogin": {
+      "value": "gieadmin"
+    },
+    "postgresDatabases": {
+      "value": [
+        "gie_orchestrator",
+        "gie_context",
+        "gie_knowledge",
+        "gie_policy",
+        "gie_risk",
+        "gie_compliance",
+        "gie_recommendation",
+        "gie_policygen",
+        "gie_explainability",
+        "gie_validation",
+        "gie_learning",
+        "gie_integration"
+      ]
+    }
+  }
+}

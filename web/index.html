@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>GIE — Guardrails Intelligence Engine</title>
+    <meta
+      name="description"
+      content="GIE orchestrates risk, compliance, validation, and explainability agents into one governed analysis pipeline for enterprise AI."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Manrope:wght@400;550;650;700&family=Syne:wght@700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="assets/css/shared.css" />
+    <link rel="stylesheet" href="assets/css/landing.css" />
+  </head>
+  <body>
+    <header class="site-nav">
+      <a class="wordmark" href="index.html">GIE</a>
+      <nav class="nav-links" aria-label="Primary">
+        <a href="#pipeline">Pipeline</a>
+        <a href="#agents">Agents</a>
+        <a class="nav-cta" href="dashboard.html">Dashboard</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero" aria-label="Introduction">
+        <div class="hero-visual" aria-hidden="true">
+          <img src="assets/img/hero-mesh.svg" alt="" width="1440" height="900" />
+        </div>
+        <div class="hero-content">
+          <p class="brand">
+            GIE
+            <span>Guardrails Intelligence Engine</span>
+          </p>
+          <h1>Govern AI decisions before they ship.</h1>
+          <p class="lede">
+            One orchestrated pipeline for risk, compliance, validation, and
+            explainability — with human approval gates when it matters.
+          </p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="dashboard.html">Open dashboard</a>
+            <a class="btn btn-ghost" href="#what">See how it works</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="section section-what" id="what">
+        <div class="section-inner what-grid">
+          <div>
+            <h2>Intelligence that stays accountable.</h2>
+            <p class="support">
+              GIE routes every analysis through specialized agents, caches
+              repeat work, and surfaces traces you can defend to audit and
+              engineering teams alike.
+            </p>
+            <ul class="what-list">
+              <li>
+                <span class="idx">01</span>
+                <div>
+                  <strong>Unified analyze API</strong>
+                  <p>
+                    One <span class="mono">POST /analyze</span> call fans out
+                    across Risk, Compliance, Validation, and Explainability.
+                  </p>
+                </div>
+              </li>
+              <li>
+                <span class="idx">02</span>
+                <div>
+                  <strong>Approval when stakes rise</strong>
+                  <p>
+                    Learning and high-impact publishes wait for a human gate —
+                    simulation mode for safe rehearsal.
+                  </p>
+                </div>
+              </li>
+              <li>
+                <span class="idx">03</span>
+                <div>
+                  <strong>Enterprise wiring</strong>
+                  <p>
+                    Connectors and IDE extensions bring guardrails into the
+                    places work already happens.
+                  </p>
+                </div>
+              </li>
+            </ul>
+          </div>
+          <div class="stat-strip" aria-label="Platform highlights">
+            <div>
+              <strong>12</strong>
+              <span>Specialized agents in the mesh</span>
+            </div>
+            <div>
+              <strong>1</strong>
+              <span>Orchestrator entry for analysis</span>
+            </div>
+            <div>
+              <strong>Full</strong>
+              <span>Trace per execution for review</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section section-pipeline" id="pipeline">
+        <div class="section-inner">
+          <h2>From request to governed result.</h2>
+          <p class="support">
+            Parallel fan-out where safe, sequential gates where required —
+            always with a single execution identity you can query later.
+          </p>
+          <div class="pipeline">
+            <div class="pipe-step">
+              <div class="step-num">Step 01</div>
+              <h3>Ingest</h3>
+              <p>Payload lands on the Orchestrator with policy context.</p>
+            </div>
+            <div class="pipe-step">
+              <div class="step-num">Step 02</div>
+              <h3>Fan-out</h3>
+              <p>Risk and Compliance run in parallel; others join as needed.</p>
+            </div>
+            <div class="pipe-step">
+              <div class="step-num">Step 03</div>
+              <h3>Validate</h3>
+              <p>Pre-deploy checks simulate impact before promotion.</p>
+            </div>
+            <div class="pipe-step">
+              <div class="step-num">Step 04</div>
+              <h3>Explain</h3>
+              <p>Audience-aware narratives for eng, risk, and leadership.</p>
+            </div>
+            <div class="pipe-step">
+              <div class="step-num">Step 05</div>
+              <h3>Gate</h3>
+              <p>Approve, reject, or learn — with cache and retry built in.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section section-agents" id="agents">
+        <div class="section-inner">
+          <h2>Agents that own a job.</h2>
+          <p class="support">
+            Each service speaks a versioned contract. The Orchestrator is the
+            only door your apps need to know.
+          </p>
+          <div class="agent-rows">
+            <div class="agent-row">
+              <span class="name">Orchestrator</span>
+              <span class="port">:8091 · gie.orchestrator.v1</span>
+              <p class="desc">Unified analyze, status, graph, approval gates.</p>
+            </div>
+            <div class="agent-row">
+              <span class="name">Explainability</span>
+              <span class="port">:8087 · gie.explainability.v1</span>
+              <p class="desc">Multi-audience explanations of decisions.</p>
+            </div>
+            <div class="agent-row">
+              <span class="name">Validation</span>
+              <span class="port">:8088 · gie.validation.v1</span>
+              <p class="desc">Pre-deploy validate and simulate.</p>
+            </div>
+            <div class="agent-row">
+              <span class="name">Learning</span>
+              <span class="port">:8089 · gie.learning.v1</span>
+              <p class="desc">Feedback loop with human-approved knowledge.</p>
+            </div>
+            <div class="agent-row">
+              <span class="name">Integration</span>
+              <span class="port">:8090 · gie.integration.v1</span>
+              <p class="desc">Enterprise connectors and IDE extensions.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section section-cta">
+        <div class="section-inner cta-panel">
+          <div>
+            <h2>Run an analysis in minutes.</h2>
+            <p class="support" style="margin-bottom: 0">
+              Point the dashboard at your Orchestrator — local simulate mode or
+              a deployed cluster — and inspect traces end to end.
+            </p>
+          </div>
+          <div>
+            <a class="btn btn-primary" href="dashboard.html">Launch dashboard</a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="inner">
+        <span>GIE · Guardrails Intelligence Engine</span>
+        <span>
+          <a href="dashboard.html">Dashboard</a>
+          ·
+          <a href="https://github.com/atulmishra84/GIE">GitHub</a>
+        </span>
+      </div>
+    </footer>
+  </body>
+</html>

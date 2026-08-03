@@ -1,0 +1,113 @@
+{
+  "domain": "identity_policies",
+  "nodes": [
+    {
+      "node_id": "fw-identity_policies",
+      "kind": "Framework",
+      "domain": "identity_policies",
+      "title": "Identity Policies",
+      "summary": "Identity and access policies for AI workloads",
+      "body": "Identity and access policies for AI workloads",
+      "tags": [
+        "framework",
+        "root"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-fw-identity_policies",
+          "source_title": "Identity Policies",
+          "citation": "identity_policies",
+          "excerpt": "Identity and access policies for AI workloads"
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "pol-agent-rbac",
+      "kind": "Policy",
+      "domain": "identity_policies",
+      "title": "Agent RBAC Policy",
+      "summary": "Map agent actions to RBAC roles and deny-by-default.",
+      "body": "Map agent actions to RBAC roles and deny-by-default.",
+      "tags": [
+        "policy",
+        "identity"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-pol-agent-rbac",
+          "source_title": "Agent RBAC Policy",
+          "citation": "identity_policies",
+          "excerpt": "Map agent actions to RBAC roles and deny-by-default."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "pol-token-exchange",
+      "kind": "Policy",
+      "domain": "identity_policies",
+      "title": "Token Exchange Policy",
+      "summary": "Short-lived tokens via OAuth token exchange for tools.",
+      "body": "Short-lived tokens via OAuth token exchange for tools.",
+      "tags": [
+        "policy",
+        "identity"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-pol-token-exchange",
+          "source_title": "Token Exchange Policy",
+          "citation": "identity_policies",
+          "excerpt": "Short-lived tokens via OAuth token exchange for tools."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "pol-breakglass",
+      "kind": "Policy",
+      "domain": "identity_policies",
+      "title": "Break-glass Access Policy",
+      "summary": "Time-bound emergency access with audit.",
+      "body": "Time-bound emergency access with audit.",
+      "tags": [
+        "policy",
+        "identity"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-pol-breakglass",
+          "source_title": "Break-glass Access Policy",
+          "citation": "identity_policies",
+          "excerpt": "Time-bound emergency access with audit."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    }
+  ]
+}

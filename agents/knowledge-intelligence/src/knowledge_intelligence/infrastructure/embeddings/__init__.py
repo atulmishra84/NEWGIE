@@ -1,0 +1,1 @@
+from knowledge_intelligence.infrastructure.embeddings.hash_embedder import HashEmbeddingService

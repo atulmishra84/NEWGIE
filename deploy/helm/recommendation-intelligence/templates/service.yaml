@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: recommendation-intelligence
+  labels:
+    app: recommendation-intelligence
+spec:
+  type: {{ .Values.service.type | default "ClusterIP" }}
+  selector:
+    app: recommendation-intelligence
+  ports:
+    - name: http
+      port: {{ .Values.service.port }}
+      targetPort: http

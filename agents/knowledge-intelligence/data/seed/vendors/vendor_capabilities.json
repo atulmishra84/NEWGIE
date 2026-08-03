@@ -1,0 +1,240 @@
+{
+  "domain": "vendor_capabilities",
+  "nodes": [
+    {
+      "node_id": "fw-vendor_capabilities",
+      "kind": "Framework",
+      "domain": "vendor_capabilities",
+      "title": "Vendor Capabilities",
+      "summary": "AI platform vendor security/guardrail capabilities",
+      "body": "AI platform vendor security/guardrail capabilities",
+      "tags": [
+        "framework",
+        "root"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-fw-vendor_capabilities",
+          "source_title": "Vendor Capabilities",
+          "citation": "vendor_capabilities",
+          "excerpt": "AI platform vendor security/guardrail capabilities"
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "vendor-azure-ai",
+      "kind": "Vendor",
+      "domain": "vendor_capabilities",
+      "title": "Azure AI Foundry",
+      "summary": "Content safety, prompt shields, private networking, Entra ID.",
+      "body": "Content safety, prompt shields, private networking, Entra ID.",
+      "tags": [
+        "vendor"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-vendor-azure-ai",
+          "source_title": "Azure AI Foundry",
+          "citation": "vendor_capabilities",
+          "excerpt": "Content safety, prompt shields, private networking, Entra ID."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "vendor-azure-ai-cap-safety",
+      "kind": "Capability",
+      "domain": "vendor_capabilities",
+      "title": "Azure AI Foundry Safety Filters",
+      "summary": "Native content/safety filtering for Azure AI Foundry",
+      "body": "Native content/safety filtering for Azure AI Foundry",
+      "tags": [
+        "capability"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-vendor-azure-ai-cap-safety",
+          "source_title": "Azure AI Foundry Safety Filters",
+          "citation": "vendor_capabilities",
+          "excerpt": "Native content/safety filtering for Azure AI Foundry"
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "vendor-openai",
+      "kind": "Vendor",
+      "domain": "vendor_capabilities",
+      "title": "OpenAI Platform",
+      "summary": "Moderation API, org RBAC, data controls.",
+      "body": "Moderation API, org RBAC, data controls.",
+      "tags": [
+        "vendor"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-vendor-openai",
+          "source_title": "OpenAI Platform",
+          "citation": "vendor_capabilities",
+          "excerpt": "Moderation API, org RBAC, data controls."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "vendor-openai-cap-safety",
+      "kind": "Capability",
+      "domain": "vendor_capabilities",
+      "title": "OpenAI Platform Safety Filters",
+      "summary": "Native content/safety filtering for OpenAI Platform",
+      "body": "Native content/safety filtering for OpenAI Platform",
+      "tags": [
+        "capability"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-vendor-openai-cap-safety",
+          "source_title": "OpenAI Platform Safety Filters",
+          "citation": "vendor_capabilities",
+          "excerpt": "Native content/safety filtering for OpenAI Platform"
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "vendor-aws-bedrock",
+      "kind": "Vendor",
+      "domain": "vendor_capabilities",
+      "title": "AWS Bedrock",
+      "summary": "Guardrails for Amazon Bedrock, IAM, VPC endpoints.",
+      "body": "Guardrails for Amazon Bedrock, IAM, VPC endpoints.",
+      "tags": [
+        "vendor"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-vendor-aws-bedrock",
+          "source_title": "AWS Bedrock",
+          "citation": "vendor_capabilities",
+          "excerpt": "Guardrails for Amazon Bedrock, IAM, VPC endpoints."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "vendor-aws-bedrock-cap-safety",
+      "kind": "Capability",
+      "domain": "vendor_capabilities",
+      "title": "AWS Bedrock Safety Filters",
+      "summary": "Native content/safety filtering for AWS Bedrock",
+      "body": "Native content/safety filtering for AWS Bedrock",
+      "tags": [
+        "capability"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-vendor-aws-bedrock-cap-safety",
+          "source_title": "AWS Bedrock Safety Filters",
+          "citation": "vendor_capabilities",
+          "excerpt": "Native content/safety filtering for AWS Bedrock"
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "vendor-gcp-vertex",
+      "kind": "Vendor",
+      "domain": "vendor_capabilities",
+      "title": "Google Vertex AI",
+      "summary": "Model Armor / safety filters, VPC-SC, IAM.",
+      "body": "Model Armor / safety filters, VPC-SC, IAM.",
+      "tags": [
+        "vendor"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-vendor-gcp-vertex",
+          "source_title": "Google Vertex AI",
+          "citation": "vendor_capabilities",
+          "excerpt": "Model Armor / safety filters, VPC-SC, IAM."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "vendor-gcp-vertex-cap-safety",
+      "kind": "Capability",
+      "domain": "vendor_capabilities",
+      "title": "Google Vertex AI Safety Filters",
+      "summary": "Native content/safety filtering for Google Vertex AI",
+      "body": "Native content/safety filtering for Google Vertex AI",
+      "tags": [
+        "capability"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-vendor-gcp-vertex-cap-safety",
+          "source_title": "Google Vertex AI Safety Filters",
+          "citation": "vendor_capabilities",
+          "excerpt": "Native content/safety filtering for Google Vertex AI"
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    }
+  ]
+}

@@ -1,0 +1,113 @@
+{
+  "domain": "jailbreak",
+  "nodes": [
+    {
+      "node_id": "fw-jailbreak",
+      "kind": "Framework",
+      "domain": "jailbreak",
+      "title": "Jailbreak Techniques",
+      "summary": "Model jailbreak and safety-bypass techniques",
+      "body": "Model jailbreak and safety-bypass techniques",
+      "tags": [
+        "framework",
+        "root"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-fw-jailbreak",
+          "source_title": "Jailbreak Techniques",
+          "citation": "jailbreak",
+          "excerpt": "Model jailbreak and safety-bypass techniques"
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "jb-dan",
+      "kind": "Attack",
+      "domain": "jailbreak",
+      "title": "DAN-style Jailbreak",
+      "summary": "Roleplay personas that ignore safety policies.",
+      "body": "Roleplay personas that ignore safety policies.",
+      "tags": [
+        "attack",
+        "jailbreak"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-jb-dan",
+          "source_title": "DAN-style Jailbreak",
+          "citation": "jailbreak",
+          "excerpt": "Roleplay personas that ignore safety policies."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "jb-encoding",
+      "kind": "Attack",
+      "domain": "jailbreak",
+      "title": "Encoding Jailbreak",
+      "summary": "Base64/ROT13 obfuscation to bypass filters.",
+      "body": "Base64/ROT13 obfuscation to bypass filters.",
+      "tags": [
+        "attack",
+        "jailbreak"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-jb-encoding",
+          "source_title": "Encoding Jailbreak",
+          "citation": "jailbreak",
+          "excerpt": "Base64/ROT13 obfuscation to bypass filters."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    },
+    {
+      "node_id": "jb-multi-turn",
+      "kind": "Attack",
+      "domain": "jailbreak",
+      "title": "Multi-turn Jailbreak",
+      "summary": "Gradual escalation across conversation turns.",
+      "body": "Gradual escalation across conversation turns.",
+      "tags": [
+        "attack",
+        "jailbreak"
+      ],
+      "attributes": {},
+      "evidence": [
+        {
+          "evidence_id": "ev-jb-multi-turn",
+          "source_title": "Multi-turn Jailbreak",
+          "citation": "jailbreak",
+          "excerpt": "Gradual escalation across conversation turns."
+        }
+      ],
+      "version": "1.0.0",
+      "confidence": {
+        "score": 0.95,
+        "rationale": "curated seed corpus"
+      },
+      "active": true
+    }
+  ]
+}
