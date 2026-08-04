@@ -24,12 +24,13 @@ GIE/
 ├── agents/learning-intelligence/  # Learning Agent (feedback loop & knowledge proposals)
 ├── agents/integration-intelligence/ # Integration Agent (enterprise platforms)
 ├── agents/orchestrator/           # Orchestrator Agent (unified pipeline)
-├── agents/chief-orchestrator/     # Full+GIE front door (text + voice)
+├── agents/chief-orchestrator/     # Full+GIE front door (text + voice + command console)
 ├── agents/risk-assessment/        # Risk scoring agent
 ├── agents/policy-engine/          # Deploy allow/deny policy agent
 ├── packages/                      # Shared libraries (contracts, observability, security)
 ├── deploy/                        # Kubernetes, Helm, Terraform, Azure sandbox
 ├── docs/                          # Architecture, API, security, performance
+├── frontend/command-console/      # Simple command UI (served by chief-orchestrator)
 ├── web/                           # Landing page + Orchestrator dashboard (static)
 ├── docker-compose.yml             # Local full stack / Context Intelligence
 └── docker-compose.full-gie.yml    # Full+GIE one-shot overlay
@@ -40,6 +41,8 @@ See [FOLDER_STRUCTURE.md](docs/FOLDER_STRUCTURE.md) and [FULL_GIE_FLEET.md](docs
 Azure sandbox (full mesh + data plane, or minimal Orchestrator): [deploy/azure/README.md](deploy/azure/README.md).
 
 Web UI (landing + dashboard): [web/README.md](web/README.md).
+
+Command Console (chief-orchestrator): [docs/COMMAND_CONSOLE.md](docs/COMMAND_CONSOLE.md).
 
 ## Agents
 

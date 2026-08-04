@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>GIE Command Console</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,600;0,9..40,700;1,9..40,400&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div class="atmosphere" aria-hidden="true"></div>
+  <header class="top">
+    <div class="brand-block">
+      <p class="brand">GIE</p>
+      <h1>Command Console</h1>
+      <p class="tagline">Give a command. Watch the fleet. Optionally hand events to JARVIS.</p>
+    </div>
+    <div class="conn">
+      <label>
+        Orchestrator URL
+        <input id="apiBase" type="url" value="http://127.0.0.1:8091" />
+      </label>
+      <button type="button" id="btnConnect" class="ghost">Connect</button>
+      <span id="connBadge" class="badge off">Disconnected</span>
+    </div>
+  </header>
+
+  <main class="layout">
+    <section class="panel command-panel">
+      <h2>Command</h2>
+      <textarea id="commandInput" rows="4" placeholder="Examples: status · run golden demo · approve production deploy"></textarea>
+      <div class="row">
+        <button type="button" id="btnSend" class="primary">Send command</button>
+        <button type="button" id="btnVoice" class="ghost">Voice</button>
+        <button type="button" id="btnStatus" class="ghost">Refresh fleet</button>
+        <button type="button" id="btnClear" class="ghost">Clear activity</button>
+      </div>
+      <p class="hint">Tip: Ctrl/Cmd + Enter to send. Commands go to the Orchestrator front door.</p>
+    </section>
+
+    <section class="panel jarvis-panel">
+      <h2>JARVIS integration</h2>
+      <label class="toggle">
+        <input type="checkbox" id="jarvisEnabled" />
+        Forward commands & results to JARVIS
+      </label>
+      <label>
+        JARVIS webhook URL
+        <input id="jarvisUrl" type="url" placeholder="http://127.0.0.1:7xxx/v1/gie/events" />
+      </label>
+      <label>
+        JARVIS API token (optional)
+        <input id="jarvisToken" type="password" placeholder="Bearer token" autocomplete="off" />
+      </label>
+      <div class="row">
+        <button type="button" id="btnSaveJarvis" class="ghost">Save</button>
+        <button type="button" id="btnTestJarvis" class="ghost">Test ping</button>
+      </div>
+      <p id="jarvisMsg" class="hint">Optional. Events forward via orchestrator relay when available.</p>
+    </section>
+
+    <section class="panel fleet-panel">
+      <h2>Fleet</h2>
+      <div id="fleetBox" class="fleet">Not connected yet.</div>
+    </section>
+
+    <section class="panel activity-panel">
+      <h2>Activity</h2>
+      <ol id="activity" class="activity"></ol>
+    </section>
+
+    <section class="panel result-panel">
+      <h2>Latest result</h2>
+      <pre id="resultBox" class="result">No command yet.</pre>
+    </section>
+  </main>
+
+  <script src="./app.js"></script>
+</body>
+</html>

@@ -139,6 +139,12 @@ Or manually:
 docker compose -f docker-compose.yml -f docker-compose.full-gie.yml up -d --build
 ```
 
+Default Docker e2e uses `context-stub` on `:8080`. The full Context Intelligence API/worker are behind Compose profile `full-ci` (optional, when that agent boots cleanly):
+
+```bash
+docker compose -f docker-compose.yml -f docker-compose.full-gie.yml --profile full-ci up -d --build
+```
+
 Wait for:
 
 ```text

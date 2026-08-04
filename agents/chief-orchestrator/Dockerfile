@@ -10,6 +10,7 @@ WORKDIR /app
 
 COPY packages/gie-contracts /app/packages/gie-contracts
 COPY agents/chief-orchestrator /app/agents/chief-orchestrator
+COPY frontend/command-console /app/frontend/command-console
 COPY deploy/full-gie /workspace/deploy/full-gie
 
 RUN pip install --upgrade pip && \
@@ -17,7 +18,8 @@ RUN pip install --upgrade pip && \
     pip install /app/agents/chief-orchestrator
 
 ENV PYTHONPATH=/app/agents/chief-orchestrator/src \
-    ORCH_MULTI_REGION_CONFIG=/workspace/deploy/full-gie/multi-region.yaml
+    ORCH_MULTI_REGION_CONFIG=/workspace/deploy/full-gie/multi-region.yaml \
+    ORCH_CONSOLE_DIR=/app/frontend/command-console
 
 EXPOSE 8090
 

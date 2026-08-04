@@ -37,9 +37,23 @@ class Settings(BaseSettings):
     cve_manifest_path: str = ""
     cve_block_high: bool = False
 
+    # Command console + JARVIS bridge
+    console_dir: str = ""
+    cors_origins: str = "*"
+    jarvis_enabled: bool = False
+    jarvis_webhook_url: str = ""
+    jarvis_token: str = ""
+
     @property
     def cve_provider_list(self) -> list[str]:
         return [p.strip().lower() for p in self.cve_providers.split(",") if p.strip()]
+
+    @property
+    def cors_origin_list(self) -> list[str]:
+        raw = (self.cors_origins or "*").strip()
+        if raw == "*":
+            return ["*"]
+        return [o.strip() for o in raw.split(",") if o.strip()]
 
 
 settings = Settings()

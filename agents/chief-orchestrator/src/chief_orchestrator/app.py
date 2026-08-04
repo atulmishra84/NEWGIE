@@ -9,11 +9,15 @@ from pathlib import Path
 from typing import Any
 
 from fastapi import FastAPI, File, Form, UploadFile
-from fastapi.responses import JSONResponse, Response
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse, JSONResponse, Response
+from fastapi.staticfiles import StaticFiles
 from gie_contracts import Channel, CommandRequest, IntentType
+from pydantic import BaseModel, Field
 
 from chief_orchestrator import __version__
 from chief_orchestrator.config import settings
+from chief_orchestrator import jarvis as jarvis_bridge
 from chief_orchestrator.pipeline import (
     build_go_no_go,
     handle_prod_approve,
@@ -27,6 +31,28 @@ from chief_orchestrator.topology import load_topology, production_targets
 from chief_orchestrator.voice import normalize_intent, stt_from_audio, synthesize_tts
 
 
+def _resolve_console_dir() -> Path | None:
+    candidates: list[Path] = []
+    if settings.console_dir:
+        candidates.append(Path(settings.console_dir))
+    here = Path(__file__).resolve()
+    # .../agents/chief-orchestrator/src/chief_orchestrator/app.py → repo root
+    candidates.extend(
+        [
+            here.parents[4] / "frontend" / "command-console",
+            Path("/app/frontend/command-console"),
+            Path("/workspace/frontend/command-console"),
+        ]
+    )
+    for path in candidates:
+        if (path / "index.html").is_file():
+            return path
+    return None
+
+
+CONSOLE_DIR = _resolve_console_dir()
+
+
 @asynccontextmanager
 async def lifespan(_: FastAPI):
     registry.bootstrap()
@@ -37,14 +63,60 @@ async def lifespan(_: FastAPI):
 app = FastAPI(
     title="GIE Chief Orchestrator",
     version=__version__,
-    description="Full+GIE fleet front door (text + voice)",
+    description="Full+GIE fleet front door (text + voice + command console)",
     lifespan=lifespan,
 )
+
+_cors_origins = settings.cors_origin_list
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=_cors_origins,
+    allow_credentials=_cors_origins != ["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
+class JarvisConfigBody(BaseModel):
+    enabled: bool = False
+    webhook_url: str = ""
+    token: str = ""
+
+
+class JarvisForwardBody(BaseModel):
+    event: dict[str, Any] = Field(default_factory=dict)
 
 
 @app.get("/healthz")
 async def healthz() -> dict[str, Any]:
-    return {"status": "ok", "agent": "chief-orchestrator", "version": __version__}
+    return {
+        "status": "ok",
+        "agent": "chief-orchestrator",
+        "version": __version__,
+        "console": bool(CONSOLE_DIR),
+        "jarvis": jarvis_bridge.public_config().get("enabled", False),
+    }
+
+
+@app.get("/v1/integrations/jarvis")
+async def jarvis_get() -> dict[str, Any]:
+    return jarvis_bridge.public_config()
+
+
+@app.put("/v1/integrations/jarvis")
+async def jarvis_put(body: JarvisConfigBody) -> dict[str, Any]:
+    return jarvis_bridge.save_config(
+        enabled=body.enabled,
+        webhook_url=body.webhook_url,
+        token=body.token,
+    )
+
+
+@app.post("/v1/integrations/jarvis/forward")
+async def jarvis_forward(body: JarvisForwardBody) -> dict[str, Any]:
+    event = dict(body.event or {})
+    event.setdefault("source", "gie-chief-orchestrator")
+    return await jarvis_bridge.forward_event(event)
 
 
 @app.get("/demo/golden")
@@ -245,3 +317,20 @@ async def tts(text: str = "ok") -> Response:
 @app.get("/v1/prod/targets")
 async def prod_targets() -> dict[str, Any]:
     return {"targets": production_targets()}
+
+
+@app.get("/")
+async def console_index() -> Any:
+    if CONSOLE_DIR is None:
+        return {
+            "service": "gie-chief-orchestrator",
+            "version": __version__,
+            "docs": "/docs",
+            "console": "not_bundled",
+            "hint": "Open frontend/command-console/index.html or set ORCH_CONSOLE_DIR",
+        }
+    return FileResponse(CONSOLE_DIR / "index.html")
+
+
+if CONSOLE_DIR is not None:
+    app.mount("/console", StaticFiles(directory=str(CONSOLE_DIR), html=True), name="console")

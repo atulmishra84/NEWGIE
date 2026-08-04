@@ -67,6 +67,9 @@ services:
     build:
       context: .
       dockerfile: agents/context-intelligence/Dockerfile
+    # Port 8080 is published by context-stub in docker-compose.full-gie.yml.
+    # Enable profile "full-ci" when running the real Context Intelligence API.
+    profiles: ["full-ci"]
     ports:
       - "8080:8080"
     environment:
@@ -98,6 +101,7 @@ services:
     build:
       context: .
       dockerfile: agents/context-intelligence/Dockerfile
+    profiles: ["full-ci"]
     command: ["celery", "-A", "context_intelligence.infrastructure.celery_app.app", "worker", "-l", "INFO", "-Q", "scans"]
     environment:
       GIE_ENV: local
