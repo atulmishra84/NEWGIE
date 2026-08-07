@@ -15,6 +15,8 @@ from gie_observability.logging import get_logger
 from policy_intelligence.domain.engine import determine_guardrails
 from policy_intelligence.domain.generators import generate_artifacts
 from policy_intelligence.domain.ports import CacheStore, DecisionRepository, EventPublisher
+from gie_llm import BedrockLLMClient
+from policy_intelligence.domain.llm_enhancer import enhance_policy_report
 from policy_intelligence.settings import Settings
 from policy_intelligence.version import AGENT_VERSION
 
@@ -34,6 +36,15 @@ class GeneratePolicyHandler:
         self._cache = cache
         self._events = events
         self._settings = settings
+        self._llm = BedrockLLMClient(
+            region=settings.aws_region,
+            model_id=settings.bedrock_model_id,
+            max_tokens=settings.bedrock_max_tokens,
+            temperature=settings.bedrock_temperature,
+            aws_access_key_id=settings.aws_access_key_id,
+            aws_secret_access_key=settings.aws_secret_access_key,
+            aws_session_token=settings.aws_session_token,
+        ) if settings.bedrock_enabled else None
 
     async def handle(self, request: PolicyGenerateRequest, *, actor: str, correlation_id: str) -> PolicyDecision:
         started = time.perf_counter()

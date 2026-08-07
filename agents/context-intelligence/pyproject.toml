@@ -24,6 +24,8 @@ dependencies = [
   "gie-contracts",
   "gie-observability",
   "gie-security",
+  "boto3>=1.34",
+  "gie-llm",
 ]
 
 [project.optional-dependencies]
@@ -46,6 +48,7 @@ build-backend = "hatchling.build"
 packages = ["src/context_intelligence"]
 
 [tool.uv.sources]
+gie-llm = { path = "../../packages/gie-llm", editable = true }
 gie-contracts = { path = "../../packages/gie-contracts", editable = true }
 gie-observability = { path = "../../packages/gie-observability", editable = true }
 gie-security = { path = "../../packages/gie-security", editable = true }

@@ -123,6 +123,8 @@ class ExplanationReport(BaseModel):
     figma_diagram: dict[str, Any] = Field(default_factory=dict)
     confidence: Confidence = Field(default_factory=Confidence)
     summary: str = ""
+    llm_enhancement: dict[str, Any] | None = None
+
 
 
 class ExplainRequest(BaseModel):

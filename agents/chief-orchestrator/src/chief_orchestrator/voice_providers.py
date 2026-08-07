@@ -9,6 +9,7 @@ import wave
 
 import httpx
 
+from gie_llm import AWSVoiceClient
 from chief_orchestrator.config import settings
 
 logger = logging.getLogger(__name__)
@@ -36,6 +37,14 @@ async def transcribe_audio(audio_bytes: bytes | None, transcript: str | None) ->
         return "", "none"
 
     provider = (settings.stt_provider or "stub").lower()
+    if provider == "aws" and settings.aws_transcribe_bucket:
+        try:
+            client = _aws_voice_client()
+            text = await client.transcribe(audio_bytes)
+            if text:
+                return text, "aws-transcribe"
+        except Exception as exc:  # noqa: BLE001
+            logger.warning("AWS Transcribe STT failed: %s", exc)
     if provider == "openai" and settings.openai_api_key:
         try:
             text = await _openai_stt(audio_bytes)
@@ -54,9 +63,29 @@ async def transcribe_audio(audio_bytes: bytes | None, transcript: str | None) ->
     return "", "stub"
 
 
+def _aws_voice_client() -> AWSVoiceClient:
+    return AWSVoiceClient(
+        region=settings.aws_region,
+        polly_voice_id=settings.aws_polly_voice_id,
+        polly_engine=settings.aws_polly_engine,
+        transcribe_bucket=settings.aws_transcribe_bucket,
+        aws_access_key_id=settings.aws_access_key_id,
+        aws_secret_access_key=settings.aws_secret_access_key,
+        aws_session_token=settings.aws_session_token,
+    )
+
+
 async def synthesize_speech(text: str) -> tuple[bytes, str]:
     """Return (audio_bytes, provider_used)."""
     provider = (settings.tts_provider or "stub").lower()
+    if provider == "aws":
+        try:
+            client = _aws_voice_client()
+            audio = await client.synthesize(text)
+            if audio:
+                return audio, "aws-polly"
+        except Exception as exc:  # noqa: BLE001
+            logger.warning("AWS Polly TTS failed: %s", exc)
     if provider == "openai" and settings.openai_api_key:
         try:
             audio = await _openai_tts(text)

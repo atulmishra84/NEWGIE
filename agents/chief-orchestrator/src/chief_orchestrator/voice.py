@@ -2,13 +2,77 @@
 
 from __future__ import annotations
 
+import json
+import logging
 import re
 from typing import BinaryIO
 
 from gie_contracts import Channel, IntentType, NormalizedIntent
+from gie_llm import BedrockLLMClient
 
 from chief_orchestrator.config import settings
 from chief_orchestrator.voice_providers import synthesize_speech, transcribe_audio
+
+logger = logging.getLogger(__name__)
+
+_BEDROCK_CLIENT: BedrockLLMClient | None = None
+
+
+def _get_llm() -> BedrockLLMClient | None:
+    global _BEDROCK_CLIENT
+    if not settings.bedrock_enabled:
+        return None
+    if _BEDROCK_CLIENT is None:
+        _BEDROCK_CLIENT = BedrockLLMClient(
+            region=settings.aws_region,
+            model_id=settings.bedrock_model_id,
+            max_tokens=settings.bedrock_max_tokens,
+            temperature=settings.bedrock_temperature,
+            aws_access_key_id=settings.aws_access_key_id,
+            aws_secret_access_key=settings.aws_secret_access_key,
+            aws_session_token=settings.aws_session_token,
+        )
+    return _BEDROCK_CLIENT
+
+
+async def llm_classify_intent(text: str, channel: Channel) -> NormalizedIntent | None:
+    """Use Bedrock to classify ambiguous commands into known intents."""
+    llm = _get_llm()
+    if not llm:
+        return None
+    system = (
+        "You are the GIE Chief Orchestrator command classifier. "
+        "Classify the user's command into one of: STATUS, GOLDEN_RUN, CHANGE_REQUEST, PROD_APPROVE, CLARIFY. "
+        "Return JSON only: {\"intent\": \"<INTENT>\", \"confidence\": <0-1>, \"clarification\": \"<optional>\"}."
+    )
+    raw = await llm.invoke(system=system, user=f'Command: "{text}"')
+    try:
+        start = raw.find("{")
+        end = raw.rfind("}") + 1
+        if start >= 0 and end > start:
+            parsed = json.loads(raw[start:end])
+            intent_str = str(parsed.get("intent", "CLARIFY")).upper()
+            confidence = float(parsed.get("confidence", 0.5))
+            clarification = parsed.get("clarification")
+            intent_map = {
+                "STATUS": IntentType.STATUS,
+                "GOLDEN_RUN": IntentType.GOLDEN_RUN,
+                "CHANGE_REQUEST": IntentType.CHANGE_REQUEST,
+                "PROD_APPROVE": IntentType.PROD_APPROVE,
+                "CLARIFY": IntentType.CLARIFY,
+            }
+            intent_type = intent_map.get(intent_str, IntentType.UNKNOWN)
+            return NormalizedIntent(
+                intent=intent_type,
+                text=text,
+                channel=channel,
+                confidence=confidence,
+                needs_clarification=intent_type in (IntentType.CLARIFY, IntentType.UNKNOWN),
+                clarification_prompt=clarification,
+            )
+    except Exception as exc:
+        logger.warning("Bedrock intent classification failed: %s", exc)
+    return None
 
 _AMBIGUOUS = re.compile(r"^(uh+|um+|hmm+|maybe|something|whatever)\b", re.I)
 
@@ -130,6 +194,21 @@ def normalize_intent(
             f'"{settings.prod_confirm_phrase}"'
         ),
     )
+
+
+async def normalize_intent_with_llm(
+    *,
+    text: str,
+    channel: Channel,
+    prod_confirm_phrase: str | None = None,
+) -> NormalizedIntent:
+    """normalize_intent with Bedrock fallback for UNKNOWN intents."""
+    intent = normalize_intent(text=text, channel=channel, prod_confirm_phrase=prod_confirm_phrase)
+    if intent.intent == IntentType.UNKNOWN and intent.confidence < 0.5:
+        llm_intent = await llm_classify_intent(text, channel)
+        if llm_intent and llm_intent.confidence > 0.6:
+            return llm_intent
+    return intent
 
 
 def read_upload(file_obj: BinaryIO | None) -> bytes | None:

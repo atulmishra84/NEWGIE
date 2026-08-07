@@ -124,6 +124,7 @@ class PolicyDecision(BaseModel):
     confidence: Confidence = Field(default_factory=Confidence)
     summary: str = ""
     input_digest: str | None = None
+    llm_enhancement: dict[str, Any] | None = None
 
 
 class PolicyGenerateRequest(BaseModel):

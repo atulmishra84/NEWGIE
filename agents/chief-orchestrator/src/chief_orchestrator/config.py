@@ -21,13 +21,26 @@ class Settings(BaseSettings):
     artifact_dir: str = "/tmp/gie-fleet-artifacts"
     multi_region_config: str = "/workspace/deploy/full-gie/multi-region.yaml"
 
-    # Voice providers: stub | openai | deepgram
+    # Voice providers: stub | openai | deepgram | aws
     stt_provider: str = "stub"
     tts_provider: str = "stub"
     openai_api_key: str = ""
     openai_base_url: str = "https://api.openai.com/v1"
     deepgram_api_key: str = ""
     deepgram_base_url: str = "https://api.deepgram.com/v1"
+
+    # AWS / Bedrock
+    aws_region: str = "us-east-1"
+    aws_access_key_id: str = ""
+    aws_secret_access_key: str = ""
+    aws_session_token: str = ""
+    aws_polly_voice_id: str = "Joanna"
+    aws_polly_engine: str = "neural"
+    aws_transcribe_bucket: str = ""
+    bedrock_enabled: bool = True
+    bedrock_model_id: str = "anthropic.claude-3-haiku-20240307-v1:0"
+    bedrock_max_tokens: int = 2048
+    bedrock_temperature: float = 0.5
 
     # CVE scanners: comma-separated osv,snyk
     cve_providers: str = "osv"

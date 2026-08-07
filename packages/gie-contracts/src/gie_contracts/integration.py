@@ -232,3 +232,5 @@ class IntegrationHealthReport(BaseModel):
     confidence: Confidence = Field(default_factory=Confidence)
     reasoning_path: list[dict[str, Any]] = Field(default_factory=list)
     summary: str = ""
+    llm_enhancement: dict[str, Any] | None = None
+

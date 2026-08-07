@@ -29,6 +29,8 @@ from orchestrator.domain.graph import default_analyze_workflow, topological_wave
 from orchestrator.domain.retry import with_retry
 from orchestrator.domain.router import resolve_version
 from orchestrator.domain.ports import AgentInvoker, CacheStore, EventPublisher, ExecutionRepository, TraceRepository
+from gie_llm import BedrockLLMClient
+from orchestrator.domain.llm_enhancer import enhance_analysis_result
 from orchestrator.settings import Settings
 from orchestrator.version import AGENT_VERSION
 
@@ -62,6 +64,15 @@ class OrchestratorEngine:
         self._invoker = invoker
         self._settings = settings
         self._approvals: dict[tuple[str, str], asyncio.Event] = {}
+        self._llm = BedrockLLMClient(
+            region=settings.aws_region,
+            model_id=settings.bedrock_model_id,
+            max_tokens=settings.bedrock_max_tokens,
+            temperature=settings.bedrock_temperature,
+            aws_access_key_id=settings.aws_access_key_id,
+            aws_secret_access_key=settings.aws_secret_access_key,
+            aws_session_token=settings.aws_session_token,
+        ) if settings.bedrock_enabled else None
 
     def _cache_key(self, tenant_id: str, step_id: str, payload: dict[str, Any]) -> str:
         blob = json.dumps({"t": tenant_id, "s": step_id, "p": payload}, sort_keys=True, default=str)
@@ -86,7 +97,7 @@ class OrchestratorEngine:
             from orchestrator.domain.graph import sequential_analyze_workflow
             workflow = sequential_analyze_workflow()
         workflow = self._apply_approval_gates(workflow, request.approval_gates, request.require_human_approval)
-        return await self._run(
+        record = await self._run(
             tenant_id=request.tenant_id,
             workflow=workflow,
             mode=request.mode,
@@ -97,6 +108,16 @@ class OrchestratorEngine:
             correlation_id=request.correlation_id or uuid4().hex,
             metadata=request.metadata,
         )
+        if self._llm and record.status == ExecutionStatus.COMPLETED:
+            record_dict = record.model_dump(mode="json")
+            enhanced = await enhance_analysis_result(record_dict, client=self._llm)
+            record = record.model_copy(update={"llm_enhancement": {
+                "narrative": enhanced.get("llm_narrative", ""),
+                "key_insights": enhanced.get("llm_key_insights", []),
+                "recommendations": enhanced.get("llm_recommendations", []),
+                "model": enhanced.get("llm_model", ""),
+            }})
+        return record
 
     async def workflow(self, request: WorkflowRequest) -> ExecutionRecord:
         wf = self._apply_approval_gates(request.workflow, [], request.require_human_approval)

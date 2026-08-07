@@ -18,6 +18,8 @@ from context_intelligence.infrastructure.persistence.repositories import (
     SqlAlchemyContextRepository,
     SqlAlchemyOutboxWriter,
 )
+from gie_llm import BedrockLLMClient
+from context_intelligence.domain.llm_enhancer import enhance_context_model
 from context_intelligence.settings import get_settings
 from context_intelligence.version import AGENT_VERSION
 
@@ -57,6 +59,24 @@ async def _execute_scan_async(scan_id: UUID, tenant_id: str, correlation_id: str
             outbox = SqlAlchemyOutboxWriter(session)
             executor = ScanExecutor(repo, outbox, publisher, graph, vectors, producer_version=AGENT_VERSION)
             model = await executor.execute(scan_id, tenant_id, correlation_id)
+            if settings.bedrock_enabled:
+                llm = BedrockLLMClient(
+                    region=settings.aws_region,
+                    model_id=settings.bedrock_model_id,
+                    max_tokens=settings.bedrock_max_tokens,
+                    temperature=settings.bedrock_temperature,
+                    aws_access_key_id=settings.aws_access_key_id,
+                    aws_secret_access_key=settings.aws_secret_access_key,
+                    aws_session_token=settings.aws_session_token,
+                )
+                model_dict = model.model_dump(mode="json")
+                enhanced = await enhance_context_model(model_dict, client=llm)
+                model = model.model_copy(update={"llm_enhancement": {
+                    "narrative": enhanced.get("llm_narrative", ""),
+                    "key_insights": enhanced.get("llm_key_insights", []),
+                    "recommendations": enhanced.get("llm_recommendations", []),
+                    "model": enhanced.get("llm_model", ""),
+                }})
             scan = await repo.get_scan(scan_id, tenant_id)
             if scan and scan.get("webhook_url"):
                 await deliver_webhook(

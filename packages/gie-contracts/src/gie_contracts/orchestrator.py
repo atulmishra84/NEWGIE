@@ -170,6 +170,8 @@ class ExecutionTrace(BaseModel):
     tenant_id: str
     spans: list[TraceSpan] = Field(default_factory=list)
     created_at: datetime = Field(default_factory=utcnow)
+    llm_enhancement: dict[str, Any] | None = None
+
 
 
 class UnifiedAnalysisResult(BaseModel):
@@ -207,6 +209,7 @@ class ExecutionRecord(BaseModel):
     agent_versions: dict[str, str] = Field(default_factory=dict)
     metadata: dict[str, Any] = Field(default_factory=dict)
     stream_chunks: list[dict[str, Any]] = Field(default_factory=list)
+    llm_enhancement: dict[str, Any] | None = None
 
 
 class OrchestratorStatus(BaseModel):

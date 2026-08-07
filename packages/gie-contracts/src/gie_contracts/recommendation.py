@@ -123,6 +123,8 @@ class RecommendationReport(BaseModel):
     reasoning_path: list[dict[str, Any]] = Field(default_factory=list)
     summary: str = ""
     counts: dict[str, int] = Field(default_factory=dict)
+    llm_enhancement: dict[str, Any] | None = None
+
 
 
 class RecommendationGenerateRequest(BaseModel):

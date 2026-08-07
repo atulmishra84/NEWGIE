@@ -25,6 +25,17 @@ class Settings(BaseSettings):
     webhook_hmac_secret: str = "local-webhook-secret"
     mtls_enabled: bool = False
 
+
+    # AWS Bedrock LLM
+    bedrock_enabled: bool = True
+    bedrock_model_id: str = "anthropic.claude-3-haiku-20240307-v1:0"
+    bedrock_max_tokens: int = 1024
+    bedrock_temperature: float = 0.3
+    aws_region: str = "us-east-1"
+    aws_access_key_id: str = ""
+    aws_secret_access_key: str = ""
+    aws_session_token: str = ""
+
 @lru_cache
 def get_settings() -> Settings:
     return Settings()

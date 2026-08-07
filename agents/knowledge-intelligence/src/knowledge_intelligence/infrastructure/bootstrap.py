@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from knowledge_intelligence.application.di import Container, set_container
 from knowledge_intelligence.infrastructure.cache.redis_cache import RedisCacheStore, create_redis_client
+from knowledge_intelligence.infrastructure.embeddings.bedrock_embedder import BedrockEmbeddingService
 from knowledge_intelligence.infrastructure.embeddings.hash_embedder import HashEmbeddingService
 from knowledge_intelligence.infrastructure.messaging.kafka_publisher import KafkaEventPublisher
 from knowledge_intelligence.infrastructure.persistence.memory_store import (
@@ -28,7 +29,17 @@ from knowledge_intelligence.settings import Settings, get_settings
 
 async def build_container(*, memory: bool = False, settings: Settings | None = None) -> Container:
     settings = settings or get_settings()
-    embeddings = HashEmbeddingService(dim=settings.embedding_dim)
+    if settings.bedrock_enabled and settings.gie_env != "test":
+        embeddings = BedrockEmbeddingService(
+            region=settings.aws_region,
+            model_id=settings.bedrock_embedding_model_id,
+            dimensions=settings.bedrock_embedding_dim,
+            aws_access_key_id=settings.aws_access_key_id,
+            aws_secret_access_key=settings.aws_secret_access_key,
+            aws_session_token=settings.aws_session_token,
+        )
+    else:
+        embeddings = HashEmbeddingService(dim=settings.embedding_dim)
     if memory or settings.gie_env == "test":
         nodes = InMemoryNodeRepository()
         edges = InMemoryEdgeRepository()
