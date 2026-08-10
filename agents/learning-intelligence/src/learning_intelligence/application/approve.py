@@ -1,5 +1,9 @@
 from __future__ import annotations
-from gie_contracts.learning import ApproveKnowledgeRequest, KnowledgeChangeStatus, utcnow
+from gie_contracts.learning import (
+    ApproveKnowledgeRequest,
+    KnowledgeChangeStatus,
+    utcnow,
+)
 from gie_contracts.learning_events import KnowledgeChangeApproved
 from gie_observability.logging import get_logger
 from learning_intelligence.application.errors import LearningError, NotFoundError
@@ -9,19 +13,34 @@ from learning_intelligence.version import AGENT_VERSION
 
 logger = get_logger(__name__)
 
+
 class ApproveKnowledgeHandler:
-    def __init__(self, *, knowledge: KnowledgeChangeRepository, events: EventPublisher, settings: Settings):
+    def __init__(
+        self,
+        *,
+        knowledge: KnowledgeChangeRepository,
+        events: EventPublisher,
+        settings: Settings,
+    ):
         self._knowledge = knowledge
         self._events = events
         self._settings = settings
 
-    async def handle(self, request: ApproveKnowledgeRequest, *, actor: str, correlation_id: str) -> dict:
+    async def handle(
+        self, request: ApproveKnowledgeRequest, *, actor: str, correlation_id: str
+    ) -> dict:
         approved = []
         if request.approve_all_proposed:
-            items = await self._knowledge.list(request.tenant_id, status=KnowledgeChangeStatus.PROPOSED.value, limit=500)
+            items = await self._knowledge.list(
+                request.tenant_id,
+                status=KnowledgeChangeStatus.PROPOSED.value,
+                limit=500,
+            )
         else:
             if not request.change_ids:
-                raise LearningError("invalid_request", "Provide change_ids or approve_all_proposed=true")
+                raise LearningError(
+                    "invalid_request", "Provide change_ids or approve_all_proposed=true"
+                )
             items = []
             for cid in request.change_ids:
                 ch = await self._knowledge.get(cid)
@@ -42,6 +61,10 @@ class ApproveKnowledgeHandler:
             change_ids=approved,
             actor=request.actor or actor,
         )
-        await self._events.publish(self._settings.kafka_topic_events, evt.model_dump(mode="json"), key=request.tenant_id)
+        await self._events.publish(
+            self._settings.kafka_topic_events,
+            evt.model_dump(mode="json"),
+            key=request.tenant_id,
+        )
         logger.info("knowledge_approved", count=len(approved), actor=actor)
         return {"approved_ids": approved, "count": len(approved), "note": request.note}

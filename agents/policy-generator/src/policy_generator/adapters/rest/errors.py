@@ -7,18 +7,40 @@ from gie_security.rbac import PermissionDeniedError
 from policy_generator.application.errors import NotFoundError, PolicyGenError
 from policy_generator.version import AGENT_VERSION
 
+
 def register_exception_handlers(app: FastAPI) -> None:
     @app.exception_handler(NotFoundError)
     async def nf(request: Request, exc: NotFoundError):
-        return JSONResponse(status_code=404, content=_err(request, exc.code, exc.message))
+        return JSONResponse(
+            status_code=404, content=_err(request, exc.code, exc.message)
+        )
+
     @app.exception_handler(PolicyGenError)
     async def pe(request: Request, exc: PolicyGenError):
-        return JSONResponse(status_code=400, content=_err(request, exc.code, exc.message, exc.retryable))
+        return JSONResponse(
+            status_code=400, content=_err(request, exc.code, exc.message, exc.retryable)
+        )
+
     @app.exception_handler(PermissionDeniedError)
     async def denied(request: Request, exc: PermissionDeniedError):
-        return JSONResponse(status_code=403, content=_err(request, "forbidden", str(exc)))
+        return JSONResponse(
+            status_code=403, content=_err(request, "forbidden", str(exc))
+        )
+
 
 def _err(request, code, message, retryable=False):
     obs = getattr(request.state, "obs", None)
     started = getattr(request.state, "started", time.perf_counter())
-    return {"code": code, "message": message, "retryable": retryable, "meta": {"trace_id": getattr(obs, "trace_id", uuid4().hex), "request_id": getattr(obs, "request_id", uuid4().hex), "correlation_id": getattr(obs, "correlation_id", uuid4().hex), "execution_ms": (time.perf_counter() - started) * 1000, "agent_version": AGENT_VERSION, "agent_name": "policy-generator"}}
+    return {
+        "code": code,
+        "message": message,
+        "retryable": retryable,
+        "meta": {
+            "trace_id": getattr(obs, "trace_id", uuid4().hex),
+            "request_id": getattr(obs, "request_id", uuid4().hex),
+            "correlation_id": getattr(obs, "correlation_id", uuid4().hex),
+            "execution_ms": (time.perf_counter() - started) * 1000,
+            "agent_version": AGENT_VERSION,
+            "agent_name": "policy-generator",
+        },
+    }

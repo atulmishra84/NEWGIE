@@ -60,7 +60,9 @@ ROLE_PERMISSIONS: dict[Role, frozenset[Permission]] = {
 class PermissionDeniedError(Exception):
     """Raised when a principal lacks a required permission."""
 
-    def __init__(self, permission: Permission | str, principal: AuthPrincipal | None = None) -> None:
+    def __init__(
+        self, permission: Permission | str, principal: AuthPrincipal | None = None
+    ) -> None:
         self.permission = permission
         self.principal = principal
         subject = principal.subject_id if principal else "unknown"
@@ -88,7 +90,9 @@ def has_permission(principal: AuthPrincipal, permission: Permission | str) -> bo
     return perm in granted
 
 
-def require_permission(permission: Permission | str) -> Callable[[Callable[P, R]], Callable[P, R]]:
+def require_permission(
+    permission: Permission | str,
+) -> Callable[[Callable[P, R]], Callable[P, R]]:
     """Decorator ensuring the wrapped callable receives an authorized principal."""
 
     def decorator(fn: Callable[P, R]) -> Callable[P, R]:

@@ -205,7 +205,10 @@ async def _dispatch(
         "intent": intent.model_dump(mode="json"),
     }
 
-    if intent.needs_clarification and intent.intent in {IntentType.CLARIFY, IntentType.UNKNOWN}:
+    if intent.needs_clarification and intent.intent in {
+        IntentType.CLARIFY,
+        IntentType.UNKNOWN,
+    }:
         reply["status"] = "needs_clarification"
         reply["message"] = intent.clarification_prompt
         reply["run_started"] = False
@@ -259,7 +262,9 @@ async def command_text(body: CommandRequest) -> dict[str, Any]:
         prod_confirm_phrase=body.prod_confirm_phrase,
     )
     if body.channel == Channel.VOICE:
-        audio, provider = await synthesize_tts(result.get("message") or result.get("status", "ok"))
+        audio, provider = await synthesize_tts(
+            result.get("message") or result.get("status", "ok")
+        )
         result["tts_provider"] = provider
         result["tts_wav_base64"] = base64.b64encode(audio).decode("ascii")
     return result
@@ -333,4 +338,6 @@ async def console_index() -> Any:
 
 
 if CONSOLE_DIR is not None:
-    app.mount("/console", StaticFiles(directory=str(CONSOLE_DIR), html=True), name="console")
+    app.mount(
+        "/console", StaticFiles(directory=str(CONSOLE_DIR), html=True), name="console"
+    )

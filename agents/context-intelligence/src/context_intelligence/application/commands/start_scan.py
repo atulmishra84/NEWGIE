@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from uuid import UUID, uuid4
+from uuid import uuid4
 
 from gie_contracts.events import ContextScanRequested
 from gie_contracts.sources import ScanSource
@@ -13,7 +13,11 @@ from gie_security.rbac import Permission, PermissionDeniedError, require_permiss
 
 from context_intelligence.config import Settings
 from context_intelligence.domain.entities import ContextScan, ScanStatus
-from context_intelligence.domain.ports import ContextRepository, EventPublisher, ScanEnqueuer
+from context_intelligence.domain.ports import (
+    ContextRepository,
+    EventPublisher,
+    ScanEnqueuer,
+)
 
 logger = get_logger(__name__)
 

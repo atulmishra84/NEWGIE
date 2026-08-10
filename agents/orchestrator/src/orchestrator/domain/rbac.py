@@ -2,12 +2,14 @@ from __future__ import annotations
 from enum import StrEnum
 from gie_security.rbac import PermissionDeniedError
 
+
 class OrchestratorPermission(StrEnum):
     ORCH_READ = "orchestrator:read"
     ORCH_ANALYZE = "orchestrator:analyze"
     ORCH_WORKFLOW = "orchestrator:workflow"
     ORCH_APPROVE = "orchestrator:approve"
     ORCH_ADMIN = "orchestrator:admin"
+
 
 _ROLE_PERMS: dict[str, set[OrchestratorPermission]] = {
     "viewer": {OrchestratorPermission.ORCH_READ},
@@ -26,7 +28,10 @@ _ROLE_PERMS: dict[str, set[OrchestratorPermission]] = {
     "admin": set(OrchestratorPermission),
 }
 
-def require_orch_permission(roles: set[str] | frozenset[str], permission: OrchestratorPermission) -> None:
+
+def require_orch_permission(
+    roles: set[str] | frozenset[str], permission: OrchestratorPermission
+) -> None:
     allowed: set[OrchestratorPermission] = set()
     for r in roles:
         allowed |= _ROLE_PERMS.get(r, set())

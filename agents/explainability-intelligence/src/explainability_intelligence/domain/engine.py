@@ -17,7 +17,10 @@ from gie_contracts.explainability import (
     ReasoningStep,
 )
 
-from explainability_intelligence.domain.diagram import build_mermaid, figma_diagram_payload
+from explainability_intelligence.domain.diagram import (
+    build_mermaid,
+    figma_diagram_payload,
+)
 from explainability_intelligence.domain.formats import build_artifacts
 from explainability_intelligence.version import AGENT_VERSION
 
@@ -36,10 +39,14 @@ def _evidence(bundle: ExplainabilityInputBundle, rec: dict[str, Any]) -> list[st
     evid = list(rec.get("supporting_evidence") or rec.get("evidence") or [])
     for f in (bundle.risk.get("factors") or [])[:5]:
         if isinstance(f, dict):
-            evid.append(f"Risk {f.get('category')}={f.get('score')} ({f.get('severity')})")
+            evid.append(
+                f"Risk {f.get('category')}={f.get('score')} ({f.get('severity')})"
+            )
     for g in (bundle.compliance.get("gaps") or [])[:5]:
         if isinstance(g, dict):
-            evid.append(f"Compliance gap {g.get('control_id') or g.get('title')} ({g.get('severity')})")
+            evid.append(
+                f"Compliance gap {g.get('control_id') or g.get('title')} ({g.get('severity')})"
+            )
     for hit in (bundle.knowledge.get("hits") or [])[:5]:
         if isinstance(hit, dict) and hit.get("node_id"):
             evid.append(f"Knowledge {hit['node_id']}")
@@ -48,7 +55,9 @@ def _evidence(bundle: ExplainabilityInputBundle, rec: dict[str, Any]) -> list[st
     return [str(e) for e in evid][:15]
 
 
-def _knowledge_refs(bundle: ExplainabilityInputBundle, rec: dict[str, Any]) -> list[str]:
+def _knowledge_refs(
+    bundle: ExplainabilityInputBundle, rec: dict[str, Any]
+) -> list[str]:
     refs = list(rec.get("knowledge_refs") or [])
     for hit in (bundle.knowledge.get("hits") or [])[:8]:
         if isinstance(hit, dict) and hit.get("node_id"):
@@ -78,22 +87,35 @@ def _policy_source(bundle: ExplainabilityInputBundle, rec: dict[str, Any]) -> st
         return str(bundle.policies["source"])
     guards = rec.get("related_guardrails") or []
     if guards:
-        return "Policy Generator / Policy Intelligence via " + ", ".join(str(g) for g in guards[:6])
+        return "Policy Generator / Policy Intelligence via " + ", ".join(
+            str(g) for g in guards[:6]
+        )
     return "GIE policy catalog (derived)"
 
 
 def _build_dimensions(bundle: ExplainabilityInputBundle) -> ExplanationDimensions:
     rec = _first_rec(bundle)
     title = rec.get("title") or bundle.subject.get("title") or "Decision"
-    reason = rec.get("reason") or bundle.subject.get("reason") or f"Agent decision for {title}"
-    biz = rec.get("business_impact") or "Reduces operational and regulatory exposure for the AI application."
+    reason = (
+        rec.get("reason")
+        or bundle.subject.get("reason")
+        or f"Agent decision for {title}"
+    )
+    biz = (
+        rec.get("business_impact")
+        or "Reduces operational and regulatory exposure for the AI application."
+    )
     risk_txt = (
         f"Priority {rec.get('priority', 'n/a')}; expected risk reduction "
         f"{rec.get('risk_reduction', bundle.risk.get('overall_ai_risk_score', 'n/a'))}."
     )
     if bundle.risk.get("overall_ai_risk_score") is not None:
         risk_txt += f" Overall AI risk score={bundle.risk['overall_ai_risk_score']}."
-    conf_score = float((rec.get("confidence") or {}).get("score") if isinstance(rec.get("confidence"), dict) else rec.get("confidence") or 0.8)
+    conf_score = float(
+        (rec.get("confidence") or {}).get("score")
+        if isinstance(rec.get("confidence"), dict)
+        else rec.get("confidence") or 0.8
+    )
     alts = [
         AlternativeOption(
             title="Accept residual risk",
@@ -120,7 +142,10 @@ def _build_dimensions(bundle: ExplainabilityInputBundle) -> ExplanationDimension
         risk=risk_txt,
         regulation=_regulation(bundle, rec),
         business_impact=biz,
-        confidence=Confidence(score=min(0.98, max(0.4, conf_score)), rationale="Aggregated from source agent confidence and evidence density"),
+        confidence=Confidence(
+            score=min(0.98, max(0.4, conf_score)),
+            rationale="Aggregated from source agent confidence and evidence density",
+        ),
         alternative_options=alts,
         expected_outcome=rec.get("expected_outcome")
         or f"Implementing '{title}' should improve trust posture and close related gaps.",
@@ -129,7 +154,9 @@ def _build_dimensions(bundle: ExplainabilityInputBundle) -> ExplanationDimension
     )
 
 
-def _view(audience: AudienceView, dims: ExplanationDimensions, rec: dict[str, Any]) -> AudienceExplanation:
+def _view(
+    audience: AudienceView, dims: ExplanationDimensions, rec: dict[str, Any]
+) -> AudienceExplanation:
     title = rec.get("title") or "Decision"
     templates = {
         AudienceView.EXECUTIVE: (
@@ -165,7 +192,13 @@ def _view(audience: AudienceView, dims: ExplanationDimensions, rec: dict[str, An
             "Traceable decision record with evidence and knowledge lineage.",
             f"Decision '{title}' is justified by documented evidence and knowledge refs. "
             f"Confidence {dims.confidence.score:.0%}. Reproduce via reasoning path and artifacts.",
-            ["evidence", "supporting_knowledge", "confidence", "policy_source", "regulation"],
+            [
+                "evidence",
+                "supporting_knowledge",
+                "confidence",
+                "policy_source",
+                "regulation",
+            ],
         ),
     }
     t, s, n, emph = templates[audience]
@@ -174,8 +207,17 @@ def _view(audience: AudienceView, dims: ExplanationDimensions, rec: dict[str, An
     if audience == AudienceView.EXECUTIVE:
         view_dims.why = f"Strategic: {dims.business_impact}"
     if audience == AudienceView.DEVELOPER:
-        view_dims.expected_outcome = f"Ship controls from {dims.policy_source}; validate in CI."
-    return AudienceExplanation(audience=audience, title=t, summary=s, narrative=n, dimensions=view_dims, emphasis=emph)
+        view_dims.expected_outcome = (
+            f"Ship controls from {dims.policy_source}; validate in CI."
+        )
+    return AudienceExplanation(
+        audience=audience,
+        title=t,
+        summary=s,
+        narrative=n,
+        dimensions=view_dims,
+        emphasis=emph,
+    )
 
 
 def _normalize_steps(bundle: ExplainabilityInputBundle) -> list[ReasoningStep]:
@@ -183,12 +225,42 @@ def _normalize_steps(bundle: ExplainabilityInputBundle) -> list[ReasoningStep]:
     raw = list(bundle.reasoning_path or [])
     if not raw:
         raw = [
-            {"step": 1, "agent": "context-intelligence", "action": "scan", "detail": "Normalized application context"},
-            {"step": 2, "agent": "risk-intelligence", "action": "score", "detail": f"Overall risk={bundle.risk.get('overall_ai_risk_score', 'n/a')}"},
-            {"step": 3, "agent": "compliance-intelligence", "action": "analyze", "detail": f"Compliance score={bundle.compliance.get('compliance_score', 'n/a')}"},
-            {"step": 4, "agent": "recommendation-intelligence", "action": "prioritize", "detail": f"{len(bundle.recommendations)} recommendations"},
-            {"step": 5, "agent": "policy-generator", "action": "generate", "detail": "Deployment-ready policies produced"},
-            {"step": 6, "agent": "explainability-intelligence", "action": "explain", "detail": "Multi-audience explanation assembled"},
+            {
+                "step": 1,
+                "agent": "context-intelligence",
+                "action": "scan",
+                "detail": "Normalized application context",
+            },
+            {
+                "step": 2,
+                "agent": "risk-intelligence",
+                "action": "score",
+                "detail": f"Overall risk={bundle.risk.get('overall_ai_risk_score', 'n/a')}",
+            },
+            {
+                "step": 3,
+                "agent": "compliance-intelligence",
+                "action": "analyze",
+                "detail": f"Compliance score={bundle.compliance.get('compliance_score', 'n/a')}",
+            },
+            {
+                "step": 4,
+                "agent": "recommendation-intelligence",
+                "action": "prioritize",
+                "detail": f"{len(bundle.recommendations)} recommendations",
+            },
+            {
+                "step": 5,
+                "agent": "policy-generator",
+                "action": "generate",
+                "detail": "Deployment-ready policies produced",
+            },
+            {
+                "step": 6,
+                "agent": "explainability-intelligence",
+                "action": "explain",
+                "detail": "Multi-audience explanation assembled",
+            },
         ]
     for i, item in enumerate(raw, start=1):
         if isinstance(item, ReasoningStep):
@@ -199,10 +271,21 @@ def _normalize_steps(bundle: ExplainabilityInputBundle) -> list[ReasoningStep]:
                 step=int(item.get("step") or i),
                 agent=str(item.get("agent") or item.get("producer") or "gie-agent"),
                 action=str(item.get("action") or item.get("event_type") or "decide"),
-                detail=str(item.get("detail") or item.get("summary") or item.get("title") or "step"),
+                detail=str(
+                    item.get("detail")
+                    or item.get("summary")
+                    or item.get("title")
+                    or "step"
+                ),
                 inputs=list(item.get("inputs") or []),
                 outputs=list(item.get("outputs") or []),
-                confidence=Confidence(score=float((item.get("confidence") or {}).get("score", 0.85) if isinstance(item.get("confidence"), dict) else item.get("confidence") or 0.85)),
+                confidence=Confidence(
+                    score=float(
+                        (item.get("confidence") or {}).get("score", 0.85)
+                        if isinstance(item.get("confidence"), dict)
+                        else item.get("confidence") or 0.85
+                    )
+                ),
             )
         )
     return steps
@@ -215,7 +298,10 @@ def explain_decision(bundle: ExplainabilityInputBundle) -> ExplanationReport:
     views = {a.value: _view(a, dims, rec) for a in audiences}
     steps = _normalize_steps(bundle)
     mermaid = build_mermaid(steps, title=str(rec.get("title") or "GIE decision"))
-    figma = figma_diagram_payload(mermaid, name=f"GIE Explanation {bundle.decision_id or bundle.agent_id or 'decision'}")
+    figma = figma_diagram_payload(
+        mermaid,
+        name=f"GIE Explanation {bundle.decision_id or bundle.agent_id or 'decision'}",
+    )
     summary = (
         f"Explained {bundle.subject_type} decision "
         f"'{rec.get('title') or bundle.decision_id or 'n/a'}' "
@@ -235,7 +321,16 @@ def explain_decision(bundle: ExplainabilityInputBundle) -> ExplanationReport:
         confidence=dims.confidence,
         summary=summary,
     )
-    formats = list(bundle.formats) if bundle.formats else [OutputFormat.MARKDOWN, OutputFormat.HTML, OutputFormat.PDF, OutputFormat.JSON]
+    formats = (
+        list(bundle.formats)
+        if bundle.formats
+        else [
+            OutputFormat.MARKDOWN,
+            OutputFormat.HTML,
+            OutputFormat.PDF,
+            OutputFormat.JSON,
+        ]
+    )
     report.artifacts = build_artifacts(report, formats)
     return report
 

@@ -17,7 +17,9 @@ SECRET_PATTERNS: list[tuple[str, re.Pattern[str], Severity]] = [
     ),
     (
         "anthropic_api_key",
-        re.compile(r"ANTHROPIC_API_KEY\s*=\s*(sk-ant-[A-Za-z0-9_-]{8,})", re.IGNORECASE),
+        re.compile(
+            r"ANTHROPIC_API_KEY\s*=\s*(sk-ant-[A-Za-z0-9_-]{8,})", re.IGNORECASE
+        ),
         Severity.CRITICAL,
     ),
     (
@@ -76,7 +78,9 @@ def scan_text_for_secrets(
                             start_line=line_no,
                             end_line=line_no,
                             detector_id=detector_id,
-                            excerpt_hash=hashlib.sha256(lines[line_no - 1].encode()).hexdigest()[:16],
+                            excerpt_hash=hashlib.sha256(
+                                lines[line_no - 1].encode()
+                            ).hexdigest()[:16],
                         )
                     ],
                 )

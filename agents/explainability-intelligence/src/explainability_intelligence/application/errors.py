@@ -5,6 +5,7 @@ class ExplainError(Exception):
         self.retryable = retryable
         super().__init__(message)
 
+
 class NotFoundError(ExplainError):
     def __init__(self, message: str):
         super().__init__("not_found", message)

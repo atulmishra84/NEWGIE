@@ -4,8 +4,10 @@ from typing import Literal
 from uuid import UUID, uuid4
 from pydantic import BaseModel, Field
 
+
 def utcnow() -> datetime:
     return datetime.now(timezone.utc)
+
 
 class OrchestratorEventEnvelope(BaseModel):
     event_id: UUID = Field(default_factory=uuid4)
@@ -17,17 +19,24 @@ class OrchestratorEventEnvelope(BaseModel):
     producer: str = "orchestrator"
     producer_version: str
 
+
 class ExecutionStarted(OrchestratorEventEnvelope):
-    event_type: Literal["orchestrator.execution.started"] = "orchestrator.execution.started"
+    event_type: Literal["orchestrator.execution.started"] = (
+        "orchestrator.execution.started"
+    )
     execution_id: UUID
     workflow_id: str
     mode: str
 
+
 class ExecutionCompleted(OrchestratorEventEnvelope):
-    event_type: Literal["orchestrator.execution.completed"] = "orchestrator.execution.completed"
+    event_type: Literal["orchestrator.execution.completed"] = (
+        "orchestrator.execution.completed"
+    )
     execution_id: UUID
     status: str
     duration_ms: int
+
 
 class StepCompleted(OrchestratorEventEnvelope):
     event_type: Literal["orchestrator.step.completed"] = "orchestrator.step.completed"
@@ -37,7 +46,10 @@ class StepCompleted(OrchestratorEventEnvelope):
     status: str
     duration_ms: int
 
+
 class ApprovalRequested(OrchestratorEventEnvelope):
-    event_type: Literal["orchestrator.approval.requested"] = "orchestrator.approval.requested"
+    event_type: Literal["orchestrator.approval.requested"] = (
+        "orchestrator.approval.requested"
+    )
     execution_id: UUID
     step_id: str

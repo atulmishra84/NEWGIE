@@ -9,7 +9,10 @@ from gie_observability import get_logger
 from gie_security.auth import AuthPrincipal
 from gie_security.rbac import Permission, PermissionDeniedError, require_permission
 
-from context_intelligence.application.errors import ScanNotCancellableError, ScanNotFoundError
+from context_intelligence.application.errors import (
+    ScanNotCancellableError,
+    ScanNotFoundError,
+)
 from context_intelligence.domain.entities import ContextScan, ScanStatus
 from context_intelligence.domain.ports import ContextRepository
 

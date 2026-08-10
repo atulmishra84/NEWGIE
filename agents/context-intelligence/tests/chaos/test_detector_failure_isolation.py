@@ -6,7 +6,11 @@ from pathlib import Path
 
 import pytest
 
-from context_intelligence.domain.findings import DetectionFinding, FindingCategory, FindingSection
+from context_intelligence.domain.findings import (
+    DetectionFinding,
+    FindingCategory,
+    FindingSection,
+)
 from context_intelligence.scanners.detectors.base import BaseDetector
 from context_intelligence.scanners.registry import DetectorRegistry
 

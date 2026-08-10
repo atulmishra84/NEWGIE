@@ -70,7 +70,10 @@ class AzureCloudReader(CloudReaderBase):
             raise CloudScannerSkipped("azure SDK not installed") from exc
 
         credential = DefaultAzureCredential(exclude_interactive_browser_credential=True)
-        resources: dict[str, object] = {"subscription_id": source.subscription_id, "ai_resources": []}
+        resources: dict[str, object] = {
+            "subscription_id": source.subscription_id,
+            "ai_resources": [],
+        }
 
         try:
             cog = CognitiveServicesManagementClient(credential, source.subscription_id)
@@ -78,7 +81,9 @@ class AzureCloudReader(CloudReaderBase):
                 name = getattr(account, "name", None)
                 kind = getattr(account, "kind", None)
                 if kind and str(kind).lower() in {"openai", "aiservices", "cognitive"}:
-                    resources["ai_resources"].append({"name": name, "kind": kind, "id": account.id})
+                    resources["ai_resources"].append(
+                        {"name": name, "kind": kind, "id": account.id}
+                    )
         except Exception as exc:  # noqa: BLE001
             resources["cognitive_error"] = str(exc)
 
@@ -87,7 +92,10 @@ class AzureCloudReader(CloudReaderBase):
             try:
                 for item in rm.resources.list_by_resource_group(source.resource_group):
                     item_type = getattr(item, "type", "") or ""
-                    if any(k in item_type.lower() for k in ("machinelearning", "openai", "cognitive")):
+                    if any(
+                        k in item_type.lower()
+                        for k in ("machinelearning", "openai", "cognitive")
+                    ):
                         resources.setdefault("resource_group_hits", []).append(
                             {"name": item.name, "type": item_type, "id": item.id}
                         )
@@ -159,7 +167,9 @@ class GcpCloudReader(CloudReaderBase):
             try:
                 aiplatform.init(project=source.project_id, location=location)
                 # Lightweight listing via API client when available
-                resources["ai_resources"].append({"location": location, "initialized": True})
+                resources["ai_resources"].append(
+                    {"location": location, "initialized": True}
+                )
             except Exception as exc:  # noqa: BLE001
                 resources.setdefault("errors", []).append({location: str(exc)})
 

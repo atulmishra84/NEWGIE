@@ -21,7 +21,9 @@ class ScansClient:
         webhook_url: str | None = None,
     ) -> dict[str, Any]:
         payload: dict[str, Any] = {
-            "source": source.model_dump(mode="json") if hasattr(source, "model_dump") else source,
+            "source": source.model_dump(mode="json")
+            if hasattr(source, "model_dump")
+            else source,
         }
         if idempotency_key:
             payload["idempotency_key"] = idempotency_key

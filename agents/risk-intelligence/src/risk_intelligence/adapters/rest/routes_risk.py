@@ -15,6 +15,7 @@ router = APIRouter(prefix="/v1/risk", tags=["risk"])
 # Also expose unversioned aliases matching the product API contract
 alias = APIRouter(prefix="/risk", tags=["risk-alias"])
 
+
 def _meta(started: float, confidence=None, reasoning=None) -> ResponseMeta:
     return ResponseMeta(
         trace_id=uuid4().hex,
@@ -27,25 +28,44 @@ def _meta(started: float, confidence=None, reasoning=None) -> ResponseMeta:
         agent_name=AGENT_NAME,
     )
 
-async def _calculate(body: RiskCalculateRequest, principal: AuthPrincipal, container: Container):
+
+async def _calculate(
+    body: RiskCalculateRequest, principal: AuthPrincipal, container: Container
+):
     started = time.perf_counter()
     if not body.bundle.tenant_id:
         body.bundle.tenant_id = principal.tenant_id
-    report = await container.calculate.handle(body, actor=principal.subject_id, correlation_id=uuid4().hex)
+    report = await container.calculate.handle(
+        body, actor=principal.subject_id, correlation_id=uuid4().hex
+    )
     return ObservabilityEnvelope(
         data=report,
-        meta=_meta(started, report.confidence.score, [s.model_dump() for s in report.reasoning_path]),
+        meta=_meta(
+            started,
+            report.confidence.score,
+            [s.model_dump() for s in report.reasoning_path],
+        ),
     )
 
-async def _recalculate(body: RiskRecalculateRequest, principal: AuthPrincipal, container: Container):
+
+async def _recalculate(
+    body: RiskRecalculateRequest, principal: AuthPrincipal, container: Container
+):
     started = time.perf_counter()
     if not body.tenant_id:
         body.tenant_id = principal.tenant_id
-    report = await container.recalculate.handle(body, actor=principal.subject_id, correlation_id=uuid4().hex)
+    report = await container.recalculate.handle(
+        body, actor=principal.subject_id, correlation_id=uuid4().hex
+    )
     return ObservabilityEnvelope(
         data=report,
-        meta=_meta(started, report.confidence.score, [s.model_dump() for s in report.reasoning_path]),
+        meta=_meta(
+            started,
+            report.confidence.score,
+            [s.model_dump() for s in report.reasoning_path],
+        ),
     )
+
 
 @router.post("/calculate")
 @alias.post("/calculate")
@@ -56,6 +76,7 @@ async def calculate_risk(
 ):
     return await _calculate(body, principal, container)
 
+
 @router.post("/recalculate")
 @alias.post("/recalculate")
 async def recalculate_risk(
@@ -64,6 +85,7 @@ async def recalculate_risk(
     container: Container = Depends(container_dep),
 ):
     return await _recalculate(body, principal, container)
+
 
 @router.get("/history")
 @alias.get("/history")
@@ -75,7 +97,9 @@ async def risk_history(
     container: Container = Depends(container_dep),
 ):
     started = time.perf_counter()
-    items = await container.reports.history(principal.tenant_id, agent_id=agent_id, limit=limit, offset=offset)
+    items = await container.reports.history(
+        principal.tenant_id, agent_id=agent_id, limit=limit, offset=offset
+    )
     return ObservabilityEnvelope(
         data={
             "items": items,
@@ -84,6 +108,7 @@ async def risk_history(
         },
         meta=_meta(started),
     )
+
 
 @router.get("/remediation")
 @alias.get("/remediation")
@@ -106,6 +131,7 @@ async def risk_remediation(
         },
         meta=_meta(started, report.confidence.score),
     )
+
 
 @router.get("/dashboard/{agent_id}")
 async def risk_dashboard(
@@ -131,6 +157,7 @@ async def risk_dashboard(
         meta=_meta(started, report.confidence.score),
     )
 
+
 @router.get("/{agent_id}")
 @alias.get("/{agent_id}")
 async def get_risk_for_agent(
@@ -142,4 +169,11 @@ async def get_risk_for_agent(
     report = await container.reports.latest_for_agent(principal.tenant_id, agent_id)
     if not report:
         raise NotFoundError(f"No risk report for agent {agent_id}")
-    return ObservabilityEnvelope(data=report, meta=_meta(started, report.confidence.score, [s.model_dump() for s in report.reasoning_path]))
+    return ObservabilityEnvelope(
+        data=report,
+        meta=_meta(
+            started,
+            report.confidence.score,
+            [s.model_dump() for s in report.reasoning_path],
+        ),
+    )

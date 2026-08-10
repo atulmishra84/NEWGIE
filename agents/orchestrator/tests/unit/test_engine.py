@@ -1,6 +1,12 @@
 import pytest
-from gie_contracts.orchestrator import AnalyzeRequest, ApprovalDecision, ExecutionMode, ExecutionStatus
+from gie_contracts.orchestrator import (
+    AnalyzeRequest,
+    ApprovalDecision,
+    ExecutionMode,
+    ExecutionStatus,
+)
 from orchestrator.domain.invoker import SimulatedAgentInvoker
+
 
 @pytest.mark.asyncio
 async def test_sync_analyze_completes(container, sample_analyze):
@@ -16,6 +22,7 @@ async def test_sync_analyze_completes(container, sample_analyze):
     rec2 = await container.engine.analyze(sample_analyze)
     assert rec2.cache_hits >= 1
 
+
 @pytest.mark.asyncio
 async def test_retry_on_transient(container, sample_analyze):
     inv = container.invoker
@@ -25,6 +32,7 @@ async def test_retry_on_transient(container, sample_analyze):
     assert rec.status == ExecutionStatus.COMPLETED
     ctx = next(s for s in rec.steps if s.step_id == "context")
     assert ctx.retries >= 1
+
 
 @pytest.mark.asyncio
 async def test_approval_gate(container):
@@ -39,6 +47,11 @@ async def test_approval_gate(container):
     rec = await container.engine.analyze(req)
     assert rec.status == ExecutionStatus.WAITING_APPROVAL
     resumed = await container.engine.approve(
-        ApprovalDecision(execution_id=rec.execution_id, step_id="validation", approved=True, actor="secops")
+        ApprovalDecision(
+            execution_id=rec.execution_id,
+            step_id="validation",
+            approved=True,
+            actor="secops",
+        )
     )
     assert resumed.status == ExecutionStatus.COMPLETED

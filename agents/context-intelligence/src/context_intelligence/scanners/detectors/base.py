@@ -114,7 +114,11 @@ def iter_files(
     extensions: Iterable[str] | None = None,
     names: Iterable[str] | None = None,
 ) -> Iterable[Path]:
-    ext_set = {e if e.startswith(".") else f".{e}" for e in extensions} if extensions else None
+    ext_set = (
+        {e if e.startswith(".") else f".{e}" for e in extensions}
+        if extensions
+        else None
+    )
     name_set = set(names) if names else None
     for path in root.rglob("*"):
         if not path.is_file():

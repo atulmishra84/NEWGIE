@@ -3,7 +3,11 @@ import time
 from uuid import uuid4
 from fastapi import APIRouter, Depends, Query
 from gie_contracts.envelope import ObservabilityEnvelope, ResponseMeta
-from gie_contracts.learning import ApproveKnowledgeRequest, FeedbackRequest, LearnRequest
+from gie_contracts.learning import (
+    ApproveKnowledgeRequest,
+    FeedbackRequest,
+    LearnRequest,
+)
 from gie_security.auth import AuthPrincipal
 from learning_intelligence.adapters.rest.deps import container_dep, require_perm
 from learning_intelligence.application.di import Container
@@ -12,6 +16,7 @@ from learning_intelligence.version import AGENT_NAME, AGENT_VERSION
 
 router = APIRouter(prefix="/v1", tags=["learning"])
 alias = APIRouter(tags=["learning-alias"])
+
 
 def _meta(started: float, confidence=None, reasoning=None) -> ResponseMeta:
     return ResponseMeta(
@@ -25,6 +30,7 @@ def _meta(started: float, confidence=None, reasoning=None) -> ResponseMeta:
         agent_name=AGENT_NAME,
     )
 
+
 @router.post("/feedback")
 @alias.post("/feedback")
 async def feedback(
@@ -35,8 +41,11 @@ async def feedback(
     started = time.perf_counter()
     if not body.event.tenant_id:
         body.event.tenant_id = principal.tenant_id
-    result = await container.feedback_handler.handle(body, actor=principal.subject_id, correlation_id=uuid4().hex)
+    result = await container.feedback_handler.handle(
+        body, actor=principal.subject_id, correlation_id=uuid4().hex
+    )
     return ObservabilityEnvelope(data=result, meta=_meta(started))
+
 
 @router.post("/learn")
 @alias.post("/learn")
@@ -48,8 +57,13 @@ async def learn(
     started = time.perf_counter()
     if not body.bundle.tenant_id:
         body.bundle.tenant_id = principal.tenant_id
-    report = await container.learn.handle(body, actor=principal.subject_id, correlation_id=uuid4().hex)
-    return ObservabilityEnvelope(data=report, meta=_meta(started, report.confidence.score, report.reasoning_path))
+    report = await container.learn.handle(
+        body, actor=principal.subject_id, correlation_id=uuid4().hex
+    )
+    return ObservabilityEnvelope(
+        data=report, meta=_meta(started, report.confidence.score, report.reasoning_path)
+    )
+
 
 @router.get("/learning/history")
 @alias.get("/learning/history")
@@ -61,8 +75,13 @@ async def learning_history(
     container: Container = Depends(container_dep),
 ):
     started = time.perf_counter()
-    items = await container.reports.history(principal.tenant_id, agent_id=agent_id, limit=limit, offset=offset)
-    return ObservabilityEnvelope(data={"items": items, "count": len(items)}, meta=_meta(started))
+    items = await container.reports.history(
+        principal.tenant_id, agent_id=agent_id, limit=limit, offset=offset
+    )
+    return ObservabilityEnvelope(
+        data={"items": items, "count": len(items)}, meta=_meta(started)
+    )
+
 
 @router.get("/knowledge/changes")
 @alias.get("/knowledge/changes")
@@ -74,15 +93,22 @@ async def knowledge_changes(
     container: Container = Depends(container_dep),
 ):
     started = time.perf_counter()
-    items = await container.knowledge.list(principal.tenant_id, status=status, limit=limit, offset=offset)
+    items = await container.knowledge.list(
+        principal.tenant_id, status=status, limit=limit, offset=offset
+    )
     return ObservabilityEnvelope(
         data={
             "items": items,
             "count": len(items),
-            "requires_human_approval_count": sum(1 for i in items if i.requires_human_approval and i.status.value == "proposed"),
+            "requires_human_approval_count": sum(
+                1
+                for i in items
+                if i.requires_human_approval and i.status.value == "proposed"
+            ),
         },
         meta=_meta(started),
     )
+
 
 @router.post("/knowledge/approve")
 @alias.post("/knowledge/approve")
@@ -94,5 +120,7 @@ async def knowledge_approve(
     started = time.perf_counter()
     if not body.tenant_id:
         body.tenant_id = principal.tenant_id
-    result = await container.approve.handle(body, actor=principal.subject_id, correlation_id=uuid4().hex)
+    result = await container.approve.handle(
+        body, actor=principal.subject_id, correlation_id=uuid4().hex
+    )
     return ObservabilityEnvelope(data=result, meta=_meta(started))

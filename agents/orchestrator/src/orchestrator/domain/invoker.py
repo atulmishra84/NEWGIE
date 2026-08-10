@@ -24,7 +24,9 @@ class SimulatedAgentInvoker:
     def arm_transient_failure(self, agent_id: str) -> None:
         self._fail_once.add(agent_id)
 
-    async def invoke(self, agent_id: str, version: str, payload: dict[str, Any], *, timeout_ms: int) -> dict[str, Any]:
+    async def invoke(
+        self, agent_id: str, version: str, payload: dict[str, Any], *, timeout_ms: int
+    ) -> dict[str, Any]:
         if agent_id in self._fail_once:
             self._fail_once.discard(agent_id)
             raise RetryableError(f"{agent_id} temporarily unavailable")
@@ -39,7 +41,10 @@ class SimulatedAgentInvoker:
             "status": "ok",
             "summary": f"{agent_id} analysis complete",
             "artifacts": {"id": uuid4().hex[:12]},
-            "echo": {"tenant_id": payload.get("tenant_id"), "keys": list(payload.keys())[:12]},
+            "echo": {
+                "tenant_id": payload.get("tenant_id"),
+                "keys": list(payload.keys())[:12],
+            },
             "confidence": 0.85,
             "live": False,
         }
@@ -67,7 +72,9 @@ class HttpAgentInvoker:
             **inp,
         }
 
-    async def invoke(self, agent_id: str, version: str, payload: dict[str, Any], *, timeout_ms: int) -> dict[str, Any]:
+    async def invoke(
+        self, agent_id: str, version: str, payload: dict[str, Any], *, timeout_ms: int
+    ) -> dict[str, Any]:
         aid = AgentId(agent_id)
         base = self._urls[aid]
         demo_view = self._demo_payload_view(payload)

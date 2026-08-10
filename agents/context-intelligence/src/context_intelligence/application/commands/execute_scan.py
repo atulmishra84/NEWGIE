@@ -5,15 +5,29 @@ from __future__ import annotations
 from dataclasses import dataclass
 from uuid import UUID
 
-from gie_contracts.events import ContextScanCompleted, ContextScanFailed, ContextScanStarted
-from gie_observability import ACTIVE_SCANS, SCAN_DURATION, SCAN_REQUESTS, get_logger, traced
+from gie_contracts.events import (
+    ContextScanCompleted,
+    ContextScanFailed,
+    ContextScanStarted,
+)
+from gie_observability import (
+    ACTIVE_SCANS,
+    SCAN_DURATION,
+    SCAN_REQUESTS,
+    get_logger,
+    traced,
+)
 from gie_observability.context import new_request_context
 
 from context_intelligence.application.errors import ScanNotFoundError
 from context_intelligence.application.pipeline import DetectionPipeline
 from context_intelligence.config import Settings
 from context_intelligence.domain.entities import ContextScan, ScanStatus
-from context_intelligence.domain.ports import ContextRepository, EventPublisher, WorkspaceFactory
+from context_intelligence.domain.ports import (
+    ContextRepository,
+    EventPublisher,
+    WorkspaceFactory,
+)
 
 logger = get_logger(__name__)
 
@@ -144,7 +158,9 @@ class ExecuteScanHandler:
             )
         except Exception as exc:
             error_code = type(exc).__name__
-            scan.mark_failed(error_code=error_code, error_message=str(exc), retryable=True)
+            scan.mark_failed(
+                error_code=error_code, error_message=str(exc), retryable=True
+            )
             await self._repository.update_scan(scan)
 
             await self._event_publisher.publish(
@@ -163,7 +179,9 @@ class ExecuteScanHandler:
                 source_type=source_type,
                 status=ScanStatus.FAILED.value,
             ).inc()
-            logger.exception("scan_failed", scan_id=str(scan.scan_id), error_code=error_code)
+            logger.exception(
+                "scan_failed", scan_id=str(scan.scan_id), error_code=error_code
+            )
             raise
         finally:
             ACTIVE_SCANS.dec()

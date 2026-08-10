@@ -7,7 +7,11 @@ import re
 from pathlib import Path
 
 from context_intelligence.domain.findings import FindingCategory, FindingSection
-from context_intelligence.scanners.detectors.base import BaseDetector, iter_files, read_text
+from context_intelligence.scanners.detectors.base import (
+    BaseDetector,
+    iter_files,
+    read_text,
+)
 from context_intelligence.scanners.registry import DEFAULT_DETECTOR_REGISTRY
 
 
@@ -20,7 +24,9 @@ class RuntimeDetector(BaseDetector):
     async def detect(self, workspace_path: Path) -> list:
         findings = []
 
-        for dockerfile in iter_files(workspace_path, names={"Dockerfile", "Containerfile"}):
+        for dockerfile in iter_files(
+            workspace_path, names={"Dockerfile", "Containerfile"}
+        ):
             text = read_text(dockerfile)
             if not text:
                 continue

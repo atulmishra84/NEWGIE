@@ -6,7 +6,6 @@ import hashlib
 import json
 from datetime import datetime, timezone
 from typing import Any
-from uuid import uuid4
 
 from gie_contracts.risk import (
     Confidence,
@@ -18,7 +17,6 @@ from gie_contracts.risk import (
     RiskInputBundle,
     RiskReport,
     RiskTimelineEvent,
-    Severity,
 )
 
 from risk_intelligence.domain.scorers import SCORERS, _sev
@@ -26,11 +24,27 @@ from risk_intelligence.domain.signals import extract_signals
 from risk_intelligence.version import AGENT_VERSION
 
 
-DEFAULT_WEIGHTS = {s: 1.0 for s in [
-    "security", "privacy", "compliance", "identity", "prompt_injection", "jailbreak",
-    "hallucination", "supply_chain", "model", "tool_abuse", "data_leakage", "shadow_ai",
-    "runtime", "autonomy", "business", "operational",
-]}
+DEFAULT_WEIGHTS = {
+    s: 1.0
+    for s in [
+        "security",
+        "privacy",
+        "compliance",
+        "identity",
+        "prompt_injection",
+        "jailbreak",
+        "hallucination",
+        "supply_chain",
+        "model",
+        "tool_abuse",
+        "data_leakage",
+        "shadow_ai",
+        "runtime",
+        "autonomy",
+        "business",
+        "operational",
+    ]
+}
 
 
 def _org_weights(org_model: dict[str, Any] | None) -> dict[str, float]:
@@ -46,13 +60,30 @@ def _org_weights(org_model: dict[str, Any] | None) -> dict[str, float]:
     return weights
 
 
-def calculate_risk(bundle: RiskInputBundle, *, prior: RiskReport | None = None) -> RiskReport:
+def calculate_risk(
+    bundle: RiskInputBundle, *, prior: RiskReport | None = None
+) -> RiskReport:
     signals = extract_signals(bundle)
     weights = _org_weights(bundle.org_risk_model)
     steps = [
-        ReasoningStep(step=1, action="ingest_inputs", detail="Normalized context, knowledge, compliance, identity, runtime, models, prompts, tools, capabilities", confidence=Confidence(score=1.0)),
-        ReasoningStep(step=2, action="extract_signals", detail=f"Derived {len(signals)} signal groups for scoring", confidence=Confidence(score=0.95)),
-        ReasoningStep(step=3, action="apply_org_model", detail=f"Using risk model weights from {bundle.org_risk_model.get('model_id') if bundle.org_risk_model else 'default-v1'}", confidence=Confidence(score=1.0)),
+        ReasoningStep(
+            step=1,
+            action="ingest_inputs",
+            detail="Normalized context, knowledge, compliance, identity, runtime, models, prompts, tools, capabilities",
+            confidence=Confidence(score=1.0),
+        ),
+        ReasoningStep(
+            step=2,
+            action="extract_signals",
+            detail=f"Derived {len(signals)} signal groups for scoring",
+            confidence=Confidence(score=0.95),
+        ),
+        ReasoningStep(
+            step=3,
+            action="apply_org_model",
+            detail=f"Using risk model weights from {bundle.org_risk_model.get('model_id') if bundle.org_risk_model else 'default-v1'}",
+            confidence=Confidence(score=1.0),
+        ),
     ]
     factors = []
     for scorer in SCORERS:
@@ -86,7 +117,11 @@ def calculate_risk(bundle: RiskInputBundle, *, prior: RiskReport | None = None) 
                 remediations.append(r)
                 seen.add(r.action_id)
 
-    mappings_summary: dict[str, list[str]] = {"owasp_llm": [], "mitre_atlas": [], "nist_ai_rmf": []}
+    mappings_summary: dict[str, list[str]] = {
+        "owasp_llm": [],
+        "mitre_atlas": [],
+        "nist_ai_rmf": [],
+    }
     for f in factors:
         for m in f.mappings:
             mappings_summary.setdefault(m.framework, [])
@@ -96,23 +131,50 @@ def calculate_risk(bundle: RiskInputBundle, *, prior: RiskReport | None = None) 
 
     heatmap = []
     for i, f in enumerate(factors):
-        heatmap.append(HeatmapCell(category=f.category, score=f.score, severity=f.severity, x=i % 4, y=i // 4))
+        heatmap.append(
+            HeatmapCell(
+                category=f.category,
+                score=f.score,
+                severity=f.severity,
+                x=i % 4,
+                y=i // 4,
+            )
+        )
 
-    nodes = [RiskGraphNode(id="app", kind="Application", label=bundle.agent_id, score=overall)]
+    nodes = [
+        RiskGraphNode(
+            id="app", kind="Application", label=bundle.agent_id, score=overall
+        )
+    ]
     edges = []
     for f in factors:
-        nodes.append(RiskGraphNode(id=f.factor_id, kind="RiskFactor", label=f.name, score=f.score, properties={"severity": f.severity.value}))
-        edges.append(RiskGraphEdge(source="app", target=f.factor_id, relationship="HAS_RISK"))
+        nodes.append(
+            RiskGraphNode(
+                id=f.factor_id,
+                kind="RiskFactor",
+                label=f.name,
+                score=f.score,
+                properties={"severity": f.severity.value},
+            )
+        )
+        edges.append(
+            RiskGraphEdge(source="app", target=f.factor_id, relationship="HAS_RISK")
+        )
         for m in f.mappings:
             mid = f"fw-{m.framework}"
             nodes.append(RiskGraphNode(id=mid, kind="Framework", label=m.framework))
-            edges.append(RiskGraphEdge(source=f.factor_id, target=mid, relationship="MAPS_TO"))
+            edges.append(
+                RiskGraphEdge(source=f.factor_id, target=mid, relationship="MAPS_TO")
+            )
 
     # dedupe nodes
     uniq = {}
     for n in nodes:
         uniq[n.id] = n
-    risk_graph = {"nodes": [n.model_dump() for n in uniq.values()], "edges": [e.model_dump() for e in edges]}
+    risk_graph = {
+        "nodes": [n.model_dump() for n in uniq.values()],
+        "edges": [e.model_dump() for e in edges],
+    }
 
     timeline = []
     if prior:
@@ -135,8 +197,12 @@ def calculate_risk(bundle: RiskInputBundle, *, prior: RiskReport | None = None) 
             )
         )
 
-    digest = hashlib.sha256(json.dumps(bundle.model_dump(mode="json"), sort_keys=True).encode()).hexdigest()
-    overall_conf = sum(f.confidence.score for f in factors) / len(factors) if factors else 0.0
+    digest = hashlib.sha256(
+        json.dumps(bundle.model_dump(mode="json"), sort_keys=True).encode()
+    ).hexdigest()
+    overall_conf = (
+        sum(f.confidence.score for f in factors) / len(factors) if factors else 0.0
+    )
     steps.append(
         ReasoningStep(
             step=len(steps) + 1,
@@ -155,7 +221,9 @@ def calculate_risk(bundle: RiskInputBundle, *, prior: RiskReport | None = None) 
         overall_ai_risk_score=round(overall, 3),
         trust_score=round(trust, 3),
         severity=_sev(overall),
-        confidence=Confidence(score=round(overall_conf, 3), rationale="mean factor confidence"),
+        confidence=Confidence(
+            score=round(overall_conf, 3), rationale="mean factor confidence"
+        ),
         reasoning_path=steps,
         remediations=remediations,
         mappings_summary=mappings_summary,
@@ -163,7 +231,9 @@ def calculate_risk(bundle: RiskInputBundle, *, prior: RiskReport | None = None) 
         risk_graph=risk_graph,
         timeline=timeline,
         input_digest=digest,
-        model_id=(bundle.org_risk_model or {}).get("model_id", "default-v1") if bundle.org_risk_model else "default-v1",
+        model_id=(bundle.org_risk_model or {}).get("model_id", "default-v1")
+        if bundle.org_risk_model
+        else "default-v1",
     )
     if timeline:
         timeline[-1].decision_id = report.report_id

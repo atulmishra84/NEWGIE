@@ -5,6 +5,7 @@ class RecommendationError(Exception):
         self.retryable = retryable
         super().__init__(message)
 
+
 class NotFoundError(RecommendationError):
     def __init__(self, message: str):
         super().__init__("not_found", message)

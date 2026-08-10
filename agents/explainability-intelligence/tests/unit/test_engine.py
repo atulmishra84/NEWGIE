@@ -1,6 +1,7 @@
 from gie_contracts.explainability import AudienceView, OutputFormat
 from explainability_intelligence.domain.engine import explain_decision
 
+
 def test_explains_all_views_and_formats(sample_bundle):
     report = explain_decision(sample_bundle)
     for aud in AudienceView:

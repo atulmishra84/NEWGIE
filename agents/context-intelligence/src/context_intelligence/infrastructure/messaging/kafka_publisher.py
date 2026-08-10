@@ -79,7 +79,12 @@ class KafkaEventPublisher(EventPublisher):
             except Exception as exc:
                 logger.warning("sync_kafka_publish_failed", error=str(exc))
 
-        logger.info("kafka_fallback_log_only", topic=topic, event_type=event.event_type, payload=payload)
+        logger.info(
+            "kafka_fallback_log_only",
+            topic=topic,
+            event_type=event.event_type,
+            payload=payload,
+        )
 
     async def close(self) -> None:
         if self._producer is not None:

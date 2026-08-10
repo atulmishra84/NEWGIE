@@ -15,6 +15,7 @@ from integration_intelligence.domain.ports import (
 )
 from integration_intelligence.settings import Settings
 
+
 @dataclass
 class Container:
     settings: Settings
@@ -28,25 +29,45 @@ class Container:
 
     @property
     def connect(self) -> ConnectHandler:
-        return ConnectHandler(connections=self.connections, secrets=self.secrets, audits=self.audits, events=self.events, settings=self.settings)
+        return ConnectHandler(
+            connections=self.connections,
+            secrets=self.secrets,
+            audits=self.audits,
+            events=self.events,
+            settings=self.settings,
+        )
 
     @property
     def sync(self) -> SyncHandler:
-        return SyncHandler(connections=self.connections, syncs=self.syncs, audits=self.audits, events=self.events, settings=self.settings)
+        return SyncHandler(
+            connections=self.connections,
+            syncs=self.syncs,
+            audits=self.audits,
+            events=self.events,
+            settings=self.settings,
+        )
 
     @property
     def webhook(self) -> WebhookHandler:
-        return WebhookHandler(webhooks=self.webhooks, audits=self.audits, events=self.events, settings=self.settings)
+        return WebhookHandler(
+            webhooks=self.webhooks,
+            audits=self.audits,
+            events=self.events,
+            settings=self.settings,
+        )
 
     @property
     def auth(self) -> AuthTokenHandler:
         return AuthTokenHandler(audits=self.audits, settings=self.settings)
 
+
 _container = None
+
 
 def set_container(c: Container) -> None:
     global _container
     _container = c
+
 
 def get_container() -> Container:
     if _container is None:

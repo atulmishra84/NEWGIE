@@ -15,10 +15,14 @@ class PolicyPackageRepository(ABC):
     async def get(self, package_id: UUID) -> PolicyPackage | None: ...
 
     @abstractmethod
-    async def latest_for_agent(self, tenant_id: str, agent_id: str) -> PolicyPackage | None: ...
+    async def latest_for_agent(
+        self, tenant_id: str, agent_id: str
+    ) -> PolicyPackage | None: ...
 
     @abstractmethod
-    async def list(self, tenant_id: str, limit: int = 50, offset: int = 0) -> list[PolicyPackage]: ...
+    async def list(
+        self, tenant_id: str, limit: int = 50, offset: int = 0
+    ) -> list[PolicyPackage]: ...
 
 
 class CacheStore(ABC):
@@ -31,4 +35,6 @@ class CacheStore(ABC):
 
 class EventPublisher(ABC):
     @abstractmethod
-    async def publish(self, topic: str, event: dict[str, Any], key: str | None = None) -> None: ...
+    async def publish(
+        self, topic: str, event: dict[str, Any], key: str | None = None
+    ) -> None: ...

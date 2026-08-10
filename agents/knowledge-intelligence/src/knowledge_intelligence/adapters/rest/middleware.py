@@ -34,5 +34,7 @@ class ObservabilityMiddleware(BaseHTTPMiddleware):
         response.headers["x-request-id"] = ctx.request_id
         response.headers["x-correlation-id"] = ctx.correlation_id
         response.headers["x-agent-version"] = AGENT_VERSION
-        response.headers["x-execution-ms"] = f"{(time.perf_counter() - started) * 1000:.2f}"
+        response.headers["x-execution-ms"] = (
+            f"{(time.perf_counter() - started) * 1000:.2f}"
+        )
         return response

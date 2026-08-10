@@ -2,7 +2,10 @@ from __future__ import annotations
 from typing import Any
 from gie_contracts.policy import GuardrailRecommendation, PolicyInputBundle
 
-def render(recs: list[GuardrailRecommendation], bundle: PolicyInputBundle) -> dict[str, Any]:
+
+def render(
+    recs: list[GuardrailRecommendation], bundle: PolicyInputBundle
+) -> dict[str, Any]:
     denied_tools = ["shell", "exec", "python_repl"]
     rego = """package gie.policy.opa_runtime
 
@@ -30,7 +33,9 @@ allow if {
     return {
         "vendor": "opa_rego",
         "version": "1.0",
-        "controls": [{"id": c, "guardrail": r.guardrail_id} for r in recs for c in r.controls],
+        "controls": [
+            {"id": c, "guardrail": r.guardrail_id} for r in recs for c in r.controls
+        ],
         "opa": {
             "package": "gie.policy.opa_runtime",
             "denied_tools": denied_tools,

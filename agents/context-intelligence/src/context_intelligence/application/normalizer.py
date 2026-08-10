@@ -3,8 +3,6 @@
 from __future__ import annotations
 
 from collections.abc import Sequence
-from typing import Any
-from uuid import UUID
 
 from gie_contracts.context_model import (
     AiSection,
@@ -26,7 +24,11 @@ from gie_contracts.context_model import (
 from gie_observability.context import get_context
 
 from context_intelligence.domain.entities import ContextScan
-from context_intelligence.domain.findings import DetectionFinding, FindingCategory, FindingSection
+from context_intelligence.domain.findings import (
+    DetectionFinding,
+    FindingCategory,
+    FindingSection,
+)
 
 
 class ContextModelNormalizer:
@@ -128,7 +130,9 @@ class ContextModelNormalizer:
                     location=finding.location or "unknown",
                     fingerprint=finding.fingerprint or finding.name,
                     severity=finding.severity or Severity.HIGH,
-                    confidence=Confidence(score=finding.confidence, rationale=finding.rationale),
+                    confidence=Confidence(
+                        score=finding.confidence, rationale=finding.rationale
+                    ),
                     evidence=finding.evidence,
                 )
             )
@@ -141,9 +145,13 @@ class ContextModelNormalizer:
 
         if finding.category == FindingCategory.PROJECT_META:
             if finding.name == "project_name":
-                identity.project_name = finding.attributes.get("value") or finding.version
+                identity.project_name = (
+                    finding.attributes.get("value") or finding.version
+                )
             elif finding.name == "repository_url":
-                identity.repository_url = finding.attributes.get("value") or finding.version
+                identity.repository_url = (
+                    finding.attributes.get("value") or finding.version
+                )
             return
 
         if finding.category == FindingCategory.ARCHITECTURE_NOTE:
@@ -155,12 +163,16 @@ class ContextModelNormalizer:
         item = DetectedItem(
             name=finding.name,
             version=finding.version,
-            confidence=Confidence(score=finding.confidence, rationale=finding.rationale),
+            confidence=Confidence(
+                score=finding.confidence, rationale=finding.rationale
+            ),
             evidence=finding.evidence,
             attributes=finding.attributes,
         )
 
-        target = self._resolve_list(finding.category, identity, ai, interfaces, data, security, deployment)
+        target = self._resolve_list(
+            finding.category, identity, ai, interfaces, data, security, deployment
+        )
         if target is not None:
             target.append(item)
 

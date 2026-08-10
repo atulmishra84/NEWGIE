@@ -4,7 +4,6 @@ from __future__ import annotations
 
 from abc import ABC, abstractmethod
 from typing import Any, Protocol
-from uuid import UUID
 
 from gie_contracts.knowledge import (
     ExplainableRetrievalResult,
@@ -22,7 +21,9 @@ class KnowledgeNodeRepository(ABC):
     async def upsert_nodes(self, nodes: list[KnowledgeNode]) -> int: ...
 
     @abstractmethod
-    async def get_node(self, node_id: str, version: str | None = None) -> KnowledgeNode | None: ...
+    async def get_node(
+        self, node_id: str, version: str | None = None
+    ) -> KnowledgeNode | None: ...
 
     @abstractmethod
     async def list_nodes(
@@ -55,10 +56,14 @@ class GraphRepository(ABC):
     async def project_edges(self, edges: list[KnowledgeEdge]) -> None: ...
 
     @abstractmethod
-    async def shortest_paths(self, source_id: str, target_id: str, max_depth: int = 4) -> list[list[str]]: ...
+    async def shortest_paths(
+        self, source_id: str, target_id: str, max_depth: int = 4
+    ) -> list[list[str]]: ...
 
     @abstractmethod
-    async def expand(self, node_ids: list[str], hops: int = 1) -> tuple[list[str], list[dict[str, Any]]]: ...
+    async def expand(
+        self, node_ids: list[str], hops: int = 1
+    ) -> tuple[list[str], list[dict[str, Any]]]: ...
 
     @abstractmethod
     async def ping(self) -> bool: ...
@@ -77,10 +82,14 @@ class EmbeddingService(ABC):
 
 class VectorStore(ABC):
     @abstractmethod
-    async def upsert(self, ids: list[str], vectors: list[list[float]], payloads: list[dict[str, Any]]) -> None: ...
+    async def upsert(
+        self, ids: list[str], vectors: list[list[float]], payloads: list[dict[str, Any]]
+    ) -> None: ...
 
     @abstractmethod
-    async def search(self, vector: list[float], top_k: int, filters: dict[str, Any] | None = None) -> list[dict[str, Any]]: ...
+    async def search(
+        self, vector: list[float], top_k: int, filters: dict[str, Any] | None = None
+    ) -> list[dict[str, Any]]: ...
 
     @abstractmethod
     async def ping(self) -> bool: ...
@@ -88,7 +97,9 @@ class VectorStore(ABC):
 
 class VersionRepository(ABC):
     @abstractmethod
-    async def publish(self, version: str, checksum: str, node_count: int, edge_count: int) -> KnowledgeGraphSnapshot: ...
+    async def publish(
+        self, version: str, checksum: str, node_count: int, edge_count: int
+    ) -> KnowledgeGraphSnapshot: ...
 
     @abstractmethod
     async def latest(self) -> KnowledgeGraphSnapshot | None: ...
@@ -113,12 +124,23 @@ class CacheStore(ABC):
 
 class EventPublisher(ABC):
     @abstractmethod
-    async def publish(self, topic: str, event: dict[str, Any], key: str | None = None) -> None: ...
+    async def publish(
+        self, topic: str, event: dict[str, Any], key: str | None = None
+    ) -> None: ...
 
 
 class KnowledgeQueryEngine(Protocol):
-    async def query(self, request: KnowledgeQueryRequest, *, tenant_id: str, correlation_id: str) -> ExplainableRetrievalResult: ...
+    async def query(
+        self, request: KnowledgeQueryRequest, *, tenant_id: str, correlation_id: str
+    ) -> ExplainableRetrievalResult: ...
 
 
 class KnowledgeCommandService(Protocol):
-    async def upsert(self, request: KnowledgeUpsertRequest, *, tenant_id: str, actor: str, correlation_id: str) -> dict[str, Any]: ...
+    async def upsert(
+        self,
+        request: KnowledgeUpsertRequest,
+        *,
+        tenant_id: str,
+        actor: str,
+        correlation_id: str,
+    ) -> dict[str, Any]: ...

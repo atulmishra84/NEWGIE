@@ -54,23 +54,43 @@ def generate_artifacts(
     return artifacts
 
 
-def _materialize(target: PolicyTarget, native: dict[str, Any], formats: list[OutputFormat]) -> list[GeneratedArtifact]:
+def _materialize(
+    target: PolicyTarget, native: dict[str, Any], formats: list[OutputFormat]
+) -> list[GeneratedArtifact]:
     out: list[GeneratedArtifact] = []
     # Always keep vendor-native structure
     if OutputFormat.VENDOR_NATIVE in formats or OutputFormat.JSON in formats:
         content = json.dumps(native, indent=2)
-        fmt = OutputFormat.VENDOR_NATIVE if OutputFormat.VENDOR_NATIVE in formats else OutputFormat.JSON
-        out.append(_art(target, fmt, f"{target.value}.policy.json", "application/json", content))
+        fmt = (
+            OutputFormat.VENDOR_NATIVE
+            if OutputFormat.VENDOR_NATIVE in formats
+            else OutputFormat.JSON
+        )
+        out.append(
+            _art(
+                target, fmt, f"{target.value}.policy.json", "application/json", content
+            )
+        )
     if OutputFormat.YAML in formats:
         content = yaml.safe_dump(native, sort_keys=False)
-        out.append(_art(target, OutputFormat.YAML, f"{target.value}.policy.yaml", "application/yaml", content))
+        out.append(
+            _art(
+                target,
+                OutputFormat.YAML,
+                f"{target.value}.policy.yaml",
+                "application/yaml",
+                content,
+            )
+        )
     if OutputFormat.REGO in formats:
         # OPA target emits real rego; others emit wrapper package referencing controls
         if target == PolicyTarget.OPA_REGO:
             rego = native.get("rego", "")
         else:
             rego = _wrapper_rego(target, native)
-        out.append(_art(target, OutputFormat.REGO, f"{target.value}.rego", "text/rego", rego))
+        out.append(
+            _art(target, OutputFormat.REGO, f"{target.value}.rego", "text/rego", rego)
+        )
     return out
 
 
@@ -99,7 +119,9 @@ def _wrapper_rego(target: PolicyTarget, native: dict[str, Any]) -> str:
     return chr(10).join(lines)
 
 
-def _art(target: PolicyTarget, fmt: OutputFormat, filename: str, ctype: str, content: str) -> GeneratedArtifact:
+def _art(
+    target: PolicyTarget, fmt: OutputFormat, filename: str, ctype: str, content: str
+) -> GeneratedArtifact:
     return GeneratedArtifact(
         target=target,
         format=fmt,

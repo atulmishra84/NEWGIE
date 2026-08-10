@@ -12,6 +12,7 @@ from learning_intelligence.domain.ports import (
 )
 from learning_intelligence.settings import Settings
 
+
 @dataclass
 class Container:
     settings: Settings
@@ -23,7 +24,9 @@ class Container:
 
     @property
     def feedback_handler(self) -> FeedbackHandler:
-        return FeedbackHandler(feedback=self.feedback, events=self.events, settings=self.settings)
+        return FeedbackHandler(
+            feedback=self.feedback, events=self.events, settings=self.settings
+        )
 
     @property
     def learn(self) -> LearnHandler:
@@ -38,13 +41,18 @@ class Container:
 
     @property
     def approve(self) -> ApproveKnowledgeHandler:
-        return ApproveKnowledgeHandler(knowledge=self.knowledge, events=self.events, settings=self.settings)
+        return ApproveKnowledgeHandler(
+            knowledge=self.knowledge, events=self.events, settings=self.settings
+        )
+
 
 _container = None
+
 
 def set_container(c: Container) -> None:
     global _container
     _container = c
+
 
 def get_container() -> Container:
     if _container is None:

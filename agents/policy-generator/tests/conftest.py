@@ -4,13 +4,16 @@ from gie_contracts.policy_generator import PolicyGeneratorInputBundle
 from policy_generator.infrastructure.bootstrap import build_container
 from policy_generator.settings import Settings
 
+
 @pytest.fixture
 def settings():
     return Settings(gie_env="test", require_auth=False)
 
+
 @pytest_asyncio.fixture
 async def container(settings):
     return await build_container(memory=True, settings=settings)
+
 
 @pytest.fixture
 def sample_bundle():
@@ -46,7 +49,10 @@ def sample_bundle():
                 "knowledge_refs": ["owasp-llm08"],
             },
         ],
-        risk={"overall_ai_risk_score": 0.7, "factors": [{"category": "prompt_injection", "score": 0.8}]},
+        risk={
+            "overall_ai_risk_score": 0.7,
+            "factors": [{"category": "prompt_injection", "score": 0.8}],
+        },
         compliance={
             "compliance_score": 0.4,
             "applicable_frameworks": [{"framework": "gdpr"}, {"framework": "hipaa"}],

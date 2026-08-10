@@ -124,7 +124,9 @@ def _build_minimal_context_model(
             tenant_id=tenant_id,
             source_type=source.type.value,
             source_digest=_source_digest(source),
-            confidence=Confidence(score=confidence, rationale="Baseline filesystem heuristics"),
+            confidence=Confidence(
+                score=confidence, rationale="Baseline filesystem heuristics"
+            ),
             detectors=["filesystem.language_markers"],
             reasoning_path=[],
         ),
@@ -151,17 +153,23 @@ class ScanExecutor:
         self._vectors = vectors
         self._producer_version = producer_version
 
-    async def execute(self, scan_id: UUID, tenant_id: str, correlation_id: str) -> ContextModel:
+    async def execute(
+        self, scan_id: UUID, tenant_id: str, correlation_id: str
+    ) -> ContextModel:
         started = time.monotonic()
         scan = await self._repo.get_scan(scan_id, tenant_id)
         if not scan:
             raise ValueError(f"Scan {scan_id} not found")
 
         if scan["status"] in {"cancelled", "completed", "failed"}:
-            logger.info("scan_skip_terminal", scan_id=str(scan_id), status=scan["status"])
+            logger.info(
+                "scan_skip_terminal", scan_id=str(scan_id), status=scan["status"]
+            )
             model_id = scan.get("model_id")
             if model_id and scan["status"] == "completed":
-                model = await self._repo.get_context_model(UUID(str(model_id)), tenant_id)
+                model = await self._repo.get_context_model(
+                    UUID(str(model_id)), tenant_id
+                )
                 if model:
                     return model
             raise ValueError(f"Scan {scan_id} is in terminal state: {scan['status']}")
@@ -173,7 +181,9 @@ class ScanExecutor:
 
         source = TypeAdapter(ScanSource).validate_python(source_payload)
 
-        await self._repo.update_scan_status(scan_id, status="running", started_at=_utcnow())
+        await self._repo.update_scan_status(
+            scan_id, status="running", started_at=_utcnow()
+        )
         started_event = ContextScanStarted(
             tenant_id=tenant_id,
             correlation_id=correlation_id,
@@ -190,7 +200,9 @@ class ScanExecutor:
                 source=source,
                 correlation_id=correlation_id,
             )
-            version = await self._repo.save_context_model(model, scan_id=scan_id, tenant_id=tenant_id)
+            version = await self._repo.save_context_model(
+                model, scan_id=scan_id, tenant_id=tenant_id
+            )
             model.version = version
 
             root = _resolve_scan_root(source)
@@ -198,7 +210,9 @@ class ScanExecutor:
                 readme = root / "README.md"
                 if readme.exists():
                     text = readme.read_text(encoding="utf-8", errors="replace")[:4000]
-                    evidence_id = hashlib.sha256(f"{scan_id}:readme".encode()).hexdigest()[:16]
+                    evidence_id = hashlib.sha256(
+                        f"{scan_id}:readme".encode()
+                    ).hexdigest()[:16]
                     await self._repo.save_evidence(
                         scan_id=scan_id,
                         tenant_id=tenant_id,
@@ -213,7 +227,10 @@ class ScanExecutor:
                         tenant_id=tenant_id,
                         scan_id=scan_id,
                         text=text,
-                        metadata={"path": str(readme), "detector_id": "filesystem.readme"},
+                        metadata={
+                            "path": str(readme),
+                            "detector_id": "filesystem.readme",
+                        },
                     )
 
             await self._graph.project_context_model(model, tenant_id)

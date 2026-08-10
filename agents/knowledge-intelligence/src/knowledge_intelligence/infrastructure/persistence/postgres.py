@@ -2,10 +2,8 @@
 
 from __future__ import annotations
 
-import json
 from datetime import datetime, timezone
 from typing import Any
-from uuid import uuid4
 
 from gie_contracts.knowledge import (
     Confidence,
@@ -23,7 +21,11 @@ from sqlalchemy.dialects.postgresql import JSONB, UUID as PGUUID
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
-from knowledge_intelligence.domain.ports import KnowledgeEdgeRepository, KnowledgeNodeRepository, VersionRepository
+from knowledge_intelligence.domain.ports import (
+    KnowledgeEdgeRepository,
+    KnowledgeNodeRepository,
+    VersionRepository,
+)
 from knowledge_intelligence.settings import Settings
 
 
@@ -121,7 +123,9 @@ def _to_node(row: NodeRow) -> KnowledgeNode:
         evidence=evidence,
         version=row.version,
         schema_version=row.schema_version,
-        confidence=Confidence(score=row.confidence_score, rationale=row.confidence_rationale),
+        confidence=Confidence(
+            score=row.confidence_score, rationale=row.confidence_rationale
+        ),
         created_at=row.created_at,
         updated_at=row.updated_at,
         superseded_by=row.superseded_by,
@@ -130,7 +134,9 @@ def _to_node(row: NodeRow) -> KnowledgeNode:
 
 
 class PostgresNodeRepository(KnowledgeNodeRepository):
-    def __init__(self, session_factory: async_sessionmaker[AsyncSession] | None = None) -> None:
+    def __init__(
+        self, session_factory: async_sessionmaker[AsyncSession] | None = None
+    ) -> None:
         self._sf = session_factory or _session_factory
 
     async def upsert_nodes(self, nodes: list[KnowledgeNode]) -> int:
@@ -179,14 +185,18 @@ class PostgresNodeRepository(KnowledgeNodeRepository):
             await session.commit()
         return len(nodes)
 
-    async def get_node(self, node_id: str, version: str | None = None) -> KnowledgeNode | None:
+    async def get_node(
+        self, node_id: str, version: str | None = None
+    ) -> KnowledgeNode | None:
         assert self._sf
         async with self._sf() as session:
             row = await session.get(NodeRow, node_id)
             if not row:
                 return None
             if version and row.version != version:
-                stmt = select(NodeRow).where(NodeRow.node_id == node_id, NodeRow.version == version)
+                stmt = select(NodeRow).where(
+                    NodeRow.node_id == node_id, NodeRow.version == version
+                )
                 row = (await session.execute(stmt)).scalar_one_or_none()
                 if not row:
                     return None
@@ -227,7 +237,9 @@ class PostgresNodeRepository(KnowledgeNodeRepository):
 
 
 class PostgresEdgeRepository(KnowledgeEdgeRepository):
-    def __init__(self, session_factory: async_sessionmaker[AsyncSession] | None = None) -> None:
+    def __init__(
+        self, session_factory: async_sessionmaker[AsyncSession] | None = None
+    ) -> None:
         self._sf = session_factory or _session_factory
 
     async def upsert_edges(self, edges: list[KnowledgeEdge]) -> int:
@@ -265,7 +277,9 @@ class PostgresEdgeRepository(KnowledgeEdgeRepository):
     async def neighbors(self, node_id: str, depth: int = 1) -> list[KnowledgeEdge]:
         assert self._sf
         async with self._sf() as session:
-            stmt = select(EdgeRow).where((EdgeRow.source_id == node_id) | (EdgeRow.target_id == node_id))
+            stmt = select(EdgeRow).where(
+                (EdgeRow.source_id == node_id) | (EdgeRow.target_id == node_id)
+            )
             rows = (await session.execute(stmt)).scalars().all()
             return [
                 KnowledgeEdge(
@@ -284,12 +298,21 @@ class PostgresEdgeRepository(KnowledgeEdgeRepository):
 
 
 class PostgresVersionRepository(VersionRepository):
-    def __init__(self, session_factory: async_sessionmaker[AsyncSession] | None = None) -> None:
+    def __init__(
+        self, session_factory: async_sessionmaker[AsyncSession] | None = None
+    ) -> None:
         self._sf = session_factory or _session_factory
 
-    async def publish(self, version: str, checksum: str, node_count: int, edge_count: int) -> KnowledgeGraphSnapshot:
+    async def publish(
+        self, version: str, checksum: str, node_count: int, edge_count: int
+    ) -> KnowledgeGraphSnapshot:
         assert self._sf
-        snap = KnowledgeGraphSnapshot(version=version, node_count=node_count, edge_count=edge_count, checksum=checksum)
+        snap = KnowledgeGraphSnapshot(
+            version=version,
+            node_count=node_count,
+            edge_count=edge_count,
+            checksum=checksum,
+        )
         async with self._sf() as session:
             session.add(
                 VersionRow(

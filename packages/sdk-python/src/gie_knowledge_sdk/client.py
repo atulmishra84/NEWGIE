@@ -19,7 +19,9 @@ class KnowledgeClient:
             headers["Authorization"] = f"Bearer {token}"
         if api_key:
             headers["X-API-Key"] = api_key
-        self._client = httpx.Client(base_url=base_url.rstrip("/"), headers=headers, timeout=60.0)
+        self._client = httpx.Client(
+            base_url=base_url.rstrip("/"), headers=headers, timeout=60.0
+        )
 
     def query(self, query: str, **kwargs: Any) -> dict[str, Any]:
         payload = {"query": query, **kwargs}

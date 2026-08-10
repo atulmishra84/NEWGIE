@@ -81,7 +81,12 @@ def run_frontend(ux: dict[str, Any]) -> AgentStepResult:
         AgentStepResult(
             agent_id=AgentId.FRONTEND_SPECIALIST,
             summary="Frontend shell implemented for demo flow",
-            artifacts={"frontend": {"pages": ux.get("primary_flow", []), "status": "implemented"}},
+            artifacts={
+                "frontend": {
+                    "pages": ux.get("primary_flow", []),
+                    "status": "implemented",
+                }
+            },
         )
     )
 
@@ -149,7 +154,10 @@ def run_sec_test(*, inject_critical: bool) -> AgentStepResult:
             agent_id=AgentId.SECURITY_TEST_ENGINEER,
             ok=not findings,
             summary="Security test suite executed",
-            artifacts={"tests": ["secrets_scan", "auth_smoke", "injection_smoke"], "failed": len(findings)},
+            artifacts={
+                "tests": ["secrets_scan", "auth_smoke", "injection_smoke"],
+                "failed": len(findings),
+            },
             findings=findings,
         )
     )
@@ -197,7 +205,9 @@ def run_release_manager() -> AgentStepResult:
     )
 
 
-def run_devops(staging_url: str, *, regions: list[dict] | None = None) -> AgentStepResult:
+def run_devops(
+    staging_url: str, *, regions: list[dict] | None = None
+) -> AgentStepResult:
     from chief_orchestrator.topology import staging_targets
 
     targets = regions or staging_targets()

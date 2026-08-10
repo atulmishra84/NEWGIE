@@ -19,7 +19,10 @@ async def deliver_webhook(
     secret: str | None = None,
     max_attempts: int = 5,
 ) -> bool:
-    headers = {"Content-Type": "application/json", "User-Agent": "gie-context-intelligence/1.0.0"}
+    headers = {
+        "Content-Type": "application/json",
+        "User-Agent": "gie-context-intelligence/1.0.0",
+    }
     if secret:
         headers["X-GIE-Signature"] = secret
 

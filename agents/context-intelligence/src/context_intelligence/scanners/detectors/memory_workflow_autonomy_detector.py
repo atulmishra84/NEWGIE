@@ -2,16 +2,37 @@
 
 from __future__ import annotations
 
-import re
 from pathlib import Path
 
 from context_intelligence.domain.findings import FindingCategory, FindingSection
-from context_intelligence.scanners.detectors.base import BaseDetector, iter_files, read_text
+from context_intelligence.scanners.detectors.base import (
+    BaseDetector,
+    iter_files,
+    read_text,
+)
 from context_intelligence.scanners.registry import DEFAULT_DETECTOR_REGISTRY
 
-MEMORY_SIGNALS = ["memory", "ConversationBufferMemory", "RedisChatMessageHistory", "checkpointer"]
-WORKFLOW_SIGNALS = ["StateGraph", "langgraph.graph", "workflow", "DAG", "RunnableSequence"]
-AUTONOMY_SIGNALS = ["autonomous", "AutoGen", "Crew(", "AgentExecutor", "ReAct", "plan-and-execute"]
+MEMORY_SIGNALS = [
+    "memory",
+    "ConversationBufferMemory",
+    "RedisChatMessageHistory",
+    "checkpointer",
+]
+WORKFLOW_SIGNALS = [
+    "StateGraph",
+    "langgraph.graph",
+    "workflow",
+    "DAG",
+    "RunnableSequence",
+]
+AUTONOMY_SIGNALS = [
+    "autonomous",
+    "AutoGen",
+    "Crew(",
+    "AgentExecutor",
+    "ReAct",
+    "plan-and-execute",
+]
 
 
 @DEFAULT_DETECTOR_REGISTRY.register_detector()
@@ -23,7 +44,9 @@ class MemoryWorkflowAutonomyDetector(BaseDetector):
     async def detect(self, workspace_path: Path) -> list:
         findings = []
 
-        for path in iter_files(workspace_path, extensions={".py", ".ts", ".js", ".yaml", ".yml"}):
+        for path in iter_files(
+            workspace_path, extensions={".py", ".ts", ".js", ".yaml", ".yml"}
+        ):
             text = read_text(path)
             if not text:
                 continue

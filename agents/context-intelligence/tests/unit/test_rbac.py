@@ -4,7 +4,12 @@ from __future__ import annotations
 
 import pytest
 
-from context_intelligence.domain.rbac import Permission, Role, has_permission, require_permission
+from context_intelligence.domain.rbac import (
+    Permission,
+    Role,
+    has_permission,
+    require_permission,
+)
 
 
 def test_viewer_can_read_not_create():

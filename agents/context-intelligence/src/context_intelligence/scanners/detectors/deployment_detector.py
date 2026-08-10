@@ -6,7 +6,7 @@ import re
 from pathlib import Path
 
 from context_intelligence.domain.findings import FindingCategory, FindingSection
-from context_intelligence.scanners.detectors.base import BaseDetector, iter_files, read_text
+from context_intelligence.scanners.detectors.base import BaseDetector, read_text
 from context_intelligence.scanners.registry import DEFAULT_DETECTOR_REGISTRY
 
 
@@ -25,7 +25,12 @@ class DeploymentDetector(BaseDetector):
             name = path.name.lower()
             rel = path.relative_to(workspace_path).as_posix()
 
-            if name in {"docker-compose.yml", "docker-compose.yaml", "compose.yaml", "compose.yml"}:
+            if name in {
+                "docker-compose.yml",
+                "docker-compose.yaml",
+                "compose.yaml",
+                "compose.yml",
+            }:
                 findings.append(
                     self.finding(
                         category=FindingCategory.CONTAINER,
@@ -36,7 +41,9 @@ class DeploymentDetector(BaseDetector):
                     )
                 )
 
-            if path.suffix in {".yaml", ".yml"} and _looks_like_k8s(path, read_text(path)):
+            if path.suffix in {".yaml", ".yml"} and _looks_like_k8s(
+                path, read_text(path)
+            ):
                 findings.append(
                     self.finding(
                         category=FindingCategory.KUBERNETES,

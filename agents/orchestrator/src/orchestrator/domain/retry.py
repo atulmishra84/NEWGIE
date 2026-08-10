@@ -6,8 +6,10 @@ from typing import Awaitable, Callable, TypeVar
 
 T = TypeVar("T")
 
+
 class RetryableError(RuntimeError):
     pass
+
 
 async def with_retry(
     fn: Callable[[], Awaitable[T]],
@@ -23,7 +25,13 @@ async def with_retry(
             return await fn(), attempt - 1
         except Exception as exc:  # noqa: BLE001
             last = exc
-            can = retryable(exc) if retryable else isinstance(exc, RetryableError) or "timeout" in str(exc).lower() or "unavailable" in str(exc).lower()
+            can = (
+                retryable(exc)
+                if retryable
+                else isinstance(exc, RetryableError)
+                or "timeout" in str(exc).lower()
+                or "unavailable" in str(exc).lower()
+            )
             if attempt >= max_attempts or not can:
                 break
             await asyncio.sleep((base_delay_ms / 1000.0) * (2 ** (attempt - 1)))

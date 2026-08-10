@@ -4,7 +4,11 @@ from __future__ import annotations
 
 from gie_observability.logging import get_logger
 
-from knowledge_intelligence.domain.ports import EmbeddingService, KnowledgeNodeRepository, VectorStore
+from knowledge_intelligence.domain.ports import (
+    EmbeddingService,
+    KnowledgeNodeRepository,
+    VectorStore,
+)
 from knowledge_intelligence.settings import Settings
 
 logger = get_logger(__name__)
@@ -24,11 +28,15 @@ class ReindexHandler:
         self._embeddings = embeddings
         self._settings = settings
 
-    async def handle(self, *, domain: str | None = None, batch_size: int = 100) -> dict[str, int]:
+    async def handle(
+        self, *, domain: str | None = None, batch_size: int = 100
+    ) -> dict[str, int]:
         offset = 0
         total = 0
         while True:
-            batch = await self._nodes.list_nodes(domain=domain, limit=batch_size, offset=offset)
+            batch = await self._nodes.list_nodes(
+                domain=domain, limit=batch_size, offset=offset
+            )
             if not batch:
                 break
             texts = [f"{n.title}\n{n.summary}\n{n.body}" for n in batch]

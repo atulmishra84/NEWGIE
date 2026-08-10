@@ -36,9 +36,7 @@ class PipelineStore:
         return run
 
     def add_trace(self, run_id: str, event: str, **details: Any) -> None:
-        self.traces.setdefault(run_id, []).append(
-            {"event": event, "details": details}
-        )
+        self.traces.setdefault(run_id, []).append({"event": event, "details": details})
 
     def get_trace(self, run_id: str) -> list[dict[str, Any]]:
         return list(self.traces.get(run_id, []))
@@ -48,7 +46,11 @@ store = PipelineStore()
 
 
 async def handle_status() -> dict[str, Any]:
-    from chief_orchestrator.topology import load_topology, production_targets, staging_targets
+    from chief_orchestrator.topology import (
+        load_topology,
+        production_targets,
+        staging_targets,
+    )
 
     registry.touch_all()
     platform = await gie_client.refresh_platform_health()
@@ -97,7 +99,12 @@ async def run_golden(
         command_text=intent.text,
     )
     store.save(run)
-    store.add_trace(run.run_id, "run_started", intent=intent.intent.value, channel=intent.channel.value)
+    store.add_trace(
+        run.run_id,
+        "run_started",
+        intent=intent.intent.value,
+        channel=intent.channel.value,
+    )
     registry.touch_all()
     store.add_trace(run.run_id, "fleet_heartbeats", healthy=registry.healthy_count())
 
@@ -146,7 +153,11 @@ async def run_golden(
         store.save(run)
         return run
 
-    acceptance = list(pm.artifacts.get("acceptance") or pm.artifacts.get("prd", {}).get("acceptance") or [])
+    acceptance = list(
+        pm.artifacts.get("acceptance")
+        or pm.artifacts.get("prd", {}).get("acceptance")
+        or []
+    )
     qa = roles.run_qa(acceptance)
     run.steps.append(qa)
     store.add_trace(run.run_id, "step", agent=qa.agent_id.value, ok=qa.ok)
@@ -165,7 +176,12 @@ async def run_golden(
     store.add_trace(run.run_id, "step", agent=docs.agent_id.value, ok=docs.ok)
 
     context = await gie_client.scan_context_stub(intent.text)
-    store.add_trace(run.run_id, "gie_context", model_id=context.get("model_id"), source=context.get("source"))
+    store.add_trace(
+        run.run_id,
+        "gie_context",
+        model_id=context.get("model_id"),
+        source=context.get("source"),
+    )
     risk = await gie_client.assess_risk(
         context_model_id=context["model_id"],
         blocking_findings=len(blocking),
@@ -250,7 +266,9 @@ async def run_change_request(intent: NormalizedIntent) -> FleetRun:
     run.steps.append(pm)
     lead = roles.run_senior_developer(intent.text)
     run.steps.append(lead)
-    run.steps.append(roles.run_frontend({"primary_flow": ["Landing", "Feature X", "Status"]}))
+    run.steps.append(
+        roles.run_frontend({"primary_flow": ["Landing", "Feature X", "Status"]})
+    )
     run.steps.append(roles.run_backend(lead.artifacts["architecture"]))
     acceptance = list(pm.artifacts.get("acceptance") or []) + ["Feature X visible"]
     run.steps.append(roles.run_qa(acceptance))
@@ -258,7 +276,9 @@ async def run_change_request(intent: NormalizedIntent) -> FleetRun:
     run.steps.append(roles.run_devops(staging_url))
 
     context = await gie_client.scan_context_stub(intent.text)
-    risk = await gie_client.assess_risk(context_model_id=context["model_id"], blocking_findings=0)
+    risk = await gie_client.assess_risk(
+        context_model_id=context["model_id"], blocking_findings=0
+    )
     policy = await gie_client.evaluate_policy(risk=risk, force_deny=False)
 
     run.evidence = EvidencePackage(
@@ -328,7 +348,8 @@ async def handle_prod_approve(intent: NormalizedIntent) -> dict[str, Any]:
 
 def build_go_no_go() -> GoNoGoReport:
     checks = {
-        "fleet_registered": registry.healthy_count() >= min(16, registry.expected_count()),
+        "fleet_registered": registry.healthy_count()
+        >= min(16, registry.expected_count()),
         "has_golden_run": store.latest_golden_run_id is not None,
         **store.live_checks,
     }
@@ -336,7 +357,10 @@ def build_go_no_go() -> GoNoGoReport:
         run = store.runs.get(store.latest_golden_run_id)
         checks["golden_succeeded"] = bool(run and run.status == RunStatus.SUCCEEDED)
         checks["policy_allow"] = bool(
-            run and run.evidence and run.evidence.policy and run.evidence.policy.decision == PolicyDecision.ALLOW
+            run
+            and run.evidence
+            and run.evidence.policy
+            and run.evidence.policy.decision == PolicyDecision.ALLOW
         )
     failed = [k for k, v in checks.items() if not v]
     demo = None

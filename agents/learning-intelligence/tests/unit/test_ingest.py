@@ -1,5 +1,6 @@
 from learning_intelligence.domain.ingest import collect_feedback
 
+
 def test_collects_all_signal_types(sample_bundle):
     events = collect_feedback(sample_bundle)
     types = {e.feedback_type.value for e in events}

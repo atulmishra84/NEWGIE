@@ -39,7 +39,10 @@ class PackageManagerDetector(BaseDetector):
         findings = []
         for name, (manager, _) in MANIFESTS.items():
             for path in workspace_path.rglob(name):
-                if not path.is_file() or any(p.startswith(".") for p in path.relative_to(workspace_path).parts[:-1]):
+                if not path.is_file() or any(
+                    p.startswith(".")
+                    for p in path.relative_to(workspace_path).parts[:-1]
+                ):
                     continue
                 version = _extract_version(path, manager)
                 findings.append(

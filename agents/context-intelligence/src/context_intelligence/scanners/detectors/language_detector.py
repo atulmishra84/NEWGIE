@@ -5,7 +5,11 @@ from __future__ import annotations
 from pathlib import Path
 
 from context_intelligence.domain.findings import FindingCategory, FindingSection
-from context_intelligence.scanners.detectors.base import BaseDetector, iter_files, read_text
+from context_intelligence.scanners.detectors.base import (
+    BaseDetector,
+    iter_files,
+    read_text,
+)
 from context_intelligence.scanners.registry import DEFAULT_DETECTOR_REGISTRY
 
 EXTENSION_MAP: dict[str, tuple[str, float]] = {
@@ -62,7 +66,11 @@ class LanguageDetector(BaseDetector):
                 mapped = SHEBANG_MAP.get(interpreter)
                 if mapped:
                     lang, conf = mapped
-                    counts[lang] = (counts.get(lang, (0, 0, None))[0] + 2, conf, str(path))
+                    counts[lang] = (
+                        counts.get(lang, (0, 0, None))[0] + 2,
+                        conf,
+                        str(path),
+                    )
 
         findings = []
         for lang, (count, conf, sample) in counts.items():

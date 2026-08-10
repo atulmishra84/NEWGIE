@@ -17,7 +17,9 @@ class KnowledgePermission(StrEnum):
 
 
 ROLE_KNOWLEDGE_PERMISSIONS: dict[Role, frozenset[KnowledgePermission]] = {
-    Role.VIEWER: frozenset({KnowledgePermission.KNOWLEDGE_READ, KnowledgePermission.KNOWLEDGE_QUERY}),
+    Role.VIEWER: frozenset(
+        {KnowledgePermission.KNOWLEDGE_READ, KnowledgePermission.KNOWLEDGE_QUERY}
+    ),
     Role.ANALYST: frozenset(
         {
             KnowledgePermission.KNOWLEDGE_READ,
@@ -37,7 +39,9 @@ ROLE_KNOWLEDGE_PERMISSIONS: dict[Role, frozenset[KnowledgePermission]] = {
 }
 
 
-def has_knowledge_permission(roles: frozenset[str] | set[str] | list[str], permission: KnowledgePermission) -> bool:
+def has_knowledge_permission(
+    roles: frozenset[str] | set[str] | list[str], permission: KnowledgePermission
+) -> bool:
     granted: set[KnowledgePermission] = set()
     for name in roles:
         try:
@@ -48,6 +52,8 @@ def has_knowledge_permission(roles: frozenset[str] | set[str] | list[str], permi
     return permission in granted or KnowledgePermission.KNOWLEDGE_ADMIN in granted
 
 
-def require_knowledge_permission(roles: frozenset[str] | set[str] | list[str], permission: KnowledgePermission) -> None:
+def require_knowledge_permission(
+    roles: frozenset[str] | set[str] | list[str], permission: KnowledgePermission
+) -> None:
     if not has_knowledge_permission(roles, permission):
         raise PermissionDeniedError(str(permission))

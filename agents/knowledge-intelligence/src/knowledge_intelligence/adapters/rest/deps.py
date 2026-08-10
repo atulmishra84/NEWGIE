@@ -6,7 +6,10 @@ from fastapi import Depends, Header, HTTPException, Request, status
 from gie_security.auth import AuthError, AuthPrincipal, JwtAuthenticator
 
 from knowledge_intelligence.application.di import Container, get_container
-from knowledge_intelligence.domain.rbac import KnowledgePermission, require_knowledge_permission
+from knowledge_intelligence.domain.rbac import (
+    KnowledgePermission,
+    require_knowledge_permission,
+)
 from knowledge_intelligence.settings import get_settings
 
 
@@ -26,7 +29,9 @@ async def get_principal(
             )
     try:
         if authorization:
-            auth = JwtAuthenticator(settings.jwt_secret, algorithm=settings.jwt_algorithm)
+            auth = JwtAuthenticator(
+                settings.jwt_secret, algorithm=settings.jwt_algorithm
+            )
             return auth.authenticate_header(authorization)
         if x_api_key:
             # Dev/local API key bypass for operator workflows
@@ -39,11 +44,15 @@ async def get_principal(
                 )
         raise AuthError("Missing credentials")
     except AuthError as exc:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail=str(exc)) from exc
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED, detail=str(exc)
+        ) from exc
 
 
 def require_perm(permission: KnowledgePermission):
-    async def _inner(principal: AuthPrincipal = Depends(get_principal)) -> AuthPrincipal:
+    async def _inner(
+        principal: AuthPrincipal = Depends(get_principal),
+    ) -> AuthPrincipal:
         require_knowledge_permission(principal.roles, permission)
         return principal
 

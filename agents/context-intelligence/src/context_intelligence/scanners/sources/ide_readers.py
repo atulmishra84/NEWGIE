@@ -61,7 +61,9 @@ class IdeWorkspaceReader(SourceReader):
 
 def _resolve_root(source: ScanSource) -> Path:
     path: str | None = None
-    if isinstance(source, (IdeWorkspaceSource, CursorProjectSource, VsCodeWorkspaceSource)):
+    if isinstance(
+        source, (IdeWorkspaceSource, CursorProjectSource, VsCodeWorkspaceSource)
+    ):
         path = source.path
     elif isinstance(source, FrameworkProjectSource):
         path = source.path
@@ -84,10 +86,15 @@ def _collect_ide_metadata(root: Path, source: ScanSource) -> dict[str, object]:
     for ws_file in root.glob("*.code-workspace"):
         try:
             meta.setdefault("code_workspaces", []).append(
-                {"path": str(ws_file), "content": json.loads(ws_file.read_text(encoding="utf-8"))}
+                {
+                    "path": str(ws_file),
+                    "content": json.loads(ws_file.read_text(encoding="utf-8")),
+                }
             )
         except (OSError, json.JSONDecodeError):
-            meta.setdefault("code_workspaces", []).append({"path": str(ws_file), "error": "unreadable"})
+            meta.setdefault("code_workspaces", []).append(
+                {"path": str(ws_file), "error": "unreadable"}
+            )
 
     if isinstance(source, VsCodeWorkspaceSource) and source.workspace_file:
         ws = Path(source.workspace_file).expanduser()

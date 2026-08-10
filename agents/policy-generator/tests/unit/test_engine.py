@@ -9,6 +9,7 @@ REQUIRED_FILES = {
     "openai-policy.json",
 }
 
+
 def test_generates_all_formats_with_metadata(sample_bundle):
     pkg = generate_policy_package(sample_bundle)
     assert len(pkg.policies) >= 18
@@ -26,10 +27,13 @@ def test_generates_all_formats_with_metadata(sample_bundle):
     assert pkg.rollback.strategy
     assert pkg.summary
 
+
 def test_validate_json_and_rego():
     ok = validate_content('{"a": 1}', PolicyFormat.JSON)
     assert ok.status == ValidationStatus.VALID
     bad = validate_content("{not-json", PolicyFormat.JSON)
     assert bad.status == ValidationStatus.INVALID
-    rego = validate_content("package gie.guardrails\n\nallow { true }\n", PolicyFormat.OPA_REGO)
+    rego = validate_content(
+        "package gie.guardrails\n\nallow { true }\n", PolicyFormat.OPA_REGO
+    )
     assert rego.status == ValidationStatus.VALID

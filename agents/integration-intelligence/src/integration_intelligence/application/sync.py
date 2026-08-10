@@ -1,24 +1,43 @@
 from __future__ import annotations
 from gie_contracts.integration import AuditLogEntry, SyncRequest, SyncResult
-from gie_contracts.integration_events import CircuitBreakerOpened, IntegrationSyncCompleted
+from gie_contracts.integration_events import (
+    CircuitBreakerOpened,
+    IntegrationSyncCompleted,
+)
 from gie_observability.logging import get_logger
 from integration_intelligence.application.errors import NotFoundError
 from integration_intelligence.domain.engine import run_sync
-from integration_intelligence.domain.ports import AuditRepository, ConnectionRepository, EventPublisher, SyncRepository
+from integration_intelligence.domain.ports import (
+    AuditRepository,
+    ConnectionRepository,
+    EventPublisher,
+    SyncRepository,
+)
 from integration_intelligence.settings import Settings
 from integration_intelligence.version import AGENT_VERSION
 
 logger = get_logger(__name__)
 
+
 class SyncHandler:
-    def __init__(self, *, connections: ConnectionRepository, syncs: SyncRepository, audits: AuditRepository, events: EventPublisher, settings: Settings):
+    def __init__(
+        self,
+        *,
+        connections: ConnectionRepository,
+        syncs: SyncRepository,
+        audits: AuditRepository,
+        events: EventPublisher,
+        settings: Settings,
+    ):
         self._connections = connections
         self._syncs = syncs
         self._audits = audits
         self._events = events
         self._settings = settings
 
-    async def handle(self, request: SyncRequest, *, actor: str, correlation_id: str) -> SyncResult:
+    async def handle(
+        self, request: SyncRequest, *, actor: str, correlation_id: str
+    ) -> SyncResult:
         if request.connection_id is None:
             raise NotFoundError("connection_id is required")
         conn = await self._connections.get(request.connection_id)
@@ -54,7 +73,11 @@ class SyncHandler:
             connection_id=conn.connection_id,
             status=result.status,
         )
-        await self._events.publish(self._settings.kafka_topic_events, evt.model_dump(mode="json"), key=str(result.sync_id))
+        await self._events.publish(
+            self._settings.kafka_topic_events,
+            evt.model_dump(mode="json"),
+            key=str(result.sync_id),
+        )
         if result.status == "circuit_open" and conn.circuit_breaker_state == "open":
             cb = CircuitBreakerOpened(
                 tenant_id=request.tenant_id,
@@ -64,6 +87,12 @@ class SyncHandler:
                 platform_id=conn.platform_id.value,
                 failure_count=conn.failure_count,
             )
-            await self._events.publish(self._settings.kafka_topic_events, cb.model_dump(mode="json"), key=str(conn.connection_id))
-        logger.info("integration_sync", sync_id=str(result.sync_id), status=result.status)
+            await self._events.publish(
+                self._settings.kafka_topic_events,
+                cb.model_dump(mode="json"),
+                key=str(conn.connection_id),
+            )
+        logger.info(
+            "integration_sync", sync_id=str(result.sync_id), status=result.status
+        )
         return result

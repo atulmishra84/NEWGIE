@@ -15,5 +15,9 @@ def test_generates_yaml_json_rego(sample_bundle):
     targets = {a.target for a in arts}
     assert PolicyTarget.OPENAI in targets
     assert PolicyTarget.OPA_REGO in targets
-    opa = next(a for a in arts if a.target == PolicyTarget.OPA_REGO and a.format == OutputFormat.REGO)
+    opa = next(
+        a
+        for a in arts
+        if a.target == PolicyTarget.OPA_REGO and a.format == OutputFormat.REGO
+    )
     assert "package gie.policy" in opa.content

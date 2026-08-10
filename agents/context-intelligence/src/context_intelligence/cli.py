@@ -11,7 +11,9 @@ from context_intelligence.application.scan_service import scan_folder
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(prog="gie-context", description="GIE Context Intelligence CLI")
+    parser = argparse.ArgumentParser(
+        prog="gie-context", description="GIE Context Intelligence CLI"
+    )
     sub = parser.add_subparsers(dest="command", required=True)
 
     scan = sub.add_parser("scan", help="Scan a local folder")

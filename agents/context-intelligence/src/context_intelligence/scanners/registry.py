@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from collections.abc import Callable, Iterable, Sequence
+from collections.abc import Callable
 from typing import TypeVar
 
 from gie_contracts.sources import ScanSource, SourceType

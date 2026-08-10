@@ -75,7 +75,9 @@ class ContextScan:
         self._transition(ScanStatus.RUNNING)
         self.started_at = utcnow()
 
-    def mark_completed(self, model_id: UUID, model_version: int, source_digest: str | None = None) -> None:
+    def mark_completed(
+        self, model_id: UUID, model_version: int, source_digest: str | None = None
+    ) -> None:
         self._transition(ScanStatus.COMPLETED)
         self.completed_at = utcnow()
         self.model_id = model_id

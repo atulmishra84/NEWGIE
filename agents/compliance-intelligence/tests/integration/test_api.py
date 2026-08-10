@@ -4,6 +4,7 @@ from compliance_intelligence.adapters.rest.app import create_app
 from compliance_intelligence.infrastructure.bootstrap import build_container
 from compliance_intelligence.settings import Settings
 
+
 @pytest.mark.asyncio
 async def test_analyze_report_evidence_frameworks(sample_bundle):
     settings = Settings(gie_env="test", require_auth=False)

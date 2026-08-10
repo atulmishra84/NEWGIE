@@ -4,6 +4,7 @@ from recommendation_intelligence.adapters.rest.app import create_app
 from recommendation_intelligence.infrastructure.bootstrap import build_container
 from recommendation_intelligence.settings import Settings
 
+
 @pytest.mark.asyncio
 async def test_generate_get_history_approve(sample_bundle):
     settings = Settings(gie_env="test", require_auth=False)
@@ -22,18 +23,32 @@ async def test_generate_get_history_approve(sample_bundle):
         agent_id = body["agent_id"]
         rid = body["recommendations"][0]["recommendation_id"]
 
-        got = await client.get(f"/recommendations/{agent_id}", headers={"x-tenant-id": "acme"})
+        got = await client.get(
+            f"/recommendations/{agent_id}", headers={"x-tenant-id": "acme"}
+        )
         assert got.status_code == 200
 
-        hist = await client.get("/recommendations/history", params={"agent_id": agent_id}, headers={"x-tenant-id": "acme"})
+        hist = await client.get(
+            "/recommendations/history",
+            params={"agent_id": agent_id},
+            headers={"x-tenant-id": "acme"},
+        )
         assert hist.status_code == 200
         assert hist.json()["data"]["count"] >= 1
 
         appr = await client.post(
             "/v1/recommendations/approve",
-            json={"tenant_id": "acme", "agent_id": agent_id, "recommendation_ids": [rid]},
+            json={
+                "tenant_id": "acme",
+                "agent_id": agent_id,
+                "recommendation_ids": [rid],
+            },
             headers={"x-tenant-id": "acme"},
         )
         assert appr.status_code == 200
-        approved = [i for i in appr.json()["data"]["recommendations"] if i["recommendation_id"] == rid]
+        approved = [
+            i
+            for i in appr.json()["data"]["recommendations"]
+            if i["recommendation_id"] == rid
+        ]
         assert approved[0]["status"] == "approved"

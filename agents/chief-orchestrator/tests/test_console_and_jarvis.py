@@ -62,11 +62,8 @@ async def test_jarvis_config_and_forward_disabled():
         )
         assert forwarded.status_code == 200
         payload = forwarded.json()
-        assert (
-            payload.get("forwarded") is True
-            or payload.get("reason") in {
-                "jarvis_disabled",
-                "missing_webhook_url",
-                "webhook_error",
-            }
-        )
+        assert payload.get("forwarded") is True or payload.get("reason") in {
+            "jarvis_disabled",
+            "missing_webhook_url",
+            "webhook_error",
+        }

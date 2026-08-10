@@ -35,12 +35,18 @@ class RedisModelCache(ModelCache):
         ver = version if version is not None else "latest"
         return f"model:{tenant_id}:{model_id}:{ver}"
 
-    async def get(self, tenant_id: str, model_id: UUID, version: int | None) -> str | None:
+    async def get(
+        self, tenant_id: str, model_id: UUID, version: int | None
+    ) -> str | None:
         value = await self._client.get(self._key(tenant_id, model_id, version))
         return value.decode() if value else None
 
-    async def set(self, tenant_id: str, model_id: UUID, version: int | None, payload: str) -> None:
-        await self._client.set(self._key(tenant_id, model_id, version), payload, ex=self._ttl)
+    async def set(
+        self, tenant_id: str, model_id: UUID, version: int | None, payload: str
+    ) -> None:
+        await self._client.set(
+            self._key(tenant_id, model_id, version), payload, ex=self._ttl
+        )
 
 
 def create_redis_client(settings: Settings | None = None) -> aioredis.Redis:

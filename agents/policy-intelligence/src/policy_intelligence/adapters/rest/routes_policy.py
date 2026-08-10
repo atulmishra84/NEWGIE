@@ -12,6 +12,7 @@ from policy_intelligence.version import AGENT_NAME, AGENT_VERSION
 
 router = APIRouter(prefix="/v1", tags=["policy"])
 
+
 def _meta(started: float, confidence=None, reasoning=None) -> ResponseMeta:
     return ResponseMeta(
         trace_id=uuid4().hex,
@@ -24,6 +25,7 @@ def _meta(started: float, confidence=None, reasoning=None) -> ResponseMeta:
         agent_name=AGENT_NAME,
     )
 
+
 @router.post("/policies/generate")
 async def generate_policy(
     body: PolicyGenerateRequest,
@@ -34,11 +36,18 @@ async def generate_policy(
     # Bind tenant from principal if not set
     if not body.bundle.tenant_id:
         body.bundle.tenant_id = principal.tenant_id
-    decision = await container.generate.handle(body, actor=principal.subject_id, correlation_id=uuid4().hex)
+    decision = await container.generate.handle(
+        body, actor=principal.subject_id, correlation_id=uuid4().hex
+    )
     return ObservabilityEnvelope(
         data=decision,
-        meta=_meta(started, decision.confidence.score, [s.model_dump() for s in decision.reasoning_path]),
+        meta=_meta(
+            started,
+            decision.confidence.score,
+            [s.model_dump() for s in decision.reasoning_path],
+        ),
     )
+
 
 @router.get("/policies/decisions/{decision_id}")
 async def get_decision(
@@ -50,8 +59,12 @@ async def get_decision(
     decision = await container.decisions.get(decision_id)
     if not decision:
         from policy_intelligence.application.errors import NotFoundError
+
         raise NotFoundError(f"Decision not found: {decision_id}")
-    return ObservabilityEnvelope(data=decision, meta=_meta(started, decision.confidence.score))
+    return ObservabilityEnvelope(
+        data=decision, meta=_meta(started, decision.confidence.score)
+    )
+
 
 @router.get("/policies/decisions")
 async def list_decisions(
@@ -61,8 +74,13 @@ async def list_decisions(
     container: Container = Depends(container_dep),
 ):
     started = time.perf_counter()
-    items = await container.decisions.list(principal.tenant_id, limit=limit, offset=offset)
-    return ObservabilityEnvelope(data={"items": items, "count": len(items)}, meta=_meta(started))
+    items = await container.decisions.list(
+        principal.tenant_id, limit=limit, offset=offset
+    )
+    return ObservabilityEnvelope(
+        data={"items": items, "count": len(items)}, meta=_meta(started)
+    )
+
 
 @router.get("/policies/decisions/{decision_id}/explain")
 async def explain_decision(
@@ -77,6 +95,7 @@ async def explain_decision(
     score = conf.score if hasattr(conf, "score") else (conf or {}).get("score")
     return ObservabilityEnvelope(data=data, meta=_meta(started, score))
 
+
 @router.get("/policies/decisions/{decision_id}/artifacts/{filename}")
 async def get_artifact(
     decision_id: UUID,
@@ -88,9 +107,11 @@ async def get_artifact(
     decision = await container.decisions.get(decision_id)
     if not decision:
         from policy_intelligence.application.errors import NotFoundError
+
         raise NotFoundError(f"Decision not found: {decision_id}")
     art = next((a for a in decision.artifacts if a.filename == filename), None)
     if not art:
         from policy_intelligence.application.errors import NotFoundError
+
         raise NotFoundError(f"Artifact not found: {filename}")
     return ObservabilityEnvelope(data=art, meta=_meta(started))

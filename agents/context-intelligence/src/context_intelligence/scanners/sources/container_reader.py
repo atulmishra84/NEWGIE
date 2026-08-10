@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import json
 from pathlib import Path
 
 from gie_contracts.sources import ContainerSource, ScanSource, SourceType
@@ -36,25 +35,39 @@ class ContainerReader(SourceReader):
         if runtime == "podman" and not command_available("podman"):
             raise ContainerUnavailableError("podman not available")
 
-        cmd = "docker" if runtime == "docker" else "podman" if runtime == "podman" else "docker"
+        cmd = (
+            "docker"
+            if runtime == "docker"
+            else "podman"
+            if runtime == "podman"
+            else "docker"
+        )
         workspace = MaterializedWorkspace.create(prefix="gie-container-")
         root = workspace.path / "rootfs"
         root.mkdir(parents=True, exist_ok=True)
 
         inspect = run_command([cmd, "inspect", source.image], timeout=60)
         if inspect.returncode == 0:
-            (workspace.path / "inspect.json").write_text(inspect.stdout, encoding="utf-8")
+            (workspace.path / "inspect.json").write_text(
+                inspect.stdout, encoding="utf-8"
+            )
             await _export_filesystem(cmd, source.image, root)
         else:
             save_path = workspace.path / "image.tar"
-            save = run_command([cmd, "save", "-o", str(save_path), source.image], timeout=300)
+            save = run_command(
+                [cmd, "save", "-o", str(save_path), source.image], timeout=300
+            )
             if save.returncode != 0:
                 raise SourceMaterializationError(
                     f"container inspect/save failed: {save.stderr.strip() or inspect.stderr.strip()}"
                 )
-            extract = run_command(["tar", "-xf", str(save_path), "-C", str(workspace.path)], timeout=300)
+            extract = run_command(
+                ["tar", "-xf", str(save_path), "-C", str(workspace.path)], timeout=300
+            )
             if extract.returncode != 0:
-                raise SourceMaterializationError(f"tar extract failed: {extract.stderr.strip()}")
+                raise SourceMaterializationError(
+                    f"tar extract failed: {extract.stderr.strip()}"
+                )
 
         write_metadata(workspace, source)
         workspace.compute_digest()

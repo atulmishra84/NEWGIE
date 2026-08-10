@@ -6,7 +6,11 @@ import re
 from pathlib import Path
 
 from context_intelligence.domain.findings import FindingCategory, FindingSection
-from context_intelligence.scanners.detectors.base import BaseDetector, iter_files, read_text
+from context_intelligence.scanners.detectors.base import (
+    BaseDetector,
+    iter_files,
+    read_text,
+)
 from context_intelligence.scanners.registry import DEFAULT_DETECTOR_REGISTRY
 
 PROMPT_DIR_NAMES = {"prompts", "prompt", "templates", "system_prompts"}
@@ -42,7 +46,9 @@ class PromptDetector(BaseDetector):
                     )
                 )
 
-        for path in iter_files(workspace_path, extensions={".py", ".ts", ".js", ".yaml", ".json", ".md"}):
+        for path in iter_files(
+            workspace_path, extensions={".py", ".ts", ".js", ".yaml", ".json", ".md"}
+        ):
             text = read_text(path)
             if not text or not SYSTEM_PROMPT_RE.search(text):
                 continue

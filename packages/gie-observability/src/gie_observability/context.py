@@ -19,7 +19,9 @@ class ObservabilityContext:
     tenant_id: str | None = None
     reasoning_path: list[dict] = field(default_factory=list)
 
-    def add_reasoning(self, detector_id: str, action: str, detail: str, confidence: float = 0.0) -> None:
+    def add_reasoning(
+        self, detector_id: str, action: str, detail: str, confidence: float = 0.0
+    ) -> None:
         self.reasoning_path.append(
             {
                 "step": len(self.reasoning_path) + 1,

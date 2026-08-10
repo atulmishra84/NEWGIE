@@ -29,10 +29,14 @@ class KafkaEventPublisher(EventPublisher):
             logger.warning("kafka_unavailable", error=str(exc))
             self._producer = False  # type: ignore
 
-    async def publish(self, topic: str, event: dict[str, Any], key: str | None = None) -> None:
+    async def publish(
+        self, topic: str, event: dict[str, Any], key: str | None = None
+    ) -> None:
         await self._ensure()
         if not self._producer:
-            logger.info("kafka_event_dropped", topic=topic, event_type=event.get("event_type"))
+            logger.info(
+                "kafka_event_dropped", topic=topic, event_type=event.get("event_type")
+            )
             return
         data = json.dumps(event).encode()
         k = key.encode() if key else None

@@ -6,7 +6,11 @@ import re
 from pathlib import Path
 
 from context_intelligence.domain.findings import FindingCategory, FindingSection
-from context_intelligence.scanners.detectors.base import BaseDetector, iter_files, read_text
+from context_intelligence.scanners.detectors.base import (
+    BaseDetector,
+    iter_files,
+    read_text,
+)
 from context_intelligence.scanners.registry import DEFAULT_DETECTOR_REGISTRY
 
 MODEL_PATTERNS: list[tuple[re.Pattern[str], str, float]] = [
@@ -16,7 +20,11 @@ MODEL_PATTERNS: list[tuple[re.Pattern[str], str, float]] = [
     (re.compile(r"\bllama-[\w.-]+", re.I), "meta", 0.85),
     (re.compile(r"\bmistral-[\w.-]+", re.I), "mistral", 0.85),
     (re.compile(r"\bgemini-[\w.-]+", re.I), "google", 0.85),
-    (re.compile(r"AZURE_OPENAI_DEPLOYMENT(?:_NAME)?[=:\s\"']+([\w-]+)", re.I), "azure-openai", 0.92),
+    (
+        re.compile(r"AZURE_OPENAI_DEPLOYMENT(?:_NAME)?[=:\s\"']+([\w-]+)", re.I),
+        "azure-openai",
+        0.92,
+    ),
     (re.compile(r"deployment[_-]?name[=:\s\"']+([\w-]+)", re.I), "azure-openai", 0.8),
     (re.compile(r"\bo\d-mini\b", re.I), "openai", 0.88),
 ]
@@ -33,12 +41,19 @@ class ModelDetector(BaseDetector):
         findings = []
 
         text_extensions = {
-            ".py", ".ts", ".js", ".json", ".yaml", ".yml", ".env", ".toml", ".md", ".txt"
+            ".py",
+            ".ts",
+            ".js",
+            ".json",
+            ".yaml",
+            ".yml",
+            ".env",
+            ".toml",
+            ".md",
+            ".txt",
         }
         globs = list(iter_files(workspace_path, extensions=text_extensions))
-        globs.extend(
-            p for p in workspace_path.rglob(".env*") if p.is_file()
-        )
+        globs.extend(p for p in workspace_path.rglob(".env*") if p.is_file())
 
         for path in globs:
             text = read_text(path)
