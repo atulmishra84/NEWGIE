@@ -43,7 +43,7 @@ async def llm_classify_intent(text: str, channel: Channel) -> NormalizedIntent |
     system = (
         "You are the GIE Chief Orchestrator command classifier. "
         "Classify the user's command into one of: STATUS, GOLDEN_RUN, CHANGE_REQUEST, PROD_APPROVE, CLARIFY. "
-        "Return JSON only: {\"intent\": \"<INTENT>\", \"confidence\": <0-1>, \"clarification\": \"<optional>\"}."
+        'Return JSON only: {"intent": "<INTENT>", "confidence": <0-1>, "clarification": "<optional>"}.'
     )
     raw = await llm.invoke(system=system, user=f'Command: "{text}"')
     try:
@@ -67,17 +67,21 @@ async def llm_classify_intent(text: str, channel: Channel) -> NormalizedIntent |
                 text=text,
                 channel=channel,
                 confidence=confidence,
-                needs_clarification=intent_type in (IntentType.CLARIFY, IntentType.UNKNOWN),
+                needs_clarification=intent_type
+                in (IntentType.CLARIFY, IntentType.UNKNOWN),
                 clarification_prompt=clarification,
             )
     except Exception as exc:
         logger.warning("Bedrock intent classification failed: %s", exc)
     return None
 
+
 _AMBIGUOUS = re.compile(r"^(uh+|um+|hmm+|maybe|something|whatever)\b", re.I)
 
 
-async def stt_from_audio(transcript: str | None, audio_bytes: bytes | None = None) -> tuple[str, str]:
+async def stt_from_audio(
+    transcript: str | None, audio_bytes: bytes | None = None
+) -> tuple[str, str]:
     """Normalize voice to text via commercial STT or transcript. Returns (text, provider)."""
     return await transcribe_audio(audio_bytes, transcript)
 
@@ -203,7 +207,9 @@ async def normalize_intent_with_llm(
     prod_confirm_phrase: str | None = None,
 ) -> NormalizedIntent:
     """normalize_intent with Bedrock fallback for UNKNOWN intents."""
-    intent = normalize_intent(text=text, channel=channel, prod_confirm_phrase=prod_confirm_phrase)
+    intent = normalize_intent(
+        text=text, channel=channel, prod_confirm_phrase=prod_confirm_phrase
+    )
     if intent.intent == IntentType.UNKNOWN and intent.confidence < 0.5:
         llm_intent = await llm_classify_intent(text, channel)
         if llm_intent and llm_intent.confidence > 0.6:

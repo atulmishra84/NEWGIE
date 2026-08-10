@@ -135,7 +135,6 @@ class ValidationReport(BaseModel):
     llm_enhancement: dict[str, Any] | None = None
 
 
-
 class ValidateRequest(BaseModel):
     bundle: ValidationInputBundle
     persist: bool = True

@@ -152,7 +152,6 @@ class ComplianceReport(BaseModel):
     llm_enhancement: dict[str, Any] | None = None
 
 
-
 class ComplianceAnalyzeRequest(BaseModel):
     bundle: ComplianceInputBundle
     persist: bool = True

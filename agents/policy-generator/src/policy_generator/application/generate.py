@@ -4,7 +4,11 @@ from gie_contracts.policy_generator import PolicyPackageGenerateRequest, PolicyP
 from gie_contracts.policy_generator_events import PolicyPackageGenerationCompleted
 from gie_observability.logging import get_logger
 from policy_generator.domain.engine import generate_policy_package
-from policy_generator.domain.ports import CacheStore, EventPublisher, PolicyPackageRepository
+from policy_generator.domain.ports import (
+    CacheStore,
+    EventPublisher,
+    PolicyPackageRepository,
+)
 from gie_llm import BedrockLLMClient
 from policy_generator.domain.llm_enhancer import enhance_policy_package
 from policy_generator.settings import Settings
@@ -12,25 +16,41 @@ from policy_generator.version import AGENT_VERSION
 
 logger = get_logger(__name__)
 
+
 class GeneratePolicyHandler:
-    def __init__(self, *, packages: PolicyPackageRepository, cache: CacheStore, events: EventPublisher, settings: Settings):
+    def __init__(
+        self,
+        *,
+        packages: PolicyPackageRepository,
+        cache: CacheStore,
+        events: EventPublisher,
+        settings: Settings,
+    ):
         self._packages = packages
         self._cache = cache
         self._events = events
         self._settings = settings
-        self._llm = BedrockLLMClient(
-            region=settings.aws_region,
-            model_id=settings.bedrock_model_id,
-            max_tokens=settings.bedrock_max_tokens,
-            temperature=settings.bedrock_temperature,
-            aws_access_key_id=settings.aws_access_key_id,
-            aws_secret_access_key=settings.aws_secret_access_key,
-            aws_session_token=settings.aws_session_token,
-        ) if settings.bedrock_enabled else None
+        self._llm = (
+            BedrockLLMClient(
+                region=settings.aws_region,
+                model_id=settings.bedrock_model_id,
+                max_tokens=settings.bedrock_max_tokens,
+                temperature=settings.bedrock_temperature,
+                aws_access_key_id=settings.aws_access_key_id,
+                aws_secret_access_key=settings.aws_secret_access_key,
+                aws_session_token=settings.aws_session_token,
+            )
+            if settings.bedrock_enabled
+            else None
+        )
 
-    async def handle(self, request: PolicyPackageGenerateRequest, *, actor: str, correlation_id: str) -> PolicyPackage:
+    async def handle(
+        self, request: PolicyPackageGenerateRequest, *, actor: str, correlation_id: str
+    ) -> PolicyPackage:
         started = time.perf_counter()
-        prior = await self._packages.latest_for_agent(request.bundle.tenant_id, request.bundle.agent_id)
+        prior = await self._packages.latest_for_agent(
+            request.bundle.tenant_id, request.bundle.agent_id
+        )
         package = generate_policy_package(request.bundle, previous=prior)
         if request.persist:
             await self._packages.save(package)
@@ -49,15 +69,28 @@ class GeneratePolicyHandler:
                 artifact_count=len(package.artifacts),
                 duration_ms=int((time.perf_counter() - started) * 1000),
             )
-            await self._events.publish(self._settings.kafka_topic_events, evt.model_dump(mode="json"), key=package.agent_id)
+            await self._events.publish(
+                self._settings.kafka_topic_events,
+                evt.model_dump(mode="json"),
+                key=package.agent_id,
+            )
         if self._llm:
             package_dict = package.model_dump(mode="json")
             _enhanced = await enhance_policy_package(package_dict, client=self._llm)
-            package = package.model_copy(update={"llm_enhancement": {
-                "narrative": _enhanced.get("llm_narrative", ""),
-                "key_insights": _enhanced.get("llm_key_insights", []),
-                "recommendations": _enhanced.get("llm_recommendations", []),
-                "model": _enhanced.get("llm_model", ""),
-            }})
-        logger.info("policy_package_generated", agent_id=package.agent_id, count=len(package.policies), actor=actor)
+            package = package.model_copy(
+                update={
+                    "llm_enhancement": {
+                        "narrative": _enhanced.get("llm_narrative", ""),
+                        "key_insights": _enhanced.get("llm_key_insights", []),
+                        "recommendations": _enhanced.get("llm_recommendations", []),
+                        "model": _enhanced.get("llm_model", ""),
+                    }
+                }
+            )
+        logger.info(
+            "policy_package_generated",
+            agent_id=package.agent_id,
+            count=len(package.policies),
+            actor=actor,
+        )
         return package

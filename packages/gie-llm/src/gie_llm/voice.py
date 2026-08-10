@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import asyncio
-import io
 import json
 import logging
 import time
@@ -46,16 +45,19 @@ class AWSVoiceClient:
     @cached_property
     def _polly(self) -> Any:
         import boto3
+
         return boto3.client("polly", region_name=self._region, **self._creds)
 
     @cached_property
     def _transcribe(self) -> Any:
         import boto3
+
         return boto3.client("transcribe", region_name=self._region, **self._creds)
 
     @cached_property
     def _s3(self) -> Any:
         import boto3
+
         return boto3.client("s3", region_name=self._region, **self._creds)
 
     # ------------------------------------------------------------------ TTS
@@ -95,11 +97,14 @@ class AWSVoiceClient:
         # Poll (max 60 s for short utterances)
         for _ in range(30):
             time.sleep(2)
-            status = self._transcribe.get_transcription_job(TranscriptionJobName=job_name)
+            status = self._transcribe.get_transcription_job(
+                TranscriptionJobName=job_name
+            )
             state = status["TranscriptionJob"]["TranscriptionJobStatus"]
             if state == "COMPLETED":
                 uri = status["TranscriptionJob"]["Transcript"]["TranscriptFileUri"]
                 import urllib.request
+
                 with urllib.request.urlopen(uri) as r:  # noqa: S310
                     payload = json.loads(r.read())
                 return payload["results"]["transcripts"][0]["transcript"].strip()

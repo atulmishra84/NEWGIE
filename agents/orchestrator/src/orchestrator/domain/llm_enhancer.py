@@ -19,14 +19,20 @@ async def enhance_analysis_result(
         agent_name="GIE Orchestrator",
         deterministic_output={
             "status": trace_dict.get("status"),
-            "steps_completed": len([
-                s for s in (trace_dict.get("steps") or [])
-                if s.get("status") == "completed"
-            ]),
-            "steps_failed": len([
-                s for s in (trace_dict.get("steps") or [])
-                if s.get("status") == "failed"
-            ]),
+            "steps_completed": len(
+                [
+                    s
+                    for s in (trace_dict.get("steps") or [])
+                    if s.get("status") == "completed"
+                ]
+            ),
+            "steps_failed": len(
+                [
+                    s
+                    for s in (trace_dict.get("steps") or [])
+                    if s.get("status") == "failed"
+                ]
+            ),
             "overall_risk": trace_dict.get("risk_score"),
             "policy_decision": trace_dict.get("policy_decision"),
         },

@@ -28,7 +28,9 @@ def _stub_wav(text: str) -> bytes:
     return buf.getvalue()
 
 
-async def transcribe_audio(audio_bytes: bytes | None, transcript: str | None) -> tuple[str, str]:
+async def transcribe_audio(
+    audio_bytes: bytes | None, transcript: str | None
+) -> tuple[str, str]:
     """Return (text, provider_used). Prefers explicit transcript, else commercial STT."""
     if transcript and transcript.strip():
         return transcript.strip(), "transcript"

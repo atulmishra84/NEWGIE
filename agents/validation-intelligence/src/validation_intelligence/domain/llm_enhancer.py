@@ -21,7 +21,11 @@ async def enhance_validation_report(
             "verdict": report_dict.get("verdict"),
             "approval_status": report_dict.get("approval_status"),
             "findings": [
-                {k: v for k, v in f.items() if k in ("check", "category", "verdict", "message")}
+                {
+                    k: v
+                    for k, v in f.items()
+                    if k in ("check", "category", "verdict", "message")
+                }
                 for f in (report_dict.get("findings") or [])[:10]
             ],
         },

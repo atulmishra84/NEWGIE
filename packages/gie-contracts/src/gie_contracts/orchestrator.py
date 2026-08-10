@@ -173,7 +173,6 @@ class ExecutionTrace(BaseModel):
     llm_enhancement: dict[str, Any] | None = None
 
 
-
 class UnifiedAnalysisResult(BaseModel):
     context: dict[str, Any] = Field(default_factory=dict)
     knowledge: dict[str, Any] = Field(default_factory=dict)

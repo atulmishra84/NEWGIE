@@ -154,7 +154,6 @@ class LearningReport(BaseModel):
     llm_enhancement: dict[str, Any] | None = None
 
 
-
 class FeedbackRequest(BaseModel):
     event: FeedbackEvent
     persist: bool = True

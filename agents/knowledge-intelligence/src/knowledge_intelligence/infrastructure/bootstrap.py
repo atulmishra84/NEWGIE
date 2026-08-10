@@ -3,10 +3,19 @@
 from __future__ import annotations
 
 from knowledge_intelligence.application.di import Container, set_container
-from knowledge_intelligence.infrastructure.cache.redis_cache import RedisCacheStore, create_redis_client
-from knowledge_intelligence.infrastructure.embeddings.bedrock_embedder import BedrockEmbeddingService
-from knowledge_intelligence.infrastructure.embeddings.hash_embedder import HashEmbeddingService
-from knowledge_intelligence.infrastructure.messaging.kafka_publisher import KafkaEventPublisher
+from knowledge_intelligence.infrastructure.cache.redis_cache import (
+    RedisCacheStore,
+    create_redis_client,
+)
+from knowledge_intelligence.infrastructure.embeddings.bedrock_embedder import (
+    BedrockEmbeddingService,
+)
+from knowledge_intelligence.infrastructure.embeddings.hash_embedder import (
+    HashEmbeddingService,
+)
+from knowledge_intelligence.infrastructure.messaging.kafka_publisher import (
+    KafkaEventPublisher,
+)
 from knowledge_intelligence.infrastructure.persistence.memory_store import (
     InMemoryCache,
     InMemoryEdgeRepository,
@@ -16,18 +25,24 @@ from knowledge_intelligence.infrastructure.persistence.memory_store import (
     InMemoryVersionRepository,
     LoggingEventPublisher,
 )
-from knowledge_intelligence.infrastructure.persistence.neo4j_repo import Neo4jKnowledgeGraph
+from knowledge_intelligence.infrastructure.persistence.neo4j_repo import (
+    Neo4jKnowledgeGraph,
+)
 from knowledge_intelligence.infrastructure.persistence.postgres import (
     PostgresEdgeRepository,
     PostgresNodeRepository,
     PostgresVersionRepository,
     init_db,
 )
-from knowledge_intelligence.infrastructure.vector.qdrant_store import QdrantKnowledgeStore
+from knowledge_intelligence.infrastructure.vector.qdrant_store import (
+    QdrantKnowledgeStore,
+)
 from knowledge_intelligence.settings import Settings, get_settings
 
 
-async def build_container(*, memory: bool = False, settings: Settings | None = None) -> Container:
+async def build_container(
+    *, memory: bool = False, settings: Settings | None = None
+) -> Container:
     settings = settings or get_settings()
     if settings.bedrock_enabled and settings.gie_env != "test":
         embeddings = BedrockEmbeddingService(

@@ -161,7 +161,6 @@ class RiskReport(BaseModel):
     llm_enhancement: dict[str, Any] | None = None
 
 
-
 class RiskCalculateRequest(BaseModel):
     bundle: RiskInputBundle
     idempotency_key: str | None = None

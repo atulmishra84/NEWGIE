@@ -152,7 +152,6 @@ class PolicyPackage(BaseModel):
     llm_enhancement: dict[str, Any] | None = None
 
 
-
 class PolicyPackageGenerateRequest(BaseModel):
     bundle: PolicyGeneratorInputBundle
     persist: bool = True

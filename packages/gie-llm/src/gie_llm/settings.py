@@ -23,8 +23,8 @@ class BedrockSettingsMixin:
     bedrock_embedding_dim: int = 512
 
     # Voice: STT via Amazon Transcribe, TTS via Amazon Polly
-    bedrock_stt_enabled: bool = False   # requires S3 bucket
+    bedrock_stt_enabled: bool = False  # requires S3 bucket
     bedrock_tts_enabled: bool = True
-    aws_transcribe_bucket: str = ""     # S3 bucket for Transcribe jobs
+    aws_transcribe_bucket: str = ""  # S3 bucket for Transcribe jobs
     aws_polly_voice_id: str = "Joanna"
     aws_polly_engine: str = "neural"

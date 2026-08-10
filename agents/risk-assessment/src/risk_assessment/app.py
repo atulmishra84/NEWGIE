@@ -24,7 +24,9 @@ def _get_llm() -> BedrockLLMClient | None:
     if _llm is None:
         _llm = BedrockLLMClient(
             region=os.environ.get("AWS_REGION", "us-east-1"),
-            model_id=os.environ.get("BEDROCK_MODEL_ID", "anthropic.claude-3-haiku-20240307-v1:0"),
+            model_id=os.environ.get(
+                "BEDROCK_MODEL_ID", "anthropic.claude-3-haiku-20240307-v1:0"
+            ),
             aws_access_key_id=os.environ.get("AWS_ACCESS_KEY_ID", ""),
             aws_secret_access_key=os.environ.get("AWS_SECRET_ACCESS_KEY", ""),
             aws_session_token=os.environ.get("AWS_SESSION_TOKEN", ""),
@@ -87,11 +89,15 @@ async def assess(body: AssessRequest) -> RiskReport:
             ),
         )
         if enhancement.get("narrative"):
-            report = report.model_copy(update={"llm_enhancement": {
-                "narrative": enhancement["narrative"],
-                "key_insights": enhancement.get("key_insights", []),
-                "recommendations": enhancement.get("recommendations", []),
-                "model": llm._model_id,
-            }})
+            report = report.model_copy(
+                update={
+                    "llm_enhancement": {
+                        "narrative": enhancement["narrative"],
+                        "key_insights": enhancement.get("key_insights", []),
+                        "recommendations": enhancement.get("recommendations", []),
+                        "model": llm._model_id,
+                    }
+                }
+            )
 
     return report

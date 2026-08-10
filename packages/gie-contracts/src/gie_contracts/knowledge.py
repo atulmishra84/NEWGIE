@@ -147,7 +147,6 @@ class ExplainableRetrievalResult(BaseModel):
     llm_enhancement: dict[str, Any] | None = None
 
 
-
 class KnowledgeGraphSnapshot(BaseModel):
     snapshot_id: UUID = Field(default_factory=uuid4)
     version: str

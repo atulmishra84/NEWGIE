@@ -20,7 +20,9 @@ async def enhance_policy_report(
         deterministic_output={
             "selected_guardrails": (report_dict.get("selected_guardrails") or [])[:10],
             "policy_score": report_dict.get("policy_score"),
-            "deployment_artifacts": list((report_dict.get("deployment_artifacts") or {}).keys()),
+            "deployment_artifacts": list(
+                (report_dict.get("deployment_artifacts") or {}).keys()
+            ),
         },
         context_summary=(
             "Explain the selected guardrails, why they address identified risks, "

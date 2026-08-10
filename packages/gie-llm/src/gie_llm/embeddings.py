@@ -41,17 +41,20 @@ class BedrockEmbeddingClient:
     @cached_property
     def _boto_client(self) -> Any:
         import boto3
+
         return boto3.client("bedrock-runtime", region_name=self._region, **self._creds)
 
     def dimension(self) -> int:
         return self._dimensions
 
     def _embed_one_sync(self, text: str) -> list[float]:
-        body = json.dumps({
-            "inputText": text[:8192],
-            "dimensions": self._dimensions,
-            "normalize": True,
-        })
+        body = json.dumps(
+            {
+                "inputText": text[:8192],
+                "dimensions": self._dimensions,
+                "normalize": True,
+            }
+        )
         resp = self._boto_client.invoke_model(
             modelId=self._model_id,
             body=body,

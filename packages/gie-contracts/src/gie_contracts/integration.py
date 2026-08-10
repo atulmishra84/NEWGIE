@@ -233,4 +233,3 @@ class IntegrationHealthReport(BaseModel):
     reasoning_path: list[dict[str, Any]] = Field(default_factory=list)
     summary: str = ""
     llm_enhancement: dict[str, Any] | None = None
-

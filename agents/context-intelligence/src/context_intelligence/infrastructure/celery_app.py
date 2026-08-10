@@ -9,11 +9,20 @@ from celery import Celery
 from gie_observability.logging import configure_logging, get_logger
 
 from context_intelligence.domain.scan_executor import ScanExecutor
-from context_intelligence.infrastructure.messaging.kafka_publisher import KafkaEventPublisher
+from context_intelligence.infrastructure.messaging.kafka_publisher import (
+    KafkaEventPublisher,
+)
 from context_intelligence.infrastructure.messaging.webhooks import deliver_webhook
-from context_intelligence.infrastructure.persistence.database import init_db, session_scope
-from context_intelligence.infrastructure.persistence.neo4j_repo import Neo4jGraphRepository
-from context_intelligence.infrastructure.persistence.qdrant_store import QdrantEvidenceVectorStore
+from context_intelligence.infrastructure.persistence.database import (
+    init_db,
+    session_scope,
+)
+from context_intelligence.infrastructure.persistence.neo4j_repo import (
+    Neo4jGraphRepository,
+)
+from context_intelligence.infrastructure.persistence.qdrant_store import (
+    QdrantEvidenceVectorStore,
+)
 from context_intelligence.infrastructure.persistence.repositories import (
     SqlAlchemyContextRepository,
     SqlAlchemyOutboxWriter,
@@ -32,7 +41,11 @@ app = Celery(
     backend=settings.celery_backend,
 )
 app.conf.task_default_queue = "scans"
-app.conf.task_routes = {"context_intelligence.infrastructure.celery_app.execute_scan_task": {"queue": "scans"}}
+app.conf.task_routes = {
+    "context_intelligence.infrastructure.celery_app.execute_scan_task": {
+        "queue": "scans"
+    }
+}
 app.conf.task_serializer = "json"
 app.conf.result_serializer = "json"
 app.conf.accept_content = ["json"]
@@ -47,7 +60,9 @@ def _run_async(coro):
     return loop.run_until_complete(coro)
 
 
-async def _execute_scan_async(scan_id: UUID, tenant_id: str, correlation_id: str) -> dict:
+async def _execute_scan_async(
+    scan_id: UUID, tenant_id: str, correlation_id: str
+) -> dict:
     configure_logging(level=settings.log_level)
     await init_db()
     publisher = KafkaEventPublisher(settings)
@@ -57,7 +72,9 @@ async def _execute_scan_async(scan_id: UUID, tenant_id: str, correlation_id: str
         async with session_scope() as session:
             repo = SqlAlchemyContextRepository(session)
             outbox = SqlAlchemyOutboxWriter(session)
-            executor = ScanExecutor(repo, outbox, publisher, graph, vectors, producer_version=AGENT_VERSION)
+            executor = ScanExecutor(
+                repo, outbox, publisher, graph, vectors, producer_version=AGENT_VERSION
+            )
             model = await executor.execute(scan_id, tenant_id, correlation_id)
             if settings.bedrock_enabled:
                 llm = BedrockLLMClient(
@@ -71,12 +88,16 @@ async def _execute_scan_async(scan_id: UUID, tenant_id: str, correlation_id: str
                 )
                 model_dict = model.model_dump(mode="json")
                 enhanced = await enhance_context_model(model_dict, client=llm)
-                model = model.model_copy(update={"llm_enhancement": {
-                    "narrative": enhanced.get("llm_narrative", ""),
-                    "key_insights": enhanced.get("llm_key_insights", []),
-                    "recommendations": enhanced.get("llm_recommendations", []),
-                    "model": enhanced.get("llm_model", ""),
-                }})
+                model = model.model_copy(
+                    update={
+                        "llm_enhancement": {
+                            "narrative": enhanced.get("llm_narrative", ""),
+                            "key_insights": enhanced.get("llm_key_insights", []),
+                            "recommendations": enhanced.get("llm_recommendations", []),
+                            "model": enhanced.get("llm_model", ""),
+                        }
+                    }
+                )
             scan = await repo.get_scan(scan_id, tenant_id)
             if scan and scan.get("webhook_url"):
                 await deliver_webhook(
@@ -94,7 +115,11 @@ async def _execute_scan_async(scan_id: UUID, tenant_id: str, correlation_id: str
         await graph.close()
 
 
-@app.task(name="context_intelligence.infrastructure.celery_app.execute_scan_task", bind=True, max_retries=3)
+@app.task(
+    name="context_intelligence.infrastructure.celery_app.execute_scan_task",
+    bind=True,
+    max_retries=3,
+)
 def execute_scan_task(self, scan_id: str, tenant_id: str, correlation_id: str) -> dict:
     """Celery task entrypoint for scan execution."""
     logger.info("execute_scan_task_started", scan_id=scan_id, tenant_id=tenant_id)
@@ -102,4 +127,4 @@ def execute_scan_task(self, scan_id: str, tenant_id: str, correlation_id: str) -
         return _run_async(_execute_scan_async(UUID(scan_id), tenant_id, correlation_id))
     except Exception as exc:
         logger.exception("execute_scan_task_failed", scan_id=scan_id)
-        raise self.retry(exc=exc, countdown=min(60, 2 ** self.request.retries))
+        raise self.retry(exc=exc, countdown=min(60, 2**self.request.retries))

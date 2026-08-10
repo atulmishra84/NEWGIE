@@ -21,7 +21,11 @@ async def enhance_recommendation_report(
             "total_count": report_dict.get("total_count"),
             "critical_count": report_dict.get("critical_count"),
             "items": [
-                {k: v for k, v in item.items() if k in ("id", "title", "priority", "category", "effort")}
+                {
+                    k: v
+                    for k, v in item.items()
+                    if k in ("id", "title", "priority", "category", "effort")
+                }
                 for item in (report_dict.get("items") or [])[:8]
             ],
         },

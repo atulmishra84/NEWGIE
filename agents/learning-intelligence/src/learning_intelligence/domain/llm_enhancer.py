@@ -19,7 +19,9 @@ async def enhance_learning_report(
         agent_name="Learning Intelligence",
         deterministic_output={
             "drift_findings": (report_dict.get("drift_findings") or [])[:8],
-            "improved_recommendations": len(report_dict.get("improved_recommendations") or []),
+            "improved_recommendations": len(
+                report_dict.get("improved_recommendations") or []
+            ),
             "knowledge_changes": len(report_dict.get("knowledge_changes") or []),
         },
         context_summary=(

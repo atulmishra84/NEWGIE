@@ -43,6 +43,7 @@ class BedrockLLMClient:
     @cached_property
     def _boto_client(self) -> Any:
         import boto3  # lazy import so tests can mock easily
+
         return boto3.client("bedrock-runtime", region_name=self._region, **self._creds)
 
     def _invoke_sync(self, system: str, user: str) -> str:
@@ -92,7 +93,9 @@ class BedrockLLMClient:
             "actionable insights, and clear recommendations. Be concise and structured."
         )
         user_parts = ["## Deterministic Analysis Output\n```json"]
-        user_parts.append(json.dumps(deterministic_output, default=str, indent=2)[:6000])
+        user_parts.append(
+            json.dumps(deterministic_output, default=str, indent=2)[:6000]
+        )
         user_parts.append("```")
         if context_summary:
             user_parts.append(f"\n## Additional Context\n{context_summary[:1000]}")
@@ -112,8 +115,14 @@ class BedrockLLMClient:
                 return {
                     "narrative": str(parsed.get("narrative", "")),
                     "key_insights": [str(x) for x in parsed.get("key_insights", [])],
-                    "recommendations": [str(x) for x in parsed.get("recommendations", [])],
+                    "recommendations": [
+                        str(x) for x in parsed.get("recommendations", [])
+                    ],
                 }
         except Exception:
             pass
-        return {"narrative": raw[:500] if raw else "", "key_insights": [], "recommendations": []}
+        return {
+            "narrative": raw[:500] if raw else "",
+            "key_insights": [],
+            "recommendations": [],
+        }

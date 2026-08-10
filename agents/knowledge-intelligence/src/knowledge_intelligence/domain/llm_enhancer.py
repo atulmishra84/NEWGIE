@@ -21,7 +21,11 @@ async def enhance_query_result(
         deterministic_output={
             "query": original_query[:200],
             "hits": [
-                {k: v for k, v in h.items() if k in ("node_id", "title", "score", "domain")}
+                {
+                    k: v
+                    for k, v in h.items()
+                    if k in ("node_id", "title", "score", "domain")
+                }
                 for h in (result_dict.get("hits") or [])[:8]
             ],
             "explanation": result_dict.get("explanation"),

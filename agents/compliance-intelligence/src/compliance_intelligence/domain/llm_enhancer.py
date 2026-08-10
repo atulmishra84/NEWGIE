@@ -19,9 +19,13 @@ async def enhance_compliance_report(
         agent_name="Compliance Intelligence",
         deterministic_output={
             "overall_score": report_dict.get("overall_score"),
-            "applicable_frameworks": (report_dict.get("applicable_frameworks") or [])[:8],
+            "applicable_frameworks": (report_dict.get("applicable_frameworks") or [])[
+                :8
+            ],
             "gaps": (report_dict.get("gaps") or [])[:10],
-            "audit_package_summary": report_dict.get("audit_package", {}).get("summary"),
+            "audit_package_summary": report_dict.get("audit_package", {}).get(
+                "summary"
+            ),
         },
         context_summary=(
             "Summarize regulatory compliance posture, identify the highest-severity gaps, "

@@ -89,7 +89,9 @@ class ExplainabilityInputBundle(BaseModel):
     tenant_id: str
     decision_id: str | None = None
     agent_id: str | None = None
-    subject_type: str = "recommendation"  # recommendation | risk | compliance | policy | decision
+    subject_type: str = (
+        "recommendation"  # recommendation | risk | compliance | policy | decision
+    )
     subject: dict[str, Any] = Field(default_factory=dict)
     recommendations: list[dict[str, Any]] = Field(default_factory=list)
     risk: dict[str, Any] = Field(default_factory=dict)
@@ -124,7 +126,6 @@ class ExplanationReport(BaseModel):
     confidence: Confidence = Field(default_factory=Confidence)
     summary: str = ""
     llm_enhancement: dict[str, Any] | None = None
-
 
 
 class ExplainRequest(BaseModel):
