@@ -8,15 +8,22 @@ from uuid import UUID, uuid4
 from mcp.server.fastmcp import FastMCP
 from pydantic import TypeAdapter
 
-from gie_contracts.sources import ScanSource
 from context_intelligence.infrastructure.celery_app import execute_scan_task
-from context_intelligence.infrastructure.messaging.kafka_publisher import KafkaEventPublisher
-from context_intelligence.infrastructure.persistence.database import init_db, session_scope
+from context_intelligence.infrastructure.messaging.kafka_publisher import (
+    KafkaEventPublisher,
+)
+from context_intelligence.infrastructure.persistence.database import (
+    init_db,
+    session_scope,
+)
 from context_intelligence.infrastructure.persistence.repositories import (
     SqlAlchemyContextRepository,
     SqlAlchemyOutboxWriter,
 )
 from context_intelligence.domain.scan_executor import request_scan
+from context_intelligence.settings import get_settings
+
+mcp = FastMCP("context-intelligence")
 
 
 @mcp.tool()
@@ -56,7 +63,9 @@ async def start_scan(
 
 
 @mcp.tool()
-async def get_context_model(tenant_id: str, model_id: str, version: int | None = None) -> dict[str, Any]:
+async def get_context_model(
+    tenant_id: str, model_id: str, version: int | None = None
+) -> dict[str, Any]:
     """Fetch a context model by ID."""
     await init_db()
     async with session_scope() as session:
@@ -98,7 +107,9 @@ async def diff_models(
     await init_db()
     async with session_scope() as session:
         repo = SqlAlchemyContextRepository(session)
-        return await repo.diff_models(UUID(model_id), tenant_id, from_version, to_version)
+        return await repo.diff_models(
+            UUID(model_id), tenant_id, from_version, to_version
+        )
 
 
 def main() -> None:

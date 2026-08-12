@@ -8,13 +8,22 @@ from learning_intelligence.version import AGENT_VERSION
 
 logger = get_logger(__name__)
 
+
 class FeedbackHandler:
-    def __init__(self, *, feedback: FeedbackRepository, events: EventPublisher, settings: Settings):
+    def __init__(
+        self,
+        *,
+        feedback: FeedbackRepository,
+        events: EventPublisher,
+        settings: Settings,
+    ):
         self._feedback = feedback
         self._events = events
         self._settings = settings
 
-    async def handle(self, request: FeedbackRequest, *, actor: str, correlation_id: str) -> dict:
+    async def handle(
+        self, request: FeedbackRequest, *, actor: str, correlation_id: str
+    ) -> dict:
         event = request.event
         if request.persist:
             await self._feedback.save(event)
@@ -25,6 +34,15 @@ class FeedbackHandler:
             feedback_id=event.feedback_id,
             feedback_type=event.feedback_type.value,
         )
-        await self._events.publish(self._settings.kafka_topic_events, evt.model_dump(mode="json"), key=event.feedback_id)
-        logger.info("feedback_accepted", feedback_id=event.feedback_id, type=event.feedback_type.value, actor=actor)
+        await self._events.publish(
+            self._settings.kafka_topic_events,
+            evt.model_dump(mode="json"),
+            key=event.feedback_id,
+        )
+        logger.info(
+            "feedback_accepted",
+            feedback_id=event.feedback_id,
+            type=event.feedback_type.value,
+            actor=actor,
+        )
         return {"feedback": event, "accepted": True}

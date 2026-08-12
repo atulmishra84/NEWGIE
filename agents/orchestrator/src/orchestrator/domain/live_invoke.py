@@ -47,7 +47,9 @@ def mint_service_token(settings: Settings, tenant_id: str) -> str:
     return token if isinstance(token, str) else token.decode("utf-8")
 
 
-def headers_for(settings: Settings, tenant_id: str, *, with_bearer: bool = False) -> dict[str, str]:
+def headers_for(
+    settings: Settings, tenant_id: str, *, with_bearer: bool = False
+) -> dict[str, str]:
     h = {
         "Accept": "application/json",
         "Content-Type": "application/json",
@@ -98,7 +100,9 @@ def _source_from_payload(payload: dict[str, Any]) -> dict[str, Any]:
         source = {"type": "folder", "path": inp["path"]}
     if "type" not in source and source:
         source = {**source, "type": source.get("type") or "folder"}
-    return source if isinstance(source, dict) else {"type": "folder", "path": str(source)}
+    return (
+        source if isinstance(source, dict) else {"type": "folder", "path": str(source)}
+    )
 
 
 def _upstream(payload: dict[str, Any], key: str) -> dict[str, Any]:
@@ -109,7 +113,10 @@ def _upstream(payload: dict[str, Any], key: str) -> dict[str, Any]:
 
 # --- Normalizers (brief-friendly) -------------------------------------------------
 
-def normalize_context(data: dict[str, Any], *, source: dict[str, Any]) -> dict[str, Any]:
+
+def normalize_context(
+    data: dict[str, Any], *, source: dict[str, Any]
+) -> dict[str, Any]:
     model = data.get("context_model") or data
     ai = model.get("ai") if isinstance(model, dict) else {}
     assets = []
@@ -137,7 +144,12 @@ def normalize_context(data: dict[str, Any], *, source: dict[str, Any]) -> dict[s
     if not assets:
         path = source.get("path") or "/unknown"
         assets = [
-            {"id": "target", "type": "source", "name": str(path).rstrip("/").split("/")[-1], "runtime": source.get("type")},
+            {
+                "id": "target",
+                "type": "source",
+                "name": str(path).rstrip("/").split("/")[-1],
+                "runtime": source.get("type"),
+            },
         ]
     summary = data.get("summary")
     if not summary:
@@ -151,7 +163,12 @@ def normalize_context(data: dict[str, Any], *, source: dict[str, Any]) -> dict[s
         "context_model": model if isinstance(model, dict) else {},
         "scan_id": data.get("scan_id"),
         "model_id": data.get("model_id"),
-        "confidence": _conf(data.get("confidence") or (model.get("provenance") or {}).get("confidence") if isinstance(model, dict) else None, 0.8),
+        "confidence": _conf(
+            data.get("confidence") or (model.get("provenance") or {}).get("confidence")
+            if isinstance(model, dict)
+            else None,
+            0.8,
+        ),
         "source_path": source.get("path"),
     }
 
@@ -215,7 +232,13 @@ def normalize_risk(data: dict[str, Any]) -> dict[str, Any]:
     remediations = []
     for r in data.get("remediations") or []:
         if isinstance(r, dict):
-            remediations.append({"id": r.get("action_id"), "title": r.get("title"), "priority": r.get("priority")})
+            remediations.append(
+                {
+                    "id": r.get("action_id"),
+                    "title": r.get("title"),
+                    "priority": r.get("priority"),
+                }
+            )
     severity = str(data.get("severity") or "medium").lower()
     summary = (
         data.get("summary")
@@ -243,7 +266,10 @@ def normalize_compliance(data: dict[str, Any]) -> dict[str, Any]:
             continue
         gaps.append(
             {
-                "control": g.get("control_id") or g.get("control") or g.get("framework") or "control",
+                "control": g.get("control_id")
+                or g.get("control")
+                or g.get("framework")
+                or "control",
                 "status": g.get("status") or g.get("severity") or "gap",
                 "note": g.get("description") or g.get("title") or g.get("note") or "",
             }
@@ -260,7 +286,9 @@ def normalize_compliance(data: dict[str, Any]) -> dict[str, Any]:
     except (TypeError, ValueError):
         score_f = None
     summary = data.get("summary") or (
-        f"Compliance score {score_f:.0%}." if score_f is not None else "Compliance analysis completed."
+        f"Compliance score {score_f:.0%}."
+        if score_f is not None
+        else "Compliance analysis completed."
     )
     if gaps:
         summary += f" {len(gaps)} gap(s) identified."
@@ -285,7 +313,9 @@ def normalize_policy(data: dict[str, Any]) -> dict[str, Any]:
             {
                 "id": r.get("id") or uuid4().hex[:8],
                 "policy": r.get("title") or r.get("control") or "policy-recommendation",
-                "status": "warn" if str(r.get("priority", "")).lower() in {"low", "medium"} else "fail",
+                "status": "warn"
+                if str(r.get("priority", "")).lower() in {"low", "medium"}
+                else "fail",
             }
         )
     artifacts = data.get("artifacts") or []
@@ -322,7 +352,10 @@ def normalize_recommendation(data: dict[str, Any]) -> dict[str, Any]:
                 "business_impact": r.get("business_impact"),
             }
         )
-    summary = data.get("summary") or f"{len(actions)} prioritized recommendation(s) from live Recommendation Intelligence."
+    summary = (
+        data.get("summary")
+        or f"{len(actions)} prioritized recommendation(s) from live Recommendation Intelligence."
+    )
     return {
         "summary": summary,
         "actions": actions,
@@ -340,16 +373,32 @@ def normalize_generator(data: dict[str, Any]) -> dict[str, Any]:
         meta = p.get("metadata") or {}
         fmt = p.get("format") or "policy"
         name = meta.get("name") or f"{fmt}-policy"
-        items.append({"type": str(fmt), "name": f"{name}.{fmt}" if "." not in str(name) else str(name)})
+        items.append(
+            {
+                "type": str(fmt),
+                "name": f"{name}.{fmt}" if "." not in str(name) else str(name),
+            }
+        )
     for a in data.get("artifacts") or data.get("named_artifacts") or []:
         if isinstance(a, dict):
-            items.append({"type": a.get("type") or a.get("format") or "artifact", "name": a.get("name") or a.get("filename") or "artifact"})
+            items.append(
+                {
+                    "type": a.get("type") or a.get("format") or "artifact",
+                    "name": a.get("name") or a.get("filename") or "artifact",
+                }
+            )
         elif isinstance(a, str):
             items.append({"type": "artifact", "name": a})
-    summary = data.get("summary") or f"Generated policy package with {len(items)} artifact(s)."
+    summary = (
+        data.get("summary")
+        or f"Generated policy package with {len(items)} artifact(s)."
+    )
     return {
         "summary": summary,
-        "artifacts": {"id": str(data.get("package_id") or uuid4().hex[:10]), "items": items},
+        "artifacts": {
+            "id": str(data.get("package_id") or uuid4().hex[:10]),
+            "items": items,
+        },
         "policies": data.get("policies") or [],
         "package_id": data.get("package_id"),
         "confidence": _conf(data.get("confidence"), 0.8),
@@ -406,11 +455,16 @@ def normalize_explainability(data: dict[str, Any]) -> dict[str, Any]:
         if isinstance(step, dict):
             drivers.append(
                 {
-                    "factor": step.get("action") or step.get("agent") or f"step_{i+1}",
+                    "factor": step.get("action")
+                    or step.get("agent")
+                    or f"step_{i + 1}",
                     "weight": max(0.05, 0.4 / (i + 1)),
                 }
             )
-    summary = data.get("summary") or "Explainability narrative generated from live pipeline outputs."
+    summary = (
+        data.get("summary")
+        or "Explainability narrative generated from live pipeline outputs."
+    )
     return {
         "summary": summary,
         "narrative": narrative or summary,
@@ -423,7 +477,10 @@ def normalize_explainability(data: dict[str, Any]) -> dict[str, Any]:
 
 # --- Per-agent callers ------------------------------------------------------------
 
-async def invoke_context(client: httpx.AsyncClient, base: str, settings: Settings, payload: dict[str, Any]) -> dict[str, Any]:
+
+async def invoke_context(
+    client: httpx.AsyncClient, base: str, settings: Settings, payload: dict[str, Any]
+) -> dict[str, Any]:
     tenant = payload.get("tenant_id") or "default"
     source = _source_from_payload(payload)
     # Prefer a path the sandbox worker can read when demo path is used
@@ -442,7 +499,10 @@ async def invoke_context(client: httpx.AsyncClient, base: str, settings: Setting
     )
     scan_id = (created or {}).get("scan_id")
     if not scan_id:
-        return normalize_context({"summary": "Context scan could not be created.", **(created or {})}, source=source)
+        return normalize_context(
+            {"summary": "Context scan could not be created.", **(created or {})},
+            source=source,
+        )
 
     # Prefer the step HTTP timeout (context steps are 45s in the default graph).
     try:
@@ -452,7 +512,14 @@ async def invoke_context(client: httpx.AsyncClient, base: str, settings: Setting
     deadline = time.monotonic() + max(20.0, min(40.0, client_budget * 0.85))
     scan = created or {}
     while time.monotonic() < deadline:
-        scan = unwrap_data(await _request(client, "GET", f"{base}/v1/scans/{scan_id}", headers=hdrs)) or {}
+        scan = (
+            unwrap_data(
+                await _request(
+                    client, "GET", f"{base}/v1/scans/{scan_id}", headers=hdrs
+                )
+            )
+            or {}
+        )
         status = str(scan.get("status") or "")
         if status in {"completed", "failed", "cancelled"}:
             break
@@ -462,7 +529,11 @@ async def invoke_context(client: httpx.AsyncClient, base: str, settings: Setting
     model_id = scan.get("model_id")
     if model_id and str(scan.get("status")) == "completed":
         try:
-            model = unwrap_data(await _request(client, "GET", f"{base}/v1/context-models/{model_id}", headers=hdrs))
+            model = unwrap_data(
+                await _request(
+                    client, "GET", f"{base}/v1/context-models/{model_id}", headers=hdrs
+                )
+            )
         except Exception:  # noqa: BLE001
             model = None
 
@@ -481,7 +552,9 @@ async def invoke_context(client: httpx.AsyncClient, base: str, settings: Setting
     return normalize_context(packed, source=_source_from_payload(payload))
 
 
-async def invoke_knowledge(client: httpx.AsyncClient, base: str, settings: Settings, payload: dict[str, Any]) -> dict[str, Any]:
+async def invoke_knowledge(
+    client: httpx.AsyncClient, base: str, settings: Settings, payload: dict[str, Any]
+) -> dict[str, Any]:
     tenant = payload.get("tenant_id") or "default"
     source = _source_from_payload(payload)
     ctx = _upstream(payload, "context")
@@ -498,7 +571,13 @@ async def invoke_knowledge(client: httpx.AsyncClient, base: str, settings: Setti
     }
     try:
         data = unwrap_data(
-            await _request(client, "POST", f"{base}/v1/knowledge/query", headers=headers_for(settings, tenant), json_body=body)
+            await _request(
+                client,
+                "POST",
+                f"{base}/v1/knowledge/query",
+                headers=headers_for(settings, tenant),
+                json_body=body,
+            )
         )
         return normalize_knowledge(data or {})
     except Exception as exc:  # noqa: BLE001
@@ -513,7 +592,9 @@ async def invoke_knowledge(client: httpx.AsyncClient, base: str, settings: Setti
         }
 
 
-async def invoke_risk(client: httpx.AsyncClient, base: str, settings: Settings, payload: dict[str, Any]) -> dict[str, Any]:
+async def invoke_risk(
+    client: httpx.AsyncClient, base: str, settings: Settings, payload: dict[str, Any]
+) -> dict[str, Any]:
     tenant = payload.get("tenant_id") or "default"
     source = _source_from_payload(payload)
     ctx = _upstream(payload, "context")
@@ -522,19 +603,33 @@ async def invoke_risk(client: httpx.AsyncClient, base: str, settings: Settings, 
         "bundle": {
             "tenant_id": tenant,
             "agent_id": _agent_name(source, tenant),
-            "context_model": ctx.get("context_model") or {"source": source, "assets": ctx.get("assets") or []},
-            "knowledge_graph": {"frameworks": knowledge.get("frameworks") or [], "hits": knowledge.get("hits") or []},
-            "ai_models": [a for a in (ctx.get("assets") or []) if a.get("type") == "model"],
+            "context_model": ctx.get("context_model")
+            or {"source": source, "assets": ctx.get("assets") or []},
+            "knowledge_graph": {
+                "frameworks": knowledge.get("frameworks") or [],
+                "hits": knowledge.get("hits") or [],
+            },
+            "ai_models": [
+                a for a in (ctx.get("assets") or []) if a.get("type") == "model"
+            ],
         },
         "persist": False,
     }
     data = unwrap_data(
-        await _request(client, "POST", f"{base}/v1/risk/calculate", headers=headers_for(settings, tenant), json_body=body)
+        await _request(
+            client,
+            "POST",
+            f"{base}/v1/risk/calculate",
+            headers=headers_for(settings, tenant),
+            json_body=body,
+        )
     )
     return normalize_risk(data or {})
 
 
-async def invoke_compliance(client: httpx.AsyncClient, base: str, settings: Settings, payload: dict[str, Any]) -> dict[str, Any]:
+async def invoke_compliance(
+    client: httpx.AsyncClient, base: str, settings: Settings, payload: dict[str, Any]
+) -> dict[str, Any]:
     tenant = payload.get("tenant_id") or "default"
     source = _source_from_payload(payload)
     ctx = _upstream(payload, "context")
@@ -553,7 +648,15 @@ async def invoke_compliance(client: httpx.AsyncClient, base: str, settings: Sett
             declared.append("iso27001")
         elif "gdpr" in key:
             declared.append("gdpr")
-        elif key in {"hipaa", "gdpr", "pci_dss", "soc2", "iso27001", "nist_ai_rmf", "eu_ai_act"}:
+        elif key in {
+            "hipaa",
+            "gdpr",
+            "pci_dss",
+            "soc2",
+            "iso27001",
+            "nist_ai_rmf",
+            "eu_ai_act",
+        }:
             declared.append(key)
     if not declared:
         declared = ["nist_ai_rmf", "soc2"]
@@ -561,9 +664,11 @@ async def invoke_compliance(client: httpx.AsyncClient, base: str, settings: Sett
         "bundle": {
             "tenant_id": tenant,
             "application_id": _agent_name(source, tenant),
-            "context_model": ctx.get("context_model") or {"source": source, "assets": ctx.get("assets") or []},
+            "context_model": ctx.get("context_model")
+            or {"source": source, "assets": ctx.get("assets") or []},
             "risk_report": {
-                "overall_ai_risk_score": risk.get("overall_ai_risk_score") or ((risk.get("score") or 50) / 100.0),
+                "overall_ai_risk_score": risk.get("overall_ai_risk_score")
+                or ((risk.get("score") or 50) / 100.0),
                 "severity": risk.get("severity") or "medium",
                 "findings": risk.get("findings") or [],
             },
@@ -573,12 +678,20 @@ async def invoke_compliance(client: httpx.AsyncClient, base: str, settings: Sett
         "persist": False,
     }
     data = unwrap_data(
-        await _request(client, "POST", f"{base}/v1/compliance/analyze", headers=headers_for(settings, tenant), json_body=body)
+        await _request(
+            client,
+            "POST",
+            f"{base}/v1/compliance/analyze",
+            headers=headers_for(settings, tenant),
+            json_body=body,
+        )
     )
     return normalize_compliance(data or {})
 
 
-async def invoke_policy(client: httpx.AsyncClient, base: str, settings: Settings, payload: dict[str, Any]) -> dict[str, Any]:
+async def invoke_policy(
+    client: httpx.AsyncClient, base: str, settings: Settings, payload: dict[str, Any]
+) -> dict[str, Any]:
     tenant = payload.get("tenant_id") or "default"
     body = {
         "bundle": {
@@ -593,12 +706,20 @@ async def invoke_policy(client: httpx.AsyncClient, base: str, settings: Settings
         "dry_run": True,
     }
     data = unwrap_data(
-        await _request(client, "POST", f"{base}/v1/policies/generate", headers=headers_for(settings, tenant), json_body=body)
+        await _request(
+            client,
+            "POST",
+            f"{base}/v1/policies/generate",
+            headers=headers_for(settings, tenant),
+            json_body=body,
+        )
     )
     return normalize_policy(data or {})
 
 
-async def invoke_recommendation(client: httpx.AsyncClient, base: str, settings: Settings, payload: dict[str, Any]) -> dict[str, Any]:
+async def invoke_recommendation(
+    client: httpx.AsyncClient, base: str, settings: Settings, payload: dict[str, Any]
+) -> dict[str, Any]:
     tenant = payload.get("tenant_id") or "default"
     source = _source_from_payload(payload)
     risk = _upstream(payload, "risk")
@@ -608,7 +729,8 @@ async def invoke_recommendation(client: httpx.AsyncClient, base: str, settings: 
             "tenant_id": tenant,
             "agent_id": _agent_name(source, tenant),
             "risk": {
-                "overall_ai_risk_score": risk.get("score") or int(round(float(risk.get("overall_ai_risk_score") or 0.5) * 100)),
+                "overall_ai_risk_score": risk.get("score")
+                or int(round(float(risk.get("overall_ai_risk_score") or 0.5) * 100)),
                 "severity": risk.get("severity") or "medium",
                 "findings": risk.get("findings") or [],
             },
@@ -623,17 +745,28 @@ async def invoke_recommendation(client: httpx.AsyncClient, base: str, settings: 
         "persist": False,
     }
     data = unwrap_data(
-        await _request(client, "POST", f"{base}/v1/recommendations", headers=headers_for(settings, tenant), json_body=body)
+        await _request(
+            client,
+            "POST",
+            f"{base}/v1/recommendations",
+            headers=headers_for(settings, tenant),
+            json_body=body,
+        )
     )
     return normalize_recommendation(data or {})
 
 
-async def invoke_generator(client: httpx.AsyncClient, base: str, settings: Settings, payload: dict[str, Any]) -> dict[str, Any]:
+async def invoke_generator(
+    client: httpx.AsyncClient, base: str, settings: Settings, payload: dict[str, Any]
+) -> dict[str, Any]:
     tenant = payload.get("tenant_id") or "default"
     source = _source_from_payload(payload)
     rec = _upstream(payload, "recommendation")
     recommendations = rec.get("recommendations") or [
-        {"title": a.get("title"), "priority": a.get("priority_label") or f"P{a.get('priority', 2)}"}
+        {
+            "title": a.get("title"),
+            "priority": a.get("priority_label") or f"P{a.get('priority', 2)}",
+        }
         for a in (rec.get("actions") or [])
     ]
     body = {
@@ -648,12 +781,20 @@ async def invoke_generator(client: httpx.AsyncClient, base: str, settings: Setti
         "persist": False,
     }
     data = unwrap_data(
-        await _request(client, "POST", f"{base}/v1/policy/generate", headers=headers_for(settings, tenant), json_body=body)
+        await _request(
+            client,
+            "POST",
+            f"{base}/v1/policy/generate",
+            headers=headers_for(settings, tenant),
+            json_body=body,
+        )
     )
     return normalize_generator(data or {})
 
 
-async def invoke_validation(client: httpx.AsyncClient, base: str, settings: Settings, payload: dict[str, Any]) -> dict[str, Any]:
+async def invoke_validation(
+    client: httpx.AsyncClient, base: str, settings: Settings, payload: dict[str, Any]
+) -> dict[str, Any]:
     tenant = payload.get("tenant_id") or "default"
     gen = _upstream(payload, "generator")
     policies = []
@@ -674,7 +815,13 @@ async def invoke_validation(client: httpx.AsyncClient, base: str, settings: Sett
     if not policies:
         for item in (gen.get("artifacts") or {}).get("items") or []:
             if isinstance(item, dict):
-                policies.append({"name": item.get("name") or "artifact", "format": "yaml", "content": "apiVersion: gie.ai/v1\nkind: GuardrailsPolicy\n"})
+                policies.append(
+                    {
+                        "name": item.get("name") or "artifact",
+                        "format": "yaml",
+                        "content": "apiVersion: gie.ai/v1\nkind: GuardrailsPolicy\n",
+                    }
+                )
     body = {
         "bundle": {
             "tenant_id": tenant,
@@ -688,12 +835,20 @@ async def invoke_validation(client: httpx.AsyncClient, base: str, settings: Sett
         "run_simulation": False,
     }
     data = unwrap_data(
-        await _request(client, "POST", f"{base}/v1/validate", headers=headers_for(settings, tenant), json_body=body)
+        await _request(
+            client,
+            "POST",
+            f"{base}/v1/validate",
+            headers=headers_for(settings, tenant),
+            json_body=body,
+        )
     )
     return normalize_validation(data or {})
 
 
-async def invoke_explainability(client: httpx.AsyncClient, base: str, settings: Settings, payload: dict[str, Any]) -> dict[str, Any]:
+async def invoke_explainability(
+    client: httpx.AsyncClient, base: str, settings: Settings, payload: dict[str, Any]
+) -> dict[str, Any]:
     tenant = payload.get("tenant_id") or "default"
     risk = _upstream(payload, "risk")
     rec = _upstream(payload, "recommendation")
@@ -716,7 +871,13 @@ async def invoke_explainability(client: httpx.AsyncClient, base: str, settings: 
         "persist": False,
     }
     data = unwrap_data(
-        await _request(client, "POST", f"{base}/v1/explain", headers=headers_for(settings, tenant), json_body=body)
+        await _request(
+            client,
+            "POST",
+            f"{base}/v1/explain",
+            headers=headers_for(settings, tenant),
+            json_body=body,
+        )
     )
     return normalize_explainability(data or {})
 

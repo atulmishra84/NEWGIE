@@ -25,7 +25,7 @@ def test_openapi_defines_scan_and_model_paths(openapi_spec_path: Path):
 
 def test_openapi_context_model_schema_version(openapi_spec_path: Path):
     spec = yaml.safe_load(openapi_spec_path.read_text())
-    schema_version = (
-        spec["components"]["schemas"]["ContextModel"]["properties"]["schema_version"]
-    )
+    schema_version = spec["components"]["schemas"]["ContextModel"]["properties"][
+        "schema_version"
+    ]
     assert schema_version["const"] == "gie.context.v1"

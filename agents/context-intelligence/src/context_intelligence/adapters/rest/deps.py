@@ -22,8 +22,13 @@ from context_intelligence.infrastructure.cache.redis_cache import (
     RedisModelCache,
     create_redis_client,
 )
-from context_intelligence.infrastructure.messaging.kafka_publisher import KafkaEventPublisher
-from context_intelligence.infrastructure.persistence.database import get_session_factory, session_scope
+from context_intelligence.infrastructure.messaging.kafka_publisher import (
+    KafkaEventPublisher,
+)
+from context_intelligence.infrastructure.persistence.database import (
+    get_session_factory,
+    session_scope,
+)
 from context_intelligence.infrastructure.persistence.repositories import (
     SqlAlchemyContextRepository,
     SqlAlchemyOutboxWriter,
@@ -65,7 +70,9 @@ async def get_auth_context(
             repo = SqlAlchemyContextRepository(session)
             record = await repo.validate_api_key(x_api_key)
         if not record:
-            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid API key")
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid API key"
+            )
         return AuthContext(
             tenant_id=record["tenant_id"],
             subject=record["subject"],
@@ -75,30 +82,47 @@ async def get_auth_context(
     if authorization and authorization.lower().startswith("bearer "):
         token = authorization.split(" ", 1)[1].strip()
         try:
-            payload = jwt.decode(token, settings.jwt_secret, algorithms=[settings.jwt_algorithm])
+            payload = jwt.decode(
+                token, settings.jwt_secret, algorithms=[settings.jwt_algorithm]
+            )
         except jwt.PyJWTError as exc:
-            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token") from exc
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token"
+            ) from exc
         tenant_id = payload.get("tenant_id") or payload.get("tid")
         if not tenant_id:
-            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Missing tenant_id claim")
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Missing tenant_id claim",
+            )
         return AuthContext(
             tenant_id=str(tenant_id),
             subject=str(payload.get("sub", "unknown")),
             roles=_roles_from_jwt(payload),
         )
 
-    raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Authentication required")
+    raise HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED, detail="Authentication required"
+    )
 
 
-def require_read(auth: Annotated[AuthContext, Depends(get_auth_context)]) -> AuthContext:
+def require_read(
+    auth: Annotated[AuthContext, Depends(get_auth_context)],
+) -> AuthContext:
     if not auth.can_read():
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Read permission required")
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN, detail="Read permission required"
+        )
     return auth
 
 
-def require_write(auth: Annotated[AuthContext, Depends(get_auth_context)]) -> AuthContext:
+def require_write(
+    auth: Annotated[AuthContext, Depends(get_auth_context)],
+) -> AuthContext:
     if not auth.can_write():
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Write permission required")
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN, detail="Write permission required"
+        )
     return auth
 
 
@@ -115,11 +139,15 @@ async def get_db_session() -> AsyncIterator[AsyncSession]:
         await session.close()
 
 
-def get_repository(session: Annotated[AsyncSession, Depends(get_db_session)]) -> ContextRepository:
+def get_repository(
+    session: Annotated[AsyncSession, Depends(get_db_session)],
+) -> ContextRepository:
     return SqlAlchemyContextRepository(session)
 
 
-def get_outbox(session: Annotated[AsyncSession, Depends(get_db_session)]) -> OutboxWriter:
+def get_outbox(
+    session: Annotated[AsyncSession, Depends(get_db_session)],
+) -> OutboxWriter:
     return SqlAlchemyOutboxWriter(session)
 
 
@@ -137,7 +165,9 @@ def get_event_publisher() -> EventPublisher:
     return _publisher
 
 
-def get_idempotency_cache(settings: Settings = Depends(get_settings)) -> IdempotencyCache:
+def get_idempotency_cache(
+    settings: Settings = Depends(get_settings),
+) -> IdempotencyCache:
     global _redis, _idempotency
     if _idempotency is None:
         _redis = create_redis_client(settings)

@@ -3,7 +3,12 @@ import copy
 from typing import Any
 from uuid import UUID
 from gie_contracts.policy import PolicyDecision
-from policy_intelligence.domain.ports import CacheStore, DecisionRepository, EventPublisher
+from policy_intelligence.domain.ports import (
+    CacheStore,
+    DecisionRepository,
+    EventPublisher,
+)
+
 
 class InMemoryDecisionRepository(DecisionRepository):
     def __init__(self) -> None:
@@ -15,10 +20,13 @@ class InMemoryDecisionRepository(DecisionRepository):
     async def get(self, decision_id: UUID) -> PolicyDecision | None:
         return self._items.get(decision_id)
 
-    async def list(self, tenant_id: str, limit: int = 50, offset: int = 0) -> list[PolicyDecision]:
+    async def list(
+        self, tenant_id: str, limit: int = 50, offset: int = 0
+    ) -> list[PolicyDecision]:
         items = [d for d in self._items.values() if d.tenant_id == tenant_id]
         items.sort(key=lambda d: d.created_at, reverse=True)
-        return items[offset: offset + limit]
+        return items[offset : offset + limit]
+
 
 class InMemoryCache(CacheStore):
     def __init__(self) -> None:
@@ -30,9 +38,12 @@ class InMemoryCache(CacheStore):
     async def set_json(self, key: str, value: dict[str, Any], ttl: int) -> None:
         self._data[key] = copy.deepcopy(value)
 
+
 class LoggingEventPublisher(EventPublisher):
     def __init__(self) -> None:
         self.events: list[dict[str, Any]] = []
 
-    async def publish(self, topic: str, event: dict[str, Any], key: str | None = None) -> None:
+    async def publish(
+        self, topic: str, event: dict[str, Any], key: str | None = None
+    ) -> None:
         self.events.append({"topic": topic, "key": key, "event": event})

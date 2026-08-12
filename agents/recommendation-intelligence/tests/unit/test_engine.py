@@ -1,6 +1,7 @@
 from gie_contracts.recommendation import Audience, Priority, RecommendationCategory
 from recommendation_intelligence.domain.engine import generate_recommendations
 
+
 def test_generates_prioritized_recommendations(sample_bundle):
     report = generate_recommendations(sample_bundle)
     assert report.recommendations

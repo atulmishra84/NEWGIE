@@ -33,7 +33,9 @@ class Settings(BaseSettings):
     require_auth: bool = True
 
     embedding_dim: int = 384
-    embedding_model: str = "hash-v1"  # deterministic local embedder; swap for vendor models
+    embedding_model: str = (
+        "hash-v1"  # deterministic local embedder; swap for vendor models
+    )
     default_top_k: int = 10
     cache_ttl_seconds: int = 300
     rate_limit_per_minute: int = 120
@@ -47,6 +49,18 @@ class Settings(BaseSettings):
     seed_data_path: str = ""  # resolved relative to package if empty
 
     cors_origins: list[str] = Field(default_factory=lambda: ["*"])
+
+    # AWS Bedrock LLM
+    bedrock_enabled: bool = True
+    bedrock_model_id: str = "anthropic.claude-3-haiku-20240307-v1:0"
+    bedrock_max_tokens: int = 1024
+    bedrock_temperature: float = 0.3
+    bedrock_embedding_model_id: str = "amazon.titan-embed-text-v2:0"
+    bedrock_embedding_dim: int = 512
+    aws_region: str = "us-east-1"
+    aws_access_key_id: str = ""
+    aws_secret_access_key: str = ""
+    aws_session_token: str = ""
 
 
 @lru_cache

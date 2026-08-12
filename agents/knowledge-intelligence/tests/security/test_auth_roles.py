@@ -1,4 +1,7 @@
-from knowledge_intelligence.domain.rbac import KnowledgePermission, has_knowledge_permission
+from knowledge_intelligence.domain.rbac import (
+    KnowledgePermission,
+    has_knowledge_permission,
+)
 
 
 def test_admin_has_all():
@@ -8,4 +11,6 @@ def test_admin_has_all():
 
 def test_analyst_readonly():
     assert has_knowledge_permission({"analyst"}, KnowledgePermission.KNOWLEDGE_QUERY)
-    assert not has_knowledge_permission({"analyst"}, KnowledgePermission.KNOWLEDGE_REINDEX)
+    assert not has_knowledge_permission(
+        {"analyst"}, KnowledgePermission.KNOWLEDGE_REINDEX
+    )

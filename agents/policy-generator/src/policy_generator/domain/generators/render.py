@@ -76,7 +76,9 @@ def _risk_cats(recs: list[dict[str, Any]], risk: dict[str, Any]) -> list[str]:
     return sorted(set(cats))
 
 
-def _comp_frameworks(compliance: dict[str, Any], recs: list[dict[str, Any]]) -> list[str]:
+def _comp_frameworks(
+    compliance: dict[str, Any], recs: list[dict[str, Any]]
+) -> list[str]:
     fws: list[str] = []
     for a in compliance.get("applicable_frameworks") or []:
         if isinstance(a, dict):
@@ -89,12 +91,17 @@ def _comp_frameworks(compliance: dict[str, Any], recs: list[dict[str, Any]]) -> 
     for r in recs:
         for ref in r.get("knowledge_refs") or []:
             low = str(ref).lower()
-            if any(k in low for k in ("hipaa", "gdpr", "soc2", "euai", "nist", "pci", "iso")):
+            if any(
+                k in low
+                for k in ("hipaa", "gdpr", "soc2", "euai", "nist", "pci", "iso")
+            ):
                 fws.append(str(ref))
     return sorted({x for x in fws if x})[:20]
 
 
-def _base_body(agent_id: str, version: str, controls: list[str], recs: list[dict[str, Any]]) -> dict[str, Any]:
+def _base_body(
+    agent_id: str, version: str, controls: list[str], recs: list[dict[str, Any]]
+) -> dict[str, Any]:
     return {
         "agent_id": agent_id,
         "version": version,
@@ -112,13 +119,17 @@ def _base_body(agent_id: str, version: str, controls: list[str], recs: list[dict
         "rules": {
             "block_prompt_injection": any("prompt" in str(r).lower() for r in recs)
             or "gr-prompt-firewall" in controls,
-            "redact_pii": any(x in controls for x in ("gr-pii-presidio", "gr-output-filter"))
+            "redact_pii": any(
+                x in controls for x in ("gr-pii-presidio", "gr-output-filter")
+            )
             or any("privacy" in str(r.get("category", "")).lower() for r in recs),
-            "tool_allowlist": any("tool" in str(r).lower() for r in recs) or "gr-tool-allowlist" in controls,
+            "tool_allowlist": any("tool" in str(r).lower() for r in recs)
+            or "gr-tool-allowlist" in controls,
             "require_human_approval": any(
                 "human" in str(r).lower() or "autonomy" in str(r).lower() for r in recs
             ),
-            "rate_limit": "gr-rate-limit" in controls or any("rate" in str(r).lower() for r in recs),
+            "rate_limit": "gr-rate-limit" in controls
+            or any("rate" in str(r).lower() for r in recs),
             "identity_rbac": "gr-identity-rbac" in controls
             or any("identity" in str(r.get("category", "")).lower() for r in recs),
         },
@@ -133,7 +144,9 @@ def _dump_yaml(body: dict[str, Any]) -> str:
     return yaml.safe_dump(body, sort_keys=False)
 
 
-def _vendor_body(fmt: PolicyFormat, body: dict[str, Any], agent_id: str) -> dict[str, Any]:
+def _vendor_body(
+    fmt: PolicyFormat, body: dict[str, Any], agent_id: str
+) -> dict[str, Any]:
     rules = body.get("rules") or {}
     controls = body.get("controls") or []
     if fmt == PolicyFormat.OPENAI_GUARDRAILS:
@@ -144,11 +157,15 @@ def _vendor_body(fmt: PolicyFormat, body: dict[str, Any], agent_id: str) -> dict
             "steps": [
                 {
                     "type": "input_filters",
-                    "filters": ["jailbreak", "pii"] if rules.get("block_prompt_injection") else ["pii"],
+                    "filters": ["jailbreak", "pii"]
+                    if rules.get("block_prompt_injection")
+                    else ["pii"],
                 },
                 {
                     "type": "output_filters",
-                    "filters": ["pii", "toxic"] if rules.get("redact_pii") else ["toxic"],
+                    "filters": ["pii", "toxic"]
+                    if rules.get("redact_pii")
+                    else ["toxic"],
                 },
                 {
                     "type": "tool_restrictions",
@@ -189,13 +206,19 @@ def _vendor_body(fmt: PolicyFormat, body: dict[str, Any], agent_id: str) -> dict
         return {
             "framework": "autogen",
             "agent_constraints": rules,
-            "human_input_mode": "ALWAYS" if rules.get("require_human_approval") else "NEVER",
+            "human_input_mode": "ALWAYS"
+            if rules.get("require_human_approval")
+            else "NEVER",
             "controls": controls,
         }
     if fmt == PolicyFormat.SEMANTIC_KERNEL:
         return {
             "framework": "semantic_kernel",
-            "filters": ["PromptInjectionFilter", "PiiRedactionFilter", "FunctionInvocationFilter"],
+            "filters": [
+                "PromptInjectionFilter",
+                "PiiRedactionFilter",
+                "FunctionInvocationFilter",
+            ],
             "settings": rules,
             "controls": controls,
         }
@@ -219,7 +242,10 @@ def _vendor_body(fmt: PolicyFormat, body: dict[str, Any], agent_id: str) -> dict
         return {
             "type": "identity_policy",
             "require_mfa": True,
-            "rbac": {"roles": ["viewer", "operator", "admin"], "tool_scopes": "least_privilege"},
+            "rbac": {
+                "roles": ["viewer", "operator", "admin"],
+                "tool_scopes": "least_privilege",
+            },
             "controls": controls,
         }
     if fmt == PolicyFormat.RUNTIME:
@@ -234,7 +260,14 @@ def _vendor_body(fmt: PolicyFormat, body: dict[str, Any], agent_id: str) -> dict
         return {
             "type": "dlp_policy",
             "engine": "presidio",
-            "entities": ["PERSON", "EMAIL_ADDRESS", "PHONE_NUMBER", "US_SSN", "CREDIT_CARD", "MEDICAL"],
+            "entities": [
+                "PERSON",
+                "EMAIL_ADDRESS",
+                "PHONE_NUMBER",
+                "US_SSN",
+                "CREDIT_CARD",
+                "MEDICAL",
+            ],
             "action": "redact",
             "controls": controls,
         }
@@ -255,7 +288,9 @@ def _vendor_body(fmt: PolicyFormat, body: dict[str, Any], agent_id: str) -> dict
     return body
 
 
-def _render_content(fmt: PolicyFormat, body: dict[str, Any], agent_id: str) -> tuple[dict[str, Any], str]:
+def _render_content(
+    fmt: PolicyFormat, body: dict[str, Any], agent_id: str
+) -> tuple[dict[str, Any], str]:
     controls = body.get("controls") or []
     rules = body.get("rules") or {}
 
@@ -349,10 +384,26 @@ output "policy_path" {{
                 "podSelector": {"matchLabels": {"gie.agent_id": agent_id}},
                 "policyTypes": ["Ingress", "Egress"],
                 "ingress": [
-                    {"from": [{"namespaceSelector": {"matchLabels": {"gie.trust": "internal"}}}]}
+                    {
+                        "from": [
+                            {
+                                "namespaceSelector": {
+                                    "matchLabels": {"gie.trust": "internal"}
+                                }
+                            }
+                        ]
+                    }
                 ],
                 "egress": [
-                    {"to": [{"namespaceSelector": {"matchLabels": {"gie.egress": "allowed"}}}]}
+                    {
+                        "to": [
+                            {
+                                "namespaceSelector": {
+                                    "matchLabels": {"gie.egress": "allowed"}
+                                }
+                            }
+                        ]
+                    }
                 ],
             },
         }
@@ -438,9 +489,18 @@ def render_policy(
         ),
         risk_mapping=RiskMapping(
             categories=_risk_cats(recs, risk),
-            severities=sorted({str(r.get("priority")) for r in recs if r.get("priority")}),
-            recommendation_ids=[str(r.get("recommendation_id")) for r in recs if r.get("recommendation_id")],
-            risk_reduction=max((float(r.get("risk_reduction") or 0) for r in recs), default=0.0) or None,
+            severities=sorted(
+                {str(r.get("priority")) for r in recs if r.get("priority")}
+            ),
+            recommendation_ids=[
+                str(r.get("recommendation_id"))
+                for r in recs
+                if r.get("recommendation_id")
+            ],
+            risk_reduction=max(
+                (float(r.get("risk_reduction") or 0) for r in recs), default=0.0
+            )
+            or None,
         ),
         validation=ValidationResult(status=ValidationStatus.PENDING),
         rollback=RollbackPlan(

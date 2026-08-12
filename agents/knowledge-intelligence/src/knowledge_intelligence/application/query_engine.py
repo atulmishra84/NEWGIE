@@ -8,7 +8,6 @@ from typing import Any
 from gie_contracts.knowledge import (
     Confidence,
     ExplainableRetrievalResult,
-    KnowledgeNode,
     KnowledgeQueryRequest,
     RetrievalHit,
 )
@@ -21,6 +20,8 @@ from knowledge_intelligence.domain.ports import (
     VectorStore,
     CacheStore,
 )
+from gie_llm import BedrockLLMClient
+from knowledge_intelligence.domain.llm_enhancer import enhance_query_result
 from knowledge_intelligence.domain.reasoning import build_reasoning_path
 from knowledge_intelligence.settings import Settings
 
@@ -44,6 +45,19 @@ class HybridQueryEngine:
         self._graph = graph
         self._cache = cache
         self._settings = settings
+        self._llm = (
+            BedrockLLMClient(
+                region=settings.aws_region,
+                model_id=settings.bedrock_model_id,
+                max_tokens=settings.bedrock_max_tokens,
+                temperature=settings.bedrock_temperature,
+                aws_access_key_id=settings.aws_access_key_id,
+                aws_secret_access_key=settings.aws_secret_access_key,
+                aws_session_token=settings.aws_session_token,
+            )
+            if settings.bedrock_enabled
+            else None
+        )
 
     async def query(
         self,
@@ -68,7 +82,9 @@ class HybridQueryEngine:
         if request.version:
             filters["version"] = request.version
 
-        semantic_raw = await self._vectors.search(query_vec, top_k=request.top_k * 2, filters=filters or None)
+        semantic_raw = await self._vectors.search(
+            query_vec, top_k=request.top_k * 2, filters=filters or None
+        )
         semantic_hits: list[RetrievalHit] = []
         for i, item in enumerate(semantic_raw):
             node = await self._nodes.get_node(item["id"], version=request.version)
@@ -91,11 +107,17 @@ class HybridQueryEngine:
 
         graph_paths: list[list[str]] = []
         expanded_ids: list[str] = []
-        if request.include_graph and self._settings.flag_enable_graph_expansion and merged:
+        if (
+            request.include_graph
+            and self._settings.flag_enable_graph_expansion
+            and merged
+        ):
             seed_ids = [h.node.node_id for h in merged[:3]]
             expanded_ids, _ = await self._graph.expand(seed_ids, hops=1)
             if len(merged) >= 2:
-                paths = await self._graph.shortest_paths(merged[0].node.node_id, merged[1].node.node_id)
+                paths = await self._graph.shortest_paths(
+                    merged[0].node.node_id, merged[1].node.node_id
+                )
                 graph_paths = paths
 
         reasoning = build_reasoning_path(
@@ -109,13 +131,32 @@ class HybridQueryEngine:
             query=request.query,
             hits=merged,
             reasoning_path=reasoning,
-            confidence=Confidence(score=min(1.0, top_conf), rationale="hybrid top-hit score"),
+            confidence=Confidence(
+                score=min(1.0, top_conf), rationale="hybrid top-hit score"
+            ),
             graph_paths=graph_paths,
             version_pin=request.version,
             took_ms=(time.perf_counter() - started) * 1000,
             agent_version=self._settings.agent_version,
         )
-        await self._cache.set_json(cache_key, result.model_dump(mode="json"), self._settings.cache_ttl_seconds)
+        if self._llm:
+            result_dict = result.model_dump(mode="json")
+            enhanced = await enhance_query_result(
+                result_dict, client=self._llm, original_query=request.query
+            )
+            result = result.model_copy(
+                update={
+                    "llm_enhancement": {
+                        "narrative": enhanced.get("llm_narrative", ""),
+                        "key_insights": enhanced.get("llm_key_insights", []),
+                        "recommendations": enhanced.get("llm_recommendations", []),
+                        "model": enhanced.get("llm_model", ""),
+                    }
+                }
+            )
+        await self._cache.set_json(
+            cache_key, result.model_dump(mode="json"), self._settings.cache_ttl_seconds
+        )
         logger.info(
             "knowledge_query_completed",
             tenant_id=tenant_id,
@@ -125,7 +166,9 @@ class HybridQueryEngine:
         )
         return result
 
-    async def _keyword_search(self, request: KnowledgeQueryRequest) -> list[RetrievalHit]:
+    async def _keyword_search(
+        self, request: KnowledgeQueryRequest
+    ) -> list[RetrievalHit]:
         tokens = [t.lower() for t in request.query.split() if len(t) > 2]
         if not tokens:
             return []
@@ -136,7 +179,9 @@ class HybridQueryEngine:
         )
         scored: list[RetrievalHit] = []
         for node in candidates:
-            hay = f"{node.title} {node.summary} {node.body} {' '.join(node.tags)}".lower()
+            hay = (
+                f"{node.title} {node.summary} {node.body} {' '.join(node.tags)}".lower()
+            )
             hits = sum(1 for t in tokens if t in hay)
             if hits == 0:
                 continue

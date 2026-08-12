@@ -29,7 +29,7 @@ jobs:
       - name: Install lint tools
         run: |
           pip install ruff mypy
-          pip install ./packages/gie-contracts ./packages/gie-observability ./packages/gie-security
+          pip install ./packages/gie-contracts ./packages/gie-observability ./packages/gie-security ./packages/gie-llm
           pip install ./agents/context-intelligence ./agents/knowledge-intelligence ./agents/policy-intelligence ./agents/risk-intelligence ./agents/compliance-intelligence ./agents/recommendation-intelligence ./agents/policy-generator ./agents/explainability-intelligence ./agents/validation-intelligence ./agents/learning-intelligence ./agents/integration-intelligence ./agents/orchestrator
 
       - name: Ruff check
@@ -49,7 +49,7 @@ jobs:
           python-version: ${{ env.PYTHON_VERSION }}
       - name: Install
         run: |
-          pip install ./packages/gie-contracts ./packages/gie-observability ./packages/gie-security
+          pip install ./packages/gie-contracts ./packages/gie-observability ./packages/gie-security ./packages/gie-llm
           pip install "./agents/context-intelligence[dev]"
       - name: Pytest
         working-directory: agents/context-intelligence
@@ -66,7 +66,7 @@ jobs:
           python-version: ${{ env.PYTHON_VERSION }}
       - name: Install
         run: |
-          pip install ./packages/gie-contracts ./packages/gie-observability ./packages/gie-security
+          pip install ./packages/gie-contracts ./packages/gie-observability ./packages/gie-security ./packages/gie-llm
           pip install "./agents/knowledge-intelligence[dev]"
       - name: Pytest
         working-directory: agents/knowledge-intelligence
@@ -83,7 +83,7 @@ jobs:
           python-version: ${{ env.PYTHON_VERSION }}
       - name: Install
         run: |
-          pip install ./packages/gie-contracts ./packages/gie-observability ./packages/gie-security
+          pip install ./packages/gie-contracts ./packages/gie-observability ./packages/gie-security ./packages/gie-llm
           pip install "./agents/policy-intelligence[dev]"
       - name: Pytest
         working-directory: agents/policy-intelligence
@@ -100,7 +100,7 @@ jobs:
           python-version: ${{ env.PYTHON_VERSION }}
       - name: Install
         run: |
-          pip install ./packages/gie-contracts ./packages/gie-observability ./packages/gie-security
+          pip install ./packages/gie-contracts ./packages/gie-observability ./packages/gie-security ./packages/gie-llm
           pip install "./agents/risk-intelligence[dev]"
       - name: Pytest
         working-directory: agents/risk-intelligence
@@ -117,7 +117,7 @@ jobs:
           python-version: ${{ env.PYTHON_VERSION }}
       - name: Install
         run: |
-          pip install ./packages/gie-contracts ./packages/gie-observability ./packages/gie-security
+          pip install ./packages/gie-contracts ./packages/gie-observability ./packages/gie-security ./packages/gie-llm
           pip install "./agents/compliance-intelligence[dev]"
       - name: Pytest
         working-directory: agents/compliance-intelligence
@@ -134,7 +134,7 @@ jobs:
           python-version: ${{ env.PYTHON_VERSION }}
       - name: Install
         run: |
-          pip install ./packages/gie-contracts ./packages/gie-observability ./packages/gie-security
+          pip install ./packages/gie-contracts ./packages/gie-observability ./packages/gie-security ./packages/gie-llm
           pip install "./agents/recommendation-intelligence[dev]"
       - name: Pytest
         working-directory: agents/recommendation-intelligence
@@ -151,7 +151,7 @@ jobs:
           python-version: ${{ env.PYTHON_VERSION }}
       - name: Install
         run: |
-          pip install ./packages/gie-contracts ./packages/gie-observability ./packages/gie-security
+          pip install ./packages/gie-contracts ./packages/gie-observability ./packages/gie-security ./packages/gie-llm
           pip install "./agents/policy-generator[dev]"
       - name: Pytest
         working-directory: agents/policy-generator
@@ -168,7 +168,7 @@ jobs:
           python-version: ${{ env.PYTHON_VERSION }}
       - name: Install
         run: |
-          pip install ./packages/gie-contracts ./packages/gie-observability ./packages/gie-security
+          pip install ./packages/gie-contracts ./packages/gie-observability ./packages/gie-security ./packages/gie-llm
           pip install "./agents/explainability-intelligence[dev]"
       - name: Pytest
         working-directory: agents/explainability-intelligence
@@ -185,7 +185,7 @@ jobs:
           python-version: ${{ env.PYTHON_VERSION }}
       - name: Install
         run: |
-          pip install ./packages/gie-contracts ./packages/gie-observability ./packages/gie-security
+          pip install ./packages/gie-contracts ./packages/gie-observability ./packages/gie-security ./packages/gie-llm
           pip install "./agents/validation-intelligence[dev]"
       - name: Pytest
         working-directory: agents/validation-intelligence
@@ -202,7 +202,7 @@ jobs:
           python-version: ${{ env.PYTHON_VERSION }}
       - name: Install
         run: |
-          pip install ./packages/gie-contracts ./packages/gie-observability ./packages/gie-security
+          pip install ./packages/gie-contracts ./packages/gie-observability ./packages/gie-security ./packages/gie-llm
           pip install "./agents/learning-intelligence[dev]"
       - name: Pytest
         working-directory: agents/learning-intelligence
@@ -219,7 +219,7 @@ jobs:
           python-version: ${{ env.PYTHON_VERSION }}
       - name: Install
         run: |
-          pip install ./packages/gie-contracts ./packages/gie-observability ./packages/gie-security
+          pip install ./packages/gie-contracts ./packages/gie-observability ./packages/gie-security ./packages/gie-llm
           pip install "./agents/integration-intelligence[dev]"
       - name: Pytest
         working-directory: agents/integration-intelligence
@@ -236,7 +236,7 @@ jobs:
           python-version: ${{ env.PYTHON_VERSION }}
       - name: Install
         run: |
-          pip install ./packages/gie-contracts ./packages/gie-observability ./packages/gie-security
+          pip install ./packages/gie-contracts ./packages/gie-observability ./packages/gie-security ./packages/gie-llm
           pip install "./agents/orchestrator[dev]"
       - name: Pytest
         working-directory: agents/orchestrator

@@ -12,7 +12,9 @@ from starlette.responses import Response
 
 from knowledge_intelligence.adapters.rest.errors import register_exception_handlers
 from knowledge_intelligence.adapters.rest.middleware import ObservabilityMiddleware
-from knowledge_intelligence.adapters.rest.routes_knowledge import router as knowledge_router
+from knowledge_intelligence.adapters.rest.routes_knowledge import (
+    router as knowledge_router,
+)
 from knowledge_intelligence.adapters.webhooks.inbound import router as webhook_router
 from knowledge_intelligence.infrastructure.bootstrap import build_container
 from knowledge_intelligence.seed.loader import seed_builtin_knowledge

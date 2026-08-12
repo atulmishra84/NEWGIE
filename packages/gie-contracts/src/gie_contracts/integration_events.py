@@ -4,8 +4,10 @@ from typing import Literal
 from uuid import UUID, uuid4
 from pydantic import BaseModel, Field
 
+
 def utcnow() -> datetime:
     return datetime.now(timezone.utc)
+
 
 class IntegrationEventEnvelope(BaseModel):
     event_id: UUID = Field(default_factory=uuid4)
@@ -17,11 +19,13 @@ class IntegrationEventEnvelope(BaseModel):
     producer: str = "integration-intelligence"
     producer_version: str
 
+
 class IntegrationConnected(IntegrationEventEnvelope):
     event_type: Literal["integration.connected"] = "integration.connected"
     connection_id: UUID
     platform_id: str
     auth_method: str
+
 
 class IntegrationSyncCompleted(IntegrationEventEnvelope):
     event_type: Literal["integration.sync.completed"] = "integration.sync.completed"
@@ -29,11 +33,13 @@ class IntegrationSyncCompleted(IntegrationEventEnvelope):
     connection_id: UUID
     status: str
 
+
 class WebhookReceived(IntegrationEventEnvelope):
     event_type: Literal["integration.webhook.received"] = "integration.webhook.received"
     event_id_ref: UUID
     platform_id: str
     event_type_name: str
+
 
 class CircuitBreakerOpened(IntegrationEventEnvelope):
     event_type: Literal["integration.circuit.opened"] = "integration.circuit.opened"

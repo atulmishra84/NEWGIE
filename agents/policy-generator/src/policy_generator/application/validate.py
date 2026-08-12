@@ -16,13 +16,22 @@ from policy_generator.version import AGENT_VERSION
 
 logger = get_logger(__name__)
 
+
 class ValidatePolicyHandler:
-    def __init__(self, *, packages: PolicyPackageRepository, events: EventPublisher, settings: Settings):
+    def __init__(
+        self,
+        *,
+        packages: PolicyPackageRepository,
+        events: EventPublisher,
+        settings: Settings,
+    ):
         self._packages = packages
         self._events = events
         self._settings = settings
 
-    async def handle(self, request: PolicyPackageValidateRequest, *, actor: str, correlation_id: str) -> dict:
+    async def handle(
+        self, request: PolicyPackageValidateRequest, *, actor: str, correlation_id: str
+    ) -> dict:
         package_id = request.package_id
         if request.package_id:
             pkg = await self._packages.get(request.package_id)
@@ -37,10 +46,18 @@ class ValidatePolicyHandler:
                 errors.extend(vr.errors)
                 warnings.extend(vr.warnings)
                 checks.append({"filename": p.filename, "status": vr.status.value})
-            status = ValidationStatus.INVALID if errors else (
-                ValidationStatus.WARNING if warnings else ValidationStatus.VALID
+            status = (
+                ValidationStatus.INVALID
+                if errors
+                else (ValidationStatus.WARNING if warnings else ValidationStatus.VALID)
             )
-            result = ValidationResult(status=status, checked_at=utcnow(), errors=errors, warnings=warnings, checks=checks)
+            result = ValidationResult(
+                status=status,
+                checked_at=utcnow(),
+                errors=errors,
+                warnings=warnings,
+                checks=checks,
+            )
             pkg.validation = result
             await self._packages.save(pkg)
         elif request.content:
@@ -48,7 +65,9 @@ class ValidatePolicyHandler:
         elif request.policy:
             result = validate_content(json.dumps(request.policy), request.format)
         else:
-            raise PolicyGenError("invalid_request", "Provide package_id, content, or policy")
+            raise PolicyGenError(
+                "invalid_request", "Provide package_id, content, or policy"
+            )
         evt = PolicyPackageValidationCompleted(
             tenant_id="default",
             correlation_id=correlation_id,
@@ -57,6 +76,13 @@ class ValidatePolicyHandler:
             status=result.status.value,
             error_count=len(result.errors),
         )
-        await self._events.publish(self._settings.kafka_topic_events, evt.model_dump(mode="json"), key=str(package_id or "adhoc"))
+        await self._events.publish(
+            self._settings.kafka_topic_events,
+            evt.model_dump(mode="json"),
+            key=str(package_id or "adhoc"),
+        )
         logger.info("policy_validated", status=result.status.value, actor=actor)
-        return {"validation": result, "package_id": str(package_id) if package_id else None}
+        return {
+            "validation": result,
+            "package_id": str(package_id) if package_id else None,
+        }

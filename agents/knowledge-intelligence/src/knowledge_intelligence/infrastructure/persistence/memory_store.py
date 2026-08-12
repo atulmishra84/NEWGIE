@@ -4,11 +4,9 @@ from __future__ import annotations
 
 import copy
 from typing import Any
-from uuid import uuid4
 
 from gie_contracts.knowledge import (
     KnowledgeDiff,
-    KnowledgeDomain,
     KnowledgeEdge,
     KnowledgeGraphSnapshot,
     KnowledgeNode,
@@ -33,7 +31,9 @@ class InMemoryNodeRepository(KnowledgeNodeRepository):
             bucket[n.node_id] = n
         return len(nodes)
 
-    async def get_node(self, node_id: str, version: str | None = None) -> KnowledgeNode | None:
+    async def get_node(
+        self, node_id: str, version: str | None = None
+    ) -> KnowledgeNode | None:
         if version and version in self._versions:
             return self._versions[version].get(node_id)
         return self._nodes.get(node_id)
@@ -47,7 +47,11 @@ class InMemoryNodeRepository(KnowledgeNodeRepository):
         limit: int = 100,
         offset: int = 0,
     ) -> list[KnowledgeNode]:
-        source = list(self._versions[version].values()) if version and version in self._versions else list(self._nodes.values())
+        source = (
+            list(self._versions[version].values())
+            if version and version in self._versions
+            else list(self._nodes.values())
+        )
         out = []
         for n in source:
             if domain and n.domain.value != domain:
@@ -78,18 +82,26 @@ class InMemoryEdgeRepository(KnowledgeEdgeRepository):
 
     async def neighbors(self, node_id: str, depth: int = 1) -> list[KnowledgeEdge]:
         # depth=1 only in memory impl
-        return [e for e in self._edges.values() if e.source_id == node_id or e.target_id == node_id]
+        return [
+            e
+            for e in self._edges.values()
+            if e.source_id == node_id or e.target_id == node_id
+        ]
 
 
 class InMemoryVersionRepository(VersionRepository):
-    def __init__(self, nodes: InMemoryNodeRepository, edges: InMemoryEdgeRepository) -> None:
+    def __init__(
+        self, nodes: InMemoryNodeRepository, edges: InMemoryEdgeRepository
+    ) -> None:
         self._nodes = nodes
         self._edges = edges
         self._snapshots: dict[str, KnowledgeGraphSnapshot] = {}
         self._node_sets: dict[str, set[str]] = {}
         self._edge_sets: dict[str, set[str]] = {}
 
-    async def publish(self, version: str, checksum: str, node_count: int, edge_count: int) -> KnowledgeGraphSnapshot:
+    async def publish(
+        self, version: str, checksum: str, node_count: int, edge_count: int
+    ) -> KnowledgeGraphSnapshot:
         snap = KnowledgeGraphSnapshot(
             version=version,
             node_count=node_count,
@@ -133,7 +145,12 @@ class InMemoryGraphRepository:
 
     async def project_nodes(self, nodes: list[KnowledgeNode]) -> None:
         for n in nodes:
-            self._nodes[n.node_id] = {"id": n.node_id, "kind": n.kind.value, "title": n.title, "domain": n.domain.value}
+            self._nodes[n.node_id] = {
+                "id": n.node_id,
+                "kind": n.kind.value,
+                "title": n.title,
+                "domain": n.domain.value,
+            }
 
     async def project_edges(self, edges: list[KnowledgeEdge]) -> None:
         for e in edges:
@@ -146,7 +163,9 @@ class InMemoryGraphRepository:
                 }
             )
 
-    async def shortest_paths(self, source_id: str, target_id: str, max_depth: int = 4) -> list[list[str]]:
+    async def shortest_paths(
+        self, source_id: str, target_id: str, max_depth: int = 4
+    ) -> list[list[str]]:
         # BFS
         from collections import deque
 
@@ -170,7 +189,9 @@ class InMemoryGraphRepository:
                     q.append((nxt, path + [nxt]))
         return paths[:5]
 
-    async def expand(self, node_ids: list[str], hops: int = 1) -> tuple[list[str], list[dict[str, Any]]]:
+    async def expand(
+        self, node_ids: list[str], hops: int = 1
+    ) -> tuple[list[str], list[dict[str, Any]]]:
         frontier = set(node_ids)
         for _ in range(hops):
             nxt: set[str] = set()
@@ -194,11 +215,15 @@ class InMemoryVectorStore:
     def __init__(self) -> None:
         self._items: dict[str, tuple[list[float], dict[str, Any]]] = {}
 
-    async def upsert(self, ids: list[str], vectors: list[list[float]], payloads: list[dict[str, Any]]) -> None:
+    async def upsert(
+        self, ids: list[str], vectors: list[list[float]], payloads: list[dict[str, Any]]
+    ) -> None:
         for i, v, p in zip(ids, vectors, payloads):
             self._items[i] = (v, p)
 
-    async def search(self, vector: list[float], top_k: int, filters: dict[str, Any] | None = None) -> list[dict[str, Any]]:
+    async def search(
+        self, vector: list[float], top_k: int, filters: dict[str, Any] | None = None
+    ) -> list[dict[str, Any]]:
         def cos(a: list[float], b: list[float]) -> float:
             return sum(x * y for x, y in zip(a, b))
 
@@ -237,5 +262,7 @@ class LoggingEventPublisher:
     def __init__(self) -> None:
         self.events: list[dict[str, Any]] = []
 
-    async def publish(self, topic: str, event: dict[str, Any], key: str | None = None) -> None:
+    async def publish(
+        self, topic: str, event: dict[str, Any], key: str | None = None
+    ) -> None:
         self.events.append({"topic": topic, "key": key, "event": event})

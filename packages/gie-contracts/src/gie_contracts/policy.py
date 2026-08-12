@@ -80,7 +80,12 @@ class PolicyInputBundle(BaseModel):
     business: dict[str, Any] = Field(default_factory=dict)
     targets: list[PolicyTarget] = Field(default_factory=list)
     formats: list[OutputFormat] = Field(
-        default_factory=lambda: [OutputFormat.YAML, OutputFormat.JSON, OutputFormat.REGO, OutputFormat.VENDOR_NATIVE]
+        default_factory=lambda: [
+            OutputFormat.YAML,
+            OutputFormat.JSON,
+            OutputFormat.REGO,
+            OutputFormat.VENDOR_NATIVE,
+        ]
     )
 
 
@@ -124,6 +129,7 @@ class PolicyDecision(BaseModel):
     confidence: Confidence = Field(default_factory=Confidence)
     summary: str = ""
     input_digest: str | None = None
+    llm_enhancement: dict[str, Any] | None = None
 
 
 class PolicyGenerateRequest(BaseModel):

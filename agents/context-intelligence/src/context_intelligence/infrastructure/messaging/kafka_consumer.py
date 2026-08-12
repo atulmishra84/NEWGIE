@@ -4,8 +4,7 @@ from __future__ import annotations
 
 import asyncio
 import json
-from typing import Any, Callable, Awaitable
-from uuid import UUID
+from typing import Callable, Awaitable
 
 from gie_contracts.events import ContextScanRequested
 from gie_observability.logging import get_logger

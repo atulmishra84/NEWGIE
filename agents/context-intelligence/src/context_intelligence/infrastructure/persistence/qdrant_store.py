@@ -49,7 +49,9 @@ class QdrantEvidenceVectorStore(EvidenceVectorStore):
         self._initialized = False
 
     @classmethod
-    def from_settings(cls, settings: Settings | None = None, embedder: Any | None = None) -> QdrantEvidenceVectorStore:
+    def from_settings(
+        cls, settings: Settings | None = None, embedder: Any | None = None
+    ) -> QdrantEvidenceVectorStore:
         cfg = settings or get_settings()
         client = AsyncQdrantClient(url=cfg.qdrant_url)
         return cls(client, cfg.qdrant_collection, embedder=embedder)
@@ -62,7 +64,9 @@ class QdrantEvidenceVectorStore(EvidenceVectorStore):
         if self._collection not in names:
             await self._client.create_collection(
                 collection_name=self._collection,
-                vectors_config=qmodels.VectorParams(size=VECTOR_SIZE, distance=qmodels.Distance.COSINE),
+                vectors_config=qmodels.VectorParams(
+                    size=VECTOR_SIZE, distance=qmodels.Distance.COSINE
+                ),
             )
         self._initialized = True
 
@@ -72,7 +76,11 @@ class QdrantEvidenceVectorStore(EvidenceVectorStore):
                 result = self._embedder.embed(text)
                 if hasattr(result, "__await__"):
                     result = await result
-                if isinstance(result, list) and result and isinstance(result[0], (int, float)):
+                if (
+                    isinstance(result, list)
+                    and result
+                    and isinstance(result[0], (int, float))
+                ):
                     return [float(x) for x in result]
             except Exception:
                 logger.warning("embedder_failed_using_hash_fallback")
@@ -89,7 +97,9 @@ class QdrantEvidenceVectorStore(EvidenceVectorStore):
     ) -> None:
         await self._ensure_collection()
         vector = await self._embed(text)
-        point_id = int(hashlib.sha256(evidence_id.encode()).hexdigest()[:16], 16) % (2**63 - 1)
+        point_id = int(hashlib.sha256(evidence_id.encode()).hexdigest()[:16], 16) % (
+            2**63 - 1
+        )
         payload = {
             "evidence_id": evidence_id,
             "tenant_id": tenant_id,

@@ -1,6 +1,9 @@
 from gie_security.rbac import PermissionDeniedError
 
-from knowledge_intelligence.domain.rbac import KnowledgePermission, require_knowledge_permission
+from knowledge_intelligence.domain.rbac import (
+    KnowledgePermission,
+    require_knowledge_permission,
+)
 
 
 def test_viewer_can_query():

@@ -4,11 +4,22 @@ from __future__ import annotations
 
 import html
 
-from gie_contracts.explainability import ExplanationDimensions, ExplanationReport, OutputFormat, RenderedArtifact
+from gie_contracts.explainability import (
+    ExplanationDimensions,
+    ExplanationReport,
+    OutputFormat,
+    RenderedArtifact,
+)
 
 
 def _dims_md(d: ExplanationDimensions) -> str:
-    alts = "\n".join(f"- **{a.title}**: {a.description} ({a.tradeoffs})" for a in d.alternative_options) or "- None"
+    alts = (
+        "\n".join(
+            f"- **{a.title}**: {a.description} ({a.tradeoffs})"
+            for a in d.alternative_options
+        )
+        or "- None"
+    )
     evid = "\n".join(f"- {e}" for e in d.evidence) or "- None"
     know = "\n".join(f"- {k}" for k in d.supporting_knowledge) or "- None"
     return f"""### Why
@@ -69,7 +80,9 @@ def render_markdown(report: ExplanationReport) -> str:
     for step in report.reasoning_path:
         parts.append(f"{step.step}. **{step.agent}** / {step.action}: {step.detail}")
     if report.mermaid_diagram:
-        parts.extend(["", "## Decision Diagram", "```mermaid", report.mermaid_diagram, "```"])
+        parts.extend(
+            ["", "## Decision Diagram", "```mermaid", report.mermaid_diagram, "```"]
+        )
     return "\n".join(parts)
 
 
@@ -93,8 +106,15 @@ def render_json(report: ExplanationReport) -> str:
     return report.model_dump_json(indent=2)
 
 
-def build_artifacts(report: ExplanationReport, formats: list[OutputFormat] | None = None) -> list[RenderedArtifact]:
-    wanted = formats or [OutputFormat.MARKDOWN, OutputFormat.HTML, OutputFormat.PDF, OutputFormat.JSON]
+def build_artifacts(
+    report: ExplanationReport, formats: list[OutputFormat] | None = None
+) -> list[RenderedArtifact]:
+    wanted = formats or [
+        OutputFormat.MARKDOWN,
+        OutputFormat.HTML,
+        OutputFormat.PDF,
+        OutputFormat.JSON,
+    ]
     out: list[RenderedArtifact] = []
     eid = str(report.explanation_id)[:8]
     for fmt in wanted:

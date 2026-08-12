@@ -4,14 +4,21 @@ from orchestrator.adapters.rest.app import create_app
 from orchestrator.infrastructure.bootstrap import build_container
 from orchestrator.settings import Settings
 
+
 @pytest.mark.asyncio
 async def test_analyze_status_execution_trace(sample_analyze):
-    settings = Settings(gie_env="test", require_auth=False, simulate_agents=True, retry_base_delay_ms=1)
+    settings = Settings(
+        gie_env="test", require_auth=False, simulate_agents=True, retry_base_delay_ms=1
+    )
     await build_container(memory=True, settings=settings)
     app = create_app()
     transport = ASGITransport(app=app)
     async with AsyncClient(transport=transport, base_url="http://test") as client:
-        r = await client.post("/analyze", json=sample_analyze.model_dump(mode="json"), headers={"x-tenant-id": "acme"})
+        r = await client.post(
+            "/analyze",
+            json=sample_analyze.model_dump(mode="json"),
+            headers={"x-tenant-id": "acme"},
+        )
         assert r.status_code == 200, r.text
         data = r.json()["data"]
         assert data["status"] == "completed"
@@ -48,7 +55,11 @@ async def test_analyze_status_execution_trace(sample_analyze):
                     "parallel_enabled": False,
                     "steps": [
                         {"step_id": "context", "agent_id": "context", "depends_on": []},
-                        {"step_id": "knowledge", "agent_id": "knowledge", "depends_on": ["context"]},
+                        {
+                            "step_id": "knowledge",
+                            "agent_id": "knowledge",
+                            "depends_on": ["context"],
+                        },
                     ],
                 },
                 "input": {"source": {"path": "/y"}},

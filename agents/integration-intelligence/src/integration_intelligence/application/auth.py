@@ -7,12 +7,15 @@ from integration_intelligence.settings import Settings
 
 logger = get_logger(__name__)
 
+
 class AuthTokenHandler:
     def __init__(self, *, audits: AuditRepository, settings: Settings):
         self._audits = audits
         self._settings = settings
 
-    async def handle(self, request: AuthTokenRequest, *, actor: str) -> AuthTokenResponse:
+    async def handle(
+        self, request: AuthTokenRequest, *, actor: str
+    ) -> AuthTokenResponse:
         token = issue_token(
             request,
             jwt_secret=self._settings.jwt_secret,
@@ -27,8 +30,15 @@ class AuthTokenHandler:
                 resource_type="token",
                 resource_id=request.subject,
                 outcome="success",
-                detail={"auth_method": request.auth_method.value, "scopes": request.scopes},
+                detail={
+                    "auth_method": request.auth_method.value,
+                    "scopes": request.scopes,
+                },
             )
         )
-        logger.info("auth_token_issued", method=request.auth_method.value, subject=request.subject)
+        logger.info(
+            "auth_token_issued",
+            method=request.auth_method.value,
+            subject=request.subject,
+        )
         return token

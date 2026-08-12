@@ -25,7 +25,9 @@ def load_config() -> dict[str, Any]:
             if isinstance(data, dict):
                 return {
                     "enabled": bool(data.get("enabled", False)),
-                    "webhook_url": str(data.get("webhook_url") or settings.jarvis_webhook_url or ""),
+                    "webhook_url": str(
+                        data.get("webhook_url") or settings.jarvis_webhook_url or ""
+                    ),
                     "token": str(data.get("token") or settings.jarvis_token or ""),
                 }
         except (OSError, json.JSONDecodeError):
@@ -37,7 +39,9 @@ def load_config() -> dict[str, Any]:
     }
 
 
-def save_config(*, enabled: bool, webhook_url: str = "", token: str = "") -> dict[str, Any]:
+def save_config(
+    *, enabled: bool, webhook_url: str = "", token: str = ""
+) -> dict[str, Any]:
     cfg = {
         "enabled": enabled,
         "webhook_url": webhook_url.strip(),

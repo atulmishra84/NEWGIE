@@ -3,7 +3,13 @@ import copy
 from typing import Any
 from uuid import UUID
 from gie_contracts.orchestrator import ExecutionRecord, ExecutionStatus, ExecutionTrace
-from orchestrator.domain.ports import CacheStore, EventPublisher, ExecutionRepository, TraceRepository
+from orchestrator.domain.ports import (
+    CacheStore,
+    EventPublisher,
+    ExecutionRepository,
+    TraceRepository,
+)
+
 
 class InMemoryExecutionRepository(ExecutionRepository):
     def __init__(self) -> None:
@@ -19,14 +25,26 @@ class InMemoryExecutionRepository(ExecutionRepository):
     async def get(self, execution_id: UUID) -> ExecutionRecord | None:
         return self._by_id.get(execution_id)
 
-    async def list(self, tenant_id: str, limit: int = 50, offset: int = 0) -> list[ExecutionRecord]:
+    async def list(
+        self, tenant_id: str, limit: int = 50, offset: int = 0
+    ) -> list[ExecutionRecord]:
         ids = self._by_tenant.get(tenant_id) or []
         items = [self._by_id[i] for i in ids if i in self._by_id]
         items.sort(key=lambda r: r.created_at, reverse=True)
-        return items[offset: offset + limit]
+        return items[offset : offset + limit]
 
     async def count_active(self) -> int:
-        return sum(1 for r in self._by_id.values() if r.status in {ExecutionStatus.RUNNING, ExecutionStatus.PENDING, ExecutionStatus.WAITING_APPROVAL})
+        return sum(
+            1
+            for r in self._by_id.values()
+            if r.status
+            in {
+                ExecutionStatus.RUNNING,
+                ExecutionStatus.PENDING,
+                ExecutionStatus.WAITING_APPROVAL,
+            }
+        )
+
 
 class InMemoryTraceRepository(TraceRepository):
     def __init__(self) -> None:
@@ -37,6 +55,7 @@ class InMemoryTraceRepository(TraceRepository):
 
     async def get(self, trace_id: str) -> ExecutionTrace | None:
         return self._by_id.get(trace_id)
+
 
 class InMemoryCache(CacheStore):
     def __init__(self) -> None:
@@ -51,9 +70,12 @@ class InMemoryCache(CacheStore):
     async def size(self) -> int:
         return len(self._data)
 
+
 class LoggingEventPublisher(EventPublisher):
     def __init__(self) -> None:
         self.events: list[dict[str, Any]] = []
 
-    async def publish(self, topic: str, event: dict[str, Any], key: str | None = None) -> None:
+    async def publish(
+        self, topic: str, event: dict[str, Any], key: str | None = None
+    ) -> None:
         self.events.append({"topic": topic, "key": key, "event": event})

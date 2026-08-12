@@ -16,7 +16,12 @@ SAMPLE_PROJECT = FIXTURES_DIR / "sample_ai_project"
 OPENAPI_SPEC = Path(__file__).resolve().parents[3] / "docs" / "api" / "openapi.yaml"
 
 
-def make_jwt(*, tenant_id: str = "test-tenant", roles: list[str] | None = None, subject: str = "test-user") -> str:
+def make_jwt(
+    *,
+    tenant_id: str = "test-tenant",
+    roles: list[str] | None = None,
+    subject: str = "test-user",
+) -> str:
     settings = get_settings()
     payload = {
         "sub": subject,

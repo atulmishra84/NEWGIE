@@ -2,6 +2,7 @@ from __future__ import annotations
 from functools import lru_cache
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
+
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
     gie_env: str = "local"
@@ -34,6 +35,17 @@ class Settings(BaseSettings):
     validation_url: str = "http://localhost:8088"
     learning_url: str = "http://localhost:8089"
     integration_url: str = "http://localhost:8090"
+
+    # AWS Bedrock LLM
+    bedrock_enabled: bool = True
+    bedrock_model_id: str = "anthropic.claude-3-haiku-20240307-v1:0"
+    bedrock_max_tokens: int = 1024
+    bedrock_temperature: float = 0.3
+    aws_region: str = "us-east-1"
+    aws_access_key_id: str = ""
+    aws_secret_access_key: str = ""
+    aws_session_token: str = ""
+
 
 @lru_cache
 def get_settings() -> Settings:

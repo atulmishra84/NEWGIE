@@ -102,7 +102,9 @@ def _gitpython_available() -> bool:
 async def _clone_gitpython(url: str, dest: Path, ref: str, depth: int) -> None:
     import git
 
-    repo = git.Repo.clone_from(url, dest, depth=depth, branch=None if ref == "HEAD" else ref)
+    repo = git.Repo.clone_from(
+        url, dest, depth=depth, branch=None if ref == "HEAD" else ref
+    )
     if ref and ref != "HEAD":
         try:
             repo.git.checkout(ref)

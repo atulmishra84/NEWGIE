@@ -68,7 +68,9 @@ class Settings(BaseSettings):
     json_logs: bool = Field(default=True, alias="JSON_LOGS")
 
     celery_broker_url: str | None = Field(default=None, alias="CELERY_BROKER_URL")
-    celery_result_backend: str | None = Field(default=None, alias="CELERY_RESULT_BACKEND")
+    celery_result_backend: str | None = Field(
+        default=None, alias="CELERY_RESULT_BACKEND"
+    )
 
     @property
     def effective_celery_broker(self) -> str:

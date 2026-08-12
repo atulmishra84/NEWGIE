@@ -14,16 +14,24 @@ from policy_intelligence.version import AGENT_NAME, AGENT_VERSION
 
 logger = get_logger(__name__)
 
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     settings = get_settings()
     configure_logging(level=settings.log_level)
-    setup_tracing(service_name=AGENT_NAME, service_version=AGENT_VERSION, otlp_endpoint=settings.otel_exporter_otlp_endpoint or None)
-    container = await build_container(memory=settings.gie_env in {"local", "test", "docker"}, settings=settings)
+    setup_tracing(
+        service_name=AGENT_NAME,
+        service_version=AGENT_VERSION,
+        otlp_endpoint=settings.otel_exporter_otlp_endpoint or None,
+    )
+    container = await build_container(
+        memory=settings.gie_env in {"local", "test", "docker"}, settings=settings
+    )
     app.state.container = container
     logger.info("app_started", agent=AGENT_NAME, version=AGENT_VERSION)
     yield
     logger.info("app_stopped")
+
 
 def create_app() -> FastAPI:
     app = FastAPI(
@@ -53,5 +61,6 @@ def create_app() -> FastAPI:
         return Response(generate_latest(), media_type=CONTENT_TYPE_LATEST)
 
     return app
+
 
 app = create_app()

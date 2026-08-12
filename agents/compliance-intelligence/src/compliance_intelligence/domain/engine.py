@@ -40,6 +40,7 @@ REMEDIATION_MAP = {
     "mas-feat": ["gr-output-filter"],
 }
 
+
 def _haystack(bundle: ComplianceInputBundle) -> str:
     return json.dumps(
         {
@@ -53,17 +54,29 @@ def _haystack(bundle: ComplianceInputBundle) -> str:
         default=str,
     ).lower()
 
-def determine_applicability(bundle: ComplianceInputBundle) -> list[FrameworkApplicability]:
+
+def determine_applicability(
+    bundle: ComplianceInputBundle,
+) -> list[FrameworkApplicability]:
     cat = load_catalog()
     hay = _haystack(bundle)
-    declared = {f.value if isinstance(f, FrameworkId) else str(f) for f in bundle.declared_frameworks}
+    declared = {
+        f.value if isinstance(f, FrameworkId) else str(f)
+        for f in bundle.declared_frameworks
+    }
     results: list[FrameworkApplicability] = []
     for fid, meta in cat["frameworks"].items():
         triggers = meta.get("triggers", [])
         matched = [t for t in triggers if t in hay]
-        applicable = bool(matched) or fid in declared or (fid == "internal_corporate" and bool(bundle.internal_policies))
+        applicable = (
+            bool(matched)
+            or fid in declared
+            or (fid == "internal_corporate" and bool(bundle.internal_policies))
+        )
         # Always consider NIST AI RMF for any AI app
-        if fid == "nist_ai_rmf" and ("ai" in hay or "llm" in hay or "agent" in hay or "openai" in hay):
+        if fid == "nist_ai_rmf" and (
+            "ai" in hay or "llm" in hay or "agent" in hay or "openai" in hay
+        ):
             applicable = True
             if "ai system" not in matched:
                 matched.append("ai system baseline")
@@ -79,7 +92,9 @@ def determine_applicability(bundle: ComplianceInputBundle) -> list[FrameworkAppl
             FrameworkApplicability(
                 framework=FrameworkId(fid),
                 applicable=applicable,
-                confidence=Confidence(score=round(conf, 3), rationale="trigger + declaration match"),
+                confidence=Confidence(
+                    score=round(conf, 3), rationale="trigger + declaration match"
+                ),
                 reasons=reasons or ["Not applicable based on current signals"],
                 version=meta.get("version", "1.0.0"),
                 last_regulatory_update=meta.get("last_update"),
@@ -87,19 +102,34 @@ def determine_applicability(bundle: ComplianceInputBundle) -> list[FrameworkAppl
         )
     return results
 
-def _status_for(control_id: str, implemented: set[str], evidence_by_control: dict[str, list[EvidenceItem]]) -> ControlStatus:
+
+def _status_for(
+    control_id: str,
+    implemented: set[str],
+    evidence_by_control: dict[str, list[EvidenceItem]],
+) -> ControlStatus:
     if control_id in implemented:
-        return ControlStatus.IMPLEMENTED if evidence_by_control.get(control_id) else ControlStatus.PARTIAL
+        return (
+            ControlStatus.IMPLEMENTED
+            if evidence_by_control.get(control_id)
+            else ControlStatus.PARTIAL
+        )
     if evidence_by_control.get(control_id):
         return ControlStatus.PARTIAL
     return ControlStatus.MISSING
+
 
 def _severity(status: ControlStatus, category: str) -> GapSeverity | None:
     if status in {ControlStatus.IMPLEMENTED, ControlStatus.NOT_APPLICABLE}:
         return None
     if status == ControlStatus.MISSING:
-        return GapSeverity.CRITICAL if category in {"privacy", "access", "data", "security"} else GapSeverity.HIGH
+        return (
+            GapSeverity.CRITICAL
+            if category in {"privacy", "access", "data", "security"}
+            else GapSeverity.HIGH
+        )
     return GapSeverity.MEDIUM
+
 
 def analyze_compliance(bundle: ComplianceInputBundle) -> ComplianceReport:
     cat = load_catalog()
@@ -114,8 +144,16 @@ def analyze_compliance(bundle: ComplianceInputBundle) -> ComplianceReport:
     matrix: list[ComplianceMatrixRow] = []
     mappings: dict[str, list[str]] = {}
     reasoning: list[dict[str, Any]] = [
-        {"step": 1, "action": "load_catalog", "detail": f"Catalog version {cat.get('version')}"},
-        {"step": 2, "action": "determine_applicability", "detail": f"Evaluated {len(applicable)} frameworks"},
+        {
+            "step": 1,
+            "action": "load_catalog",
+            "detail": f"Catalog version {cat.get('version')}",
+        },
+        {
+            "step": 2,
+            "action": "determine_applicability",
+            "detail": f"Evaluated {len(applicable)} frameworks",
+        },
     ]
 
     for fa in applicable:
@@ -144,10 +182,16 @@ def analyze_compliance(bundle: ComplianceInputBundle) -> ComplianceReport:
                 title=ctrl["title"],
                 status=status,
                 gap_severity=sev,
-                gap_description=None if status == ControlStatus.IMPLEMENTED else f"Gap against {ctrl['title']}: {ctrl['description']}",
-                recommended_controls=recs if status != ControlStatus.IMPLEMENTED else [],
+                gap_description=None
+                if status == ControlStatus.IMPLEMENTED
+                else f"Gap against {ctrl['title']}: {ctrl['description']}",
+                recommended_controls=recs
+                if status != ControlStatus.IMPLEMENTED
+                else [],
                 evidence=ev_list,
-                confidence=Confidence(score=0.9 if status == ControlStatus.IMPLEMENTED else 0.75),
+                confidence=Confidence(
+                    score=0.9 if status == ControlStatus.IMPLEMENTED else 0.75
+                ),
                 mapping_refs=[f"{fa.framework.value}:{cid}"],
             )
             assessments.append(assessment)
@@ -186,7 +230,11 @@ def analyze_compliance(bundle: ComplianceInputBundle) -> ComplianceReport:
     # Score: implemented(+partial*0.5) / assessed
     if assessments:
         points = sum(
-            1.0 if a.status == ControlStatus.IMPLEMENTED else 0.5 if a.status == ControlStatus.PARTIAL else 0.0
+            1.0
+            if a.status == ControlStatus.IMPLEMENTED
+            else 0.5
+            if a.status == ControlStatus.PARTIAL
+            else 0.0
             for a in assessments
         )
         score = points / len(assessments)
@@ -200,7 +248,9 @@ def analyze_compliance(bundle: ComplianceInputBundle) -> ComplianceReport:
         "policy_version": policy_version,
         "catalog_version": cat.get("version"),
         "application_id": bundle.application_id,
-        "applicable_frameworks": [f.framework.value for f in applicable if f.applicable],
+        "applicable_frameworks": [
+            f.framework.value for f in applicable if f.applicable
+        ],
         "compliance_score": round(score, 3),
         "gap_count": len(gaps),
         "evidence_count": len(all_evidence),
@@ -235,6 +285,7 @@ def analyze_compliance(bundle: ComplianceInputBundle) -> ComplianceReport:
         summary=summary,
     )
 
+
 def validate_controls(
     *,
     prior: ComplianceReport,
@@ -244,7 +295,9 @@ def validate_controls(
 ) -> ComplianceReport:
     """Re-validate selected controls against new evidence/implementation claims."""
     implemented = set(prior.assessments and [])  # start empty then merge
-    implemented = {a.control_id for a in prior.assessments if a.status == ControlStatus.IMPLEMENTED}
+    implemented = {
+        a.control_id for a in prior.assessments if a.status == ControlStatus.IMPLEMENTED
+    }
     implemented.update(implemented_controls)
     # Rebuild a minimal bundle-like reassess using prior matrix frameworks
     from gie_contracts.compliance import ComplianceInputBundle
@@ -252,7 +305,9 @@ def validate_controls(
     bundle = ComplianceInputBundle(
         tenant_id=prior.tenant_id,
         application_id=prior.application_id,
-        declared_frameworks=[f.framework for f in prior.applicable_frameworks if f.applicable],
+        declared_frameworks=[
+            f.framework for f in prior.applicable_frameworks if f.applicable
+        ],
         implemented_controls=list(implemented),
         evidence=list(prior.evidence) + list(evidence),
         policy_version=prior.policy_version,
@@ -261,5 +316,7 @@ def validate_controls(
     report = analyze_compliance(bundle)
     if control_ids:
         wanted = set(control_ids)
-        report.assessments = [a for a in report.assessments if a.control_id in wanted] or report.assessments
+        report.assessments = [
+            a for a in report.assessments if a.control_id in wanted
+        ] or report.assessments
     return report

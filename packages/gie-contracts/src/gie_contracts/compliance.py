@@ -149,6 +149,7 @@ class ComplianceReport(BaseModel):
     control_mappings: dict[str, list[str]] = Field(default_factory=dict)
     reasoning_path: list[dict[str, Any]] = Field(default_factory=list)
     summary: str = ""
+    llm_enhancement: dict[str, Any] | None = None
 
 
 class ComplianceAnalyzeRequest(BaseModel):

@@ -2,7 +2,12 @@ from __future__ import annotations
 import copy
 from typing import Any
 from uuid import UUID
-from gie_contracts.integration import AuditLogEntry, IntegrationConnection, SyncResult, WebhookEvent
+from gie_contracts.integration import (
+    AuditLogEntry,
+    IntegrationConnection,
+    SyncResult,
+    WebhookEvent,
+)
 from integration_intelligence.domain.ports import (
     AuditRepository,
     CacheStore,
@@ -12,6 +17,7 @@ from integration_intelligence.domain.ports import (
     SyncRepository,
     WebhookRepository,
 )
+
 
 class InMemoryConnectionRepository(ConnectionRepository):
     def __init__(self) -> None:
@@ -27,11 +33,14 @@ class InMemoryConnectionRepository(ConnectionRepository):
     async def get(self, connection_id: UUID) -> IntegrationConnection | None:
         return self._by_id.get(connection_id)
 
-    async def list(self, tenant_id: str, limit: int = 100, offset: int = 0) -> list[IntegrationConnection]:
+    async def list(
+        self, tenant_id: str, limit: int = 100, offset: int = 0
+    ) -> list[IntegrationConnection]:
         ids = self._by_tenant.get(tenant_id) or []
         items = [self._by_id[i] for i in ids if i in self._by_id]
         items.sort(key=lambda c: c.updated_at, reverse=True)
-        return items[offset: offset + limit]
+        return items[offset : offset + limit]
+
 
 class InMemoryWebhookRepository(WebhookRepository):
     def __init__(self) -> None:
@@ -40,10 +49,13 @@ class InMemoryWebhookRepository(WebhookRepository):
     async def save(self, event: WebhookEvent) -> None:
         self._items.append(event)
 
-    async def list(self, tenant_id: str, limit: int = 100, offset: int = 0) -> list[WebhookEvent]:
+    async def list(
+        self, tenant_id: str, limit: int = 100, offset: int = 0
+    ) -> list[WebhookEvent]:
         items = [e for e in self._items if e.tenant_id == tenant_id]
         items.sort(key=lambda e: e.received_at, reverse=True)
-        return items[offset: offset + limit]
+        return items[offset : offset + limit]
+
 
 class InMemoryAuditRepository(AuditRepository):
     def __init__(self) -> None:
@@ -52,10 +64,13 @@ class InMemoryAuditRepository(AuditRepository):
     async def save(self, entry: AuditLogEntry) -> None:
         self._items.append(entry)
 
-    async def list(self, tenant_id: str, limit: int = 100, offset: int = 0) -> list[AuditLogEntry]:
+    async def list(
+        self, tenant_id: str, limit: int = 100, offset: int = 0
+    ) -> list[AuditLogEntry]:
         items = [e for e in self._items if e.tenant_id == tenant_id]
         items.sort(key=lambda e: e.occurred_at, reverse=True)
-        return items[offset: offset + limit]
+        return items[offset : offset + limit]
+
 
 class InMemorySyncRepository(SyncRepository):
     def __init__(self) -> None:
@@ -64,10 +79,13 @@ class InMemorySyncRepository(SyncRepository):
     async def save(self, result: SyncResult) -> None:
         self._items.append(result)
 
-    async def list(self, tenant_id: str, limit: int = 50, offset: int = 0) -> list[SyncResult]:
+    async def list(
+        self, tenant_id: str, limit: int = 50, offset: int = 0
+    ) -> list[SyncResult]:
         items = [s for s in self._items if s.tenant_id == tenant_id]
         items.sort(key=lambda s: s.created_at, reverse=True)
-        return items[offset: offset + limit]
+        return items[offset : offset + limit]
+
 
 class InMemorySecretStore(SecretStore):
     def __init__(self) -> None:
@@ -83,6 +101,7 @@ class InMemorySecretStore(SecretStore):
     async def delete(self, key: str) -> None:
         self._data.pop(key, None)
 
+
 class InMemoryCache(CacheStore):
     def __init__(self) -> None:
         self._data: dict[str, dict[str, Any]] = {}
@@ -93,9 +112,12 @@ class InMemoryCache(CacheStore):
     async def set_json(self, key: str, value: dict[str, Any], ttl: int) -> None:
         self._data[key] = copy.deepcopy(value)
 
+
 class LoggingEventPublisher(EventPublisher):
     def __init__(self) -> None:
         self.events: list[dict[str, Any]] = []
 
-    async def publish(self, topic: str, event: dict[str, Any], key: str | None = None) -> None:
+    async def publish(
+        self, topic: str, event: dict[str, Any], key: str | None = None
+    ) -> None:
         self.events.append({"topic": topic, "key": key, "event": event})

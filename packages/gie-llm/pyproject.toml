@@ -1,0 +1,19 @@
+[project]
+name = "gie-llm"
+version = "1.0.0"
+description = "GIE shared AWS Bedrock LLM client — inference, embeddings, voice"
+requires-python = ">=3.12"
+dependencies = [
+  "boto3>=1.34",
+  "pydantic-settings>=2.3",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0", "pytest-asyncio>=0.23", "moto[bedrock]>=5.0"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/gie_llm"]

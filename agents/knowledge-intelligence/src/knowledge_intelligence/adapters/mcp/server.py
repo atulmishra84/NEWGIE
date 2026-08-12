@@ -2,11 +2,14 @@
 
 from __future__ import annotations
 
-import json
 from typing import Any
 from uuid import uuid4
 
-from gie_contracts.knowledge import KnowledgeDomain, KnowledgeQueryRequest, KnowledgeUpsertRequest, NodeKind
+from gie_contracts.knowledge import (
+    KnowledgeDomain,
+    KnowledgeQueryRequest,
+    KnowledgeUpsertRequest,
+)
 from gie_observability.logging import get_logger
 
 from knowledge_intelligence.application.di import get_container
@@ -33,7 +36,10 @@ TOOLS = [
         "description": "Fetch a knowledge node by id with evidence",
         "inputSchema": {
             "type": "object",
-            "properties": {"node_id": {"type": "string"}, "version": {"type": "string"}},
+            "properties": {
+                "node_id": {"type": "string"},
+                "version": {"type": "string"},
+            },
             "required": ["node_id"],
         },
     },
@@ -43,7 +49,10 @@ TOOLS = [
         "inputSchema": {
             "type": "object",
             "properties": {
-                "payload": {"type": "object", "description": "KnowledgeUpsertRequest JSON"},
+                "payload": {
+                    "type": "object",
+                    "description": "KnowledgeUpsertRequest JSON",
+                },
             },
             "required": ["payload"],
         },
@@ -63,7 +72,9 @@ TOOLS = [
 ]
 
 
-async def call_tool(name: str, arguments: dict[str, Any], *, tenant_id: str = "default") -> dict[str, Any]:
+async def call_tool(
+    name: str, arguments: dict[str, Any], *, tenant_id: str = "default"
+) -> dict[str, Any]:
     container = get_container()
     if name == "knowledge_query":
         domains = [KnowledgeDomain(d) for d in arguments.get("domains", [])]
@@ -73,16 +84,24 @@ async def call_tool(name: str, arguments: dict[str, Any], *, tenant_id: str = "d
             top_k=int(arguments.get("top_k", 10)),
             version=arguments.get("version"),
         )
-        result = await container.query_engine.query(req, tenant_id=tenant_id, correlation_id=uuid4().hex)
+        result = await container.query_engine.query(
+            req, tenant_id=tenant_id, correlation_id=uuid4().hex
+        )
         return result.model_dump(mode="json")
     if name == "knowledge_get_node":
-        node = await container.get_node.handle(arguments["node_id"], version=arguments.get("version"))
+        node = await container.get_node.handle(
+            arguments["node_id"], version=arguments.get("version")
+        )
         return node.model_dump(mode="json")
     if name == "knowledge_upsert":
         payload = KnowledgeUpsertRequest.model_validate(arguments["payload"])
-        return await container.upsert.handle(payload, tenant_id=tenant_id, actor="mcp", correlation_id=uuid4().hex)
+        return await container.upsert.handle(
+            payload, tenant_id=tenant_id, actor="mcp", correlation_id=uuid4().hex
+        )
     if name == "knowledge_diff_versions":
-        diff = await container.diff_versions.handle(arguments["from_version"], arguments["to_version"])
+        diff = await container.diff_versions.handle(
+            arguments["from_version"], arguments["to_version"]
+        )
         return diff.model_dump(mode="json")
     raise ValueError(f"Unknown tool: {name}")
 

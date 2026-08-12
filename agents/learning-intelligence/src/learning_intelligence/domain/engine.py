@@ -34,7 +34,9 @@ def _sev(s: str) -> DriftSeverity:
     return DriftSeverity.MEDIUM
 
 
-def _conf_bump(base: float, events: list[FeedbackEvent]) -> tuple[float, float, list[str]]:
+def _conf_bump(
+    base: float, events: list[FeedbackEvent]
+) -> tuple[float, float, list[str]]:
     score = base
     changes: list[str] = []
     for e in events:
@@ -48,7 +50,9 @@ def _conf_bump(base: float, events: list[FeedbackEvent]) -> tuple[float, float, 
             score = min(0.98, score + 0.1)
             changes.append(f"Incident reinforces recommendation: {e.title}")
         elif e.feedback_type == FeedbackType.USER_FEEDBACK:
-            sentiment = str(e.signals.get("sentiment") or e.signals.get("rating") or "").lower()
+            sentiment = str(
+                e.signals.get("sentiment") or e.signals.get("rating") or ""
+            ).lower()
             if sentiment in {"negative", "bad", "1", "2"}:
                 score = max(0.4, score - 0.05)
                 changes.append(f"User negative feedback: {e.title}")
@@ -56,7 +60,9 @@ def _conf_bump(base: float, events: list[FeedbackEvent]) -> tuple[float, float, 
                 score = min(0.97, score + 0.03)
                 changes.append(f"User positive/neutral feedback: {e.title}")
         elif e.feedback_type == FeedbackType.RUNTIME_TELEMETRY:
-            rate = float(e.signals.get("block_rate") or e.signals.get("trigger_rate") or 0)
+            rate = float(
+                e.signals.get("block_rate") or e.signals.get("trigger_rate") or 0
+            )
             if rate > 0.3:
                 score = max(0.4, score - 0.06)
                 changes.append(f"High trigger rate suggests tuning: {e.title}")
@@ -67,20 +73,29 @@ def _conf_bump(base: float, events: list[FeedbackEvent]) -> tuple[float, float, 
     return round(score, 3), delta, changes
 
 
-def improve_recommendations(bundle: LearningInputBundle, events: list[FeedbackEvent]) -> tuple[list[ImprovedRecommendation], list[dict[str, Any]]]:
+def improve_recommendations(
+    bundle: LearningInputBundle, events: list[FeedbackEvent]
+) -> tuple[list[ImprovedRecommendation], list[dict[str, Any]]]:
     improved: list[ImprovedRecommendation] = []
     conf_imps: list[dict[str, Any]] = []
     recs = list(bundle.current_recommendations or [])
     if not recs:
         # synthesize from FN / incidents
         for e in events:
-            if e.feedback_type in {FeedbackType.FALSE_NEGATIVE, FeedbackType.SECURITY_INCIDENT, FeedbackType.THREAT_INTELLIGENCE}:
+            if e.feedback_type in {
+                FeedbackType.FALSE_NEGATIVE,
+                FeedbackType.SECURITY_INCIDENT,
+                FeedbackType.THREAT_INTELLIGENCE,
+            }:
                 recs.append(
                     {
-                        "recommendation_id": e.recommendation_id or f"rec-learned-{uuid4().hex[:6]}",
+                        "recommendation_id": e.recommendation_id
+                        or f"rec-learned-{uuid4().hex[:6]}",
                         "title": f"Address {e.title}",
                         "reason": e.description or e.title,
-                        "priority": "high" if e.feedback_type != FeedbackType.THREAT_INTELLIGENCE else "medium",
+                        "priority": "high"
+                        if e.feedback_type != FeedbackType.THREAT_INTELLIGENCE
+                        else "medium",
                         "category": "security",
                         "confidence": {"score": 0.7},
                     }
@@ -88,11 +103,19 @@ def improve_recommendations(bundle: LearningInputBundle, events: list[FeedbackEv
     for rec in recs:
         rid = str(rec.get("recommendation_id") or uuid4().hex[:12])
         related = [e for e in events if e.recommendation_id == rid or _relates(e, rec)]
-        prev = float((rec.get("confidence") or {}).get("score") if isinstance(rec.get("confidence"), dict) else rec.get("confidence") or 0.75)
+        prev = float(
+            (rec.get("confidence") or {}).get("score")
+            if isinstance(rec.get("confidence"), dict)
+            else rec.get("confidence") or 0.75
+        )
         new_score, delta, changes = _conf_bump(prev, related or events[:3])
         # priority bump on incidents/FN
         priority = str(rec.get("priority") or "medium")
-        if any(e.feedback_type in {FeedbackType.SECURITY_INCIDENT, FeedbackType.FALSE_NEGATIVE} for e in related):
+        if any(
+            e.feedback_type
+            in {FeedbackType.SECURITY_INCIDENT, FeedbackType.FALSE_NEGATIVE}
+            for e in related
+        ):
             if priority in {"low", "medium"}:
                 priority = "high"
                 changes.append("Priority elevated due to incident/FN signal")
@@ -101,7 +124,12 @@ def improve_recommendations(bundle: LearningInputBundle, events: list[FeedbackEv
             title=str(rec.get("title") or "Recommendation"),
             reason=str(rec.get("reason") or "Updated from learning signals"),
             previous_confidence=prev,
-            confidence=Confidence(score=new_score, previous_score=prev, delta=delta, rationale="; ".join(changes[:4]) or "stable"),
+            confidence=Confidence(
+                score=new_score,
+                previous_score=prev,
+                delta=delta,
+                rationale="; ".join(changes[:4]) or "stable",
+            ),
             priority=priority,
             category=str(rec.get("category") or "security"),
             changes=changes,
@@ -109,7 +137,14 @@ def improve_recommendations(bundle: LearningInputBundle, events: list[FeedbackEv
         )
         improved.append(item)
         if delta:
-            conf_imps.append({"recommendation_id": rid, "previous": prev, "new": new_score, "delta": delta})
+            conf_imps.append(
+                {
+                    "recommendation_id": rid,
+                    "previous": prev,
+                    "new": new_score,
+                    "delta": delta,
+                }
+            )
     return improved, conf_imps
 
 
@@ -125,7 +160,9 @@ def _relates(event: FeedbackEvent, rec: dict[str, Any]) -> bool:
         ]
     ).lower()
     keys = ["prompt", "pii", "tool", "injection", "identity", "rate", "model", "policy"]
-    return any(k in hay and k in str(event.title + event.description).lower() for k in keys) or event.feedback_type in {
+    return any(
+        k in hay and k in str(event.title + event.description).lower() for k in keys
+    ) or event.feedback_type in {
         FeedbackType.REGULATORY_UPDATE,
         FeedbackType.THREAT_INTELLIGENCE,
         FeedbackType.MODEL_CHANGE,
@@ -133,7 +170,9 @@ def _relates(event: FeedbackEvent, rec: dict[str, Any]) -> bool:
     }
 
 
-def detect_drift(events: list[FeedbackEvent], bundle: LearningInputBundle) -> list[DriftFinding]:
+def detect_drift(
+    events: list[FeedbackEvent], bundle: LearningInputBundle
+) -> list[DriftFinding]:
     findings: list[DriftFinding] = []
     for e in events:
         if e.feedback_type == FeedbackType.POLICY_CHANGE:
@@ -141,7 +180,8 @@ def detect_drift(events: list[FeedbackEvent], bundle: LearningInputBundle) -> li
                 DriftFinding(
                     kind="policy_drift",
                     title=f"Policy change observed: {e.title}",
-                    detail=e.description or "Policy inventory changed relative to last recommendation cycle",
+                    detail=e.description
+                    or "Policy inventory changed relative to last recommendation cycle",
                     severity=_sev(e.severity),
                     evidence=[e.feedback_id, e.source or "policy_change"],
                 )
@@ -151,9 +191,15 @@ def detect_drift(events: list[FeedbackEvent], bundle: LearningInputBundle) -> li
                 DriftFinding(
                     kind="regulation_change",
                     title=f"Regulatory update: {e.title}",
-                    detail=e.description or "New or updated regulation may invalidate prior mappings",
-                    severity=_sev(e.severity) if e.severity != "medium" else DriftSeverity.HIGH,
-                    evidence=[e.feedback_id, str(e.signals.get("framework") or "regulation")],
+                    detail=e.description
+                    or "New or updated regulation may invalidate prior mappings",
+                    severity=_sev(e.severity)
+                    if e.severity != "medium"
+                    else DriftSeverity.HIGH,
+                    evidence=[
+                        e.feedback_id,
+                        str(e.signals.get("framework") or "regulation"),
+                    ],
                 )
             )
         if e.feedback_type == FeedbackType.THREAT_INTELLIGENCE:
@@ -161,9 +207,19 @@ def detect_drift(events: list[FeedbackEvent], bundle: LearningInputBundle) -> li
                 DriftFinding(
                     kind="new_attack_technique",
                     title=f"New attack technique: {e.title}",
-                    detail=e.description or "Threat intel indicates technique not covered by current controls",
-                    severity=_sev(e.severity) if e.severity != "medium" else DriftSeverity.HIGH,
-                    evidence=[e.feedback_id, str(e.signals.get("technique_id") or e.signals.get("atlas_id") or "threat")],
+                    detail=e.description
+                    or "Threat intel indicates technique not covered by current controls",
+                    severity=_sev(e.severity)
+                    if e.severity != "medium"
+                    else DriftSeverity.HIGH,
+                    evidence=[
+                        e.feedback_id,
+                        str(
+                            e.signals.get("technique_id")
+                            or e.signals.get("atlas_id")
+                            or "threat"
+                        ),
+                    ],
                 )
             )
         if e.feedback_type == FeedbackType.MODEL_CHANGE:
@@ -171,7 +227,8 @@ def detect_drift(events: list[FeedbackEvent], bundle: LearningInputBundle) -> li
                 DriftFinding(
                     kind="policy_drift",
                     title=f"Model change may invalidate policies: {e.title}",
-                    detail=e.description or "Model swap/version change can alter guardrail efficacy",
+                    detail=e.description
+                    or "Model swap/version change can alter guardrail efficacy",
                     severity=DriftSeverity.MEDIUM,
                     evidence=[e.feedback_id],
                 )
@@ -190,7 +247,9 @@ def detect_drift(events: list[FeedbackEvent], bundle: LearningInputBundle) -> li
                 )
     # baseline compare with current policies fingerprint
     if bundle.current_policies and bundle.knowledge_snapshot.get("policy_fingerprint"):
-        if str(bundle.current_policies.get("version")) != str(bundle.knowledge_snapshot.get("policy_version")):
+        if str(bundle.current_policies.get("version")) != str(
+            bundle.knowledge_snapshot.get("policy_version")
+        ):
             findings.append(
                 DriftFinding(
                     kind="policy_drift",
@@ -203,7 +262,11 @@ def detect_drift(events: list[FeedbackEvent], bundle: LearningInputBundle) -> li
     return findings
 
 
-def recommend_policy_updates(drift: list[DriftFinding], events: list[FeedbackEvent], improved: list[ImprovedRecommendation]) -> list[PolicyUpdateRecommendation]:
+def recommend_policy_updates(
+    drift: list[DriftFinding],
+    events: list[FeedbackEvent],
+    improved: list[ImprovedRecommendation],
+) -> list[PolicyUpdateRecommendation]:
     updates: list[PolicyUpdateRecommendation] = []
     for d in drift:
         if d.kind == "new_attack_technique":
@@ -214,7 +277,10 @@ def recommend_policy_updates(drift: list[DriftFinding], events: list[FeedbackEve
                     target_policy="prompt-policy.json / opa.rego",
                     rationale="Threat intelligence indicates coverage gap",
                     severity=d.severity,
-                    suggested_diff={"add_rules": ["block_new_technique"], "evidence": d.evidence},
+                    suggested_diff={
+                        "add_rules": ["block_new_technique"],
+                        "evidence": d.evidence,
+                    },
                 )
             )
         if d.kind == "regulation_change":
@@ -225,7 +291,10 @@ def recommend_policy_updates(drift: list[DriftFinding], events: list[FeedbackEve
                     target_policy="guardrails.yaml",
                     rationale="Regulatory update requires control remapping",
                     severity=d.severity,
-                    suggested_diff={"compliance_mapping_refresh": True, "evidence": d.evidence},
+                    suggested_diff={
+                        "compliance_mapping_refresh": True,
+                        "evidence": d.evidence,
+                    },
                 )
             )
         if d.kind == "policy_drift" and "over-blocking" in d.title.lower():
@@ -281,7 +350,9 @@ def propose_knowledge_changes(
                     description=d.detail,
                     change_type="attack_technique",
                     payload={"drift": d.model_dump(mode="json")},
-                    status=KnowledgeChangeStatus.PUBLISHED if allow_auto_publish else KnowledgeChangeStatus.PROPOSED,
+                    status=KnowledgeChangeStatus.PUBLISHED
+                    if allow_auto_publish
+                    else KnowledgeChangeStatus.PROPOSED,
                     requires_human_approval=not allow_auto_publish,
                     source_feedback_ids=list(d.evidence)[:10],
                     confidence=Confidence(score=0.82, rationale="Threat intel derived"),
@@ -295,7 +366,9 @@ def propose_knowledge_changes(
                     description=d.detail,
                     change_type="regulation",
                     payload={"drift": d.model_dump(mode="json")},
-                    status=KnowledgeChangeStatus.PUBLISHED if allow_auto_publish else KnowledgeChangeStatus.PROPOSED,
+                    status=KnowledgeChangeStatus.PUBLISHED
+                    if allow_auto_publish
+                    else KnowledgeChangeStatus.PROPOSED,
                     requires_human_approval=not allow_auto_publish,
                     source_feedback_ids=list(d.evidence)[:10],
                     confidence=Confidence(score=0.88, rationale="Regulatory feed"),
@@ -333,17 +406,37 @@ def propose_knowledge_changes(
     return changes
 
 
-def run_learning_cycle(bundle: LearningInputBundle, *, allow_auto_publish: bool = False) -> LearningReport:
+def run_learning_cycle(
+    bundle: LearningInputBundle, *, allow_auto_publish: bool = False
+) -> LearningReport:
     events = collect_feedback(bundle)
     reasoning = [
-        {"step": 1, "action": "ingest_feedback", "detail": f"Consumed {len(events)} feedback signals"},
+        {
+            "step": 1,
+            "action": "ingest_feedback",
+            "detail": f"Consumed {len(events)} feedback signals",
+        },
     ]
     improved, conf_imps = improve_recommendations(bundle, events)
-    reasoning.append({"step": 2, "action": "improve_recommendations", "detail": f"{len(improved)} recommendations updated"})
+    reasoning.append(
+        {
+            "step": 2,
+            "action": "improve_recommendations",
+            "detail": f"{len(improved)} recommendations updated",
+        }
+    )
     drift = detect_drift(events, bundle)
-    reasoning.append({"step": 3, "action": "detect_drift", "detail": f"{len(drift)} drift findings"})
+    reasoning.append(
+        {"step": 3, "action": "detect_drift", "detail": f"{len(drift)} drift findings"}
+    )
     updates = recommend_policy_updates(drift, events, improved)
-    reasoning.append({"step": 4, "action": "recommend_policy_updates", "detail": f"{len(updates)} policy updates"})
+    reasoning.append(
+        {
+            "step": 4,
+            "action": "recommend_policy_updates",
+            "detail": f"{len(updates)} policy updates",
+        }
+    )
     # Never auto-publish unless explicitly allowed (settings + request flag)
     auto = bool(allow_auto_publish and bundle.publish_without_approval)
     knowledge = []
@@ -369,9 +462,13 @@ def run_learning_cycle(bundle: LearningInputBundle, *, allow_auto_publish: bool 
         "policy_updates": len(updates),
         "drift_findings": len(drift),
         "knowledge_changes": len(knowledge),
-        "knowledge_proposed": sum(1 for k in knowledge if k.status == KnowledgeChangeStatus.PROPOSED),
+        "knowledge_proposed": sum(
+            1 for k in knowledge if k.status == KnowledgeChangeStatus.PROPOSED
+        ),
     }
-    avg_conf = sum(r.confidence.score for r in improved) / len(improved) if improved else 0.7
+    avg_conf = (
+        sum(r.confidence.score for r in improved) / len(improved) if improved else 0.7
+    )
     summary = (
         f"Learning cycle consumed {counts['feedback']} signals; "
         f"improved={counts['improved_recommendations']}, drift={counts['drift_findings']}, "
@@ -387,7 +484,10 @@ def run_learning_cycle(bundle: LearningInputBundle, *, allow_auto_publish: bool 
         knowledge_changes=knowledge,
         confidence_improvements=conf_imps,
         feedback_consumed=len(events),
-        confidence=Confidence(score=round(avg_conf, 3), rationale="Aggregate improved recommendation confidence"),
+        confidence=Confidence(
+            score=round(avg_conf, 3),
+            rationale="Aggregate improved recommendation confidence",
+        ),
         reasoning_path=reasoning,
         summary=summary,
         counts=counts,

@@ -3,16 +3,16 @@
 from __future__ import annotations
 
 import json
-import sys
 from pathlib import Path
 from uuid import uuid4
 
 import httpx
 import typer
 
-from context_intelligence.version import AGENT_VERSION
 
-app = typer.Typer(name="gie-context", help="GIE Context Intelligence CLI", no_args_is_help=True)
+app = typer.Typer(
+    name="gie-context", help="GIE Context Intelligence CLI", no_args_is_help=True
+)
 
 
 def _headers(api_key: str | None, token: str | None) -> dict[str, str]:
@@ -30,7 +30,9 @@ def scan(
     api_url: str = typer.Option("http://localhost:8080", envvar="GIE_API_URL"),
     api_key: str | None = typer.Option(None, envvar="GIE_API_KEY"),
     token: str | None = typer.Option(None, envvar="GIE_JWT_TOKEN"),
-    output: Path | None = typer.Option(None, "--output", "-o", help="Write resulting model JSON to file"),
+    output: Path | None = typer.Option(
+        None, "--output", "-o", help="Write resulting model JSON to file"
+    ),
     wait: bool = typer.Option(False, help="Poll until scan completes"),
 ) -> None:
     """Start a folder scan and optionally wait for the context model."""
@@ -57,7 +59,9 @@ def scan(
                 if current["status"] != "completed" or not current.get("model_id"):
                     typer.echo(json.dumps(current, indent=2))
                     raise typer.Exit(code=2)
-                model_resp = client.get(f"/v1/context-models/{current['model_id']}", headers=headers)
+                model_resp = client.get(
+                    f"/v1/context-models/{current['model_id']}", headers=headers
+                )
                 model_resp.raise_for_status()
                 model_json = model_resp.json()["data"]
                 if output:
@@ -84,7 +88,9 @@ def get_model(
     headers = _headers(api_key, token)
     params = {"version": version} if version is not None else None
     with httpx.Client(base_url=api_url, timeout=30.0) as client:
-        resp = client.get(f"/v1/context-models/{model_id}", headers=headers, params=params)
+        resp = client.get(
+            f"/v1/context-models/{model_id}", headers=headers, params=params
+        )
         resp.raise_for_status()
         data = resp.json()["data"]
         text = json.dumps(data, indent=2)

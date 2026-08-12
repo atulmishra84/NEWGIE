@@ -12,4 +12,6 @@ def reindex_task(domain: str | None = None) -> dict:
     from knowledge_intelligence.application.di import get_container
 
     container = get_container()
-    return asyncio.get_event_loop().run_until_complete(container.reindex.handle(domain=domain))
+    return asyncio.get_event_loop().run_until_complete(
+        container.reindex.handle(domain=domain)
+    )

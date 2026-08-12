@@ -76,6 +76,7 @@ CATEGORY_MAPPINGS: dict[RiskCategory, list[tuple[str, str, str]]] = {
     ],
 }
 
+
 def mappings_for(category: RiskCategory) -> list[FrameworkMapping]:
     rows = CATEGORY_MAPPINGS.get(category, [])
     by_fw: dict[str, FrameworkMapping] = {}

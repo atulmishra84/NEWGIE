@@ -32,7 +32,7 @@ jobs:
 
       - name: Install Full+GIE packages
         run: |
-          pip install ./packages/gie-contracts
+          pip install ./packages/gie-contracts ./packages/gie-llm
           pip install "./agents/chief-orchestrator[dev]"
           pip install ./agents/risk-assessment ./agents/policy-engine
 

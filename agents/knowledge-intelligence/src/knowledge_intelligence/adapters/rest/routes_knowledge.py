@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import time
-from typing import Any
 from uuid import uuid4
 
 from fastapi import APIRouter, Depends, Query
@@ -22,7 +21,12 @@ from knowledge_intelligence.version import AGENT_NAME, AGENT_VERSION
 router = APIRouter(prefix="/v1", tags=["knowledge"])
 
 
-def _meta(principal: AuthPrincipal, started: float, confidence: float | None = None, reasoning: list | None = None) -> ResponseMeta:
+def _meta(
+    principal: AuthPrincipal,
+    started: float,
+    confidence: float | None = None,
+    reasoning: list | None = None,
+) -> ResponseMeta:
     return ResponseMeta(
         trace_id=uuid4().hex,
         request_id=uuid4().hex,
@@ -38,7 +42,9 @@ def _meta(principal: AuthPrincipal, started: float, confidence: float | None = N
 @router.post("/knowledge/query")
 async def query_knowledge(
     body: KnowledgeQueryRequest,
-    principal: AuthPrincipal = Depends(require_perm(KnowledgePermission.KNOWLEDGE_QUERY)),
+    principal: AuthPrincipal = Depends(
+        require_perm(KnowledgePermission.KNOWLEDGE_QUERY)
+    ),
     container: Container = Depends(container_dep),
 ) -> ObservabilityEnvelope:
     started = time.perf_counter()
@@ -49,14 +55,21 @@ async def query_knowledge(
     )
     return ObservabilityEnvelope(
         data=result,
-        meta=_meta(principal, started, result.confidence.score, [s.model_dump() for s in result.reasoning_path]),
+        meta=_meta(
+            principal,
+            started,
+            result.confidence.score,
+            [s.model_dump() for s in result.reasoning_path],
+        ),
     )
 
 
 @router.post("/knowledge/nodes")
 async def upsert_knowledge(
     body: KnowledgeUpsertRequest,
-    principal: AuthPrincipal = Depends(require_perm(KnowledgePermission.KNOWLEDGE_WRITE)),
+    principal: AuthPrincipal = Depends(
+        require_perm(KnowledgePermission.KNOWLEDGE_WRITE)
+    ),
     container: Container = Depends(container_dep),
 ) -> ObservabilityEnvelope:
     started = time.perf_counter()
@@ -73,12 +86,16 @@ async def upsert_knowledge(
 async def get_node(
     node_id: str,
     version: str | None = None,
-    principal: AuthPrincipal = Depends(require_perm(KnowledgePermission.KNOWLEDGE_READ)),
+    principal: AuthPrincipal = Depends(
+        require_perm(KnowledgePermission.KNOWLEDGE_READ)
+    ),
     container: Container = Depends(container_dep),
 ) -> ObservabilityEnvelope:
     started = time.perf_counter()
     node = await container.get_node.handle(node_id, version=version)
-    return ObservabilityEnvelope(data=node, meta=_meta(principal, started, node.confidence.score))
+    return ObservabilityEnvelope(
+        data=node, meta=_meta(principal, started, node.confidence.score)
+    )
 
 
 @router.get("/knowledge/nodes")
@@ -88,18 +105,26 @@ async def list_nodes(
     version: str | None = None,
     limit: int = Query(default=50, ge=1, le=500),
     offset: int = Query(default=0, ge=0),
-    principal: AuthPrincipal = Depends(require_perm(KnowledgePermission.KNOWLEDGE_READ)),
+    principal: AuthPrincipal = Depends(
+        require_perm(KnowledgePermission.KNOWLEDGE_READ)
+    ),
     container: Container = Depends(container_dep),
 ) -> ObservabilityEnvelope:
     started = time.perf_counter()
-    nodes = await container.nodes.list_nodes(domain=domain, kind=kind, version=version, limit=limit, offset=offset)
-    return ObservabilityEnvelope(data={"items": nodes, "count": len(nodes)}, meta=_meta(principal, started))
+    nodes = await container.nodes.list_nodes(
+        domain=domain, kind=kind, version=version, limit=limit, offset=offset
+    )
+    return ObservabilityEnvelope(
+        data={"items": nodes, "count": len(nodes)}, meta=_meta(principal, started)
+    )
 
 
 @router.get("/knowledge/nodes/{node_id}/neighbors")
 async def neighbors(
     node_id: str,
-    principal: AuthPrincipal = Depends(require_perm(KnowledgePermission.KNOWLEDGE_READ)),
+    principal: AuthPrincipal = Depends(
+        require_perm(KnowledgePermission.KNOWLEDGE_READ)
+    ),
     container: Container = Depends(container_dep),
 ) -> ObservabilityEnvelope:
     started = time.perf_counter()
@@ -110,19 +135,25 @@ async def neighbors(
 @router.post("/knowledge/versions/{version}/publish")
 async def publish_version(
     version: str,
-    principal: AuthPrincipal = Depends(require_perm(KnowledgePermission.KNOWLEDGE_VERSION)),
+    principal: AuthPrincipal = Depends(
+        require_perm(KnowledgePermission.KNOWLEDGE_VERSION)
+    ),
     container: Container = Depends(container_dep),
 ) -> ObservabilityEnvelope:
     started = time.perf_counter()
     nodes = await container.nodes.list_nodes(limit=10000)
     edges = []
-    snap = await container.versions.publish(version, checksum="manual", node_count=len(nodes), edge_count=len(edges))
+    snap = await container.versions.publish(
+        version, checksum="manual", node_count=len(nodes), edge_count=len(edges)
+    )
     return ObservabilityEnvelope(data=snap, meta=_meta(principal, started))
 
 
 @router.get("/knowledge/versions")
 async def latest_version(
-    principal: AuthPrincipal = Depends(require_perm(KnowledgePermission.KNOWLEDGE_READ)),
+    principal: AuthPrincipal = Depends(
+        require_perm(KnowledgePermission.KNOWLEDGE_READ)
+    ),
     container: Container = Depends(container_dep),
 ) -> ObservabilityEnvelope:
     started = time.perf_counter()
@@ -134,7 +165,9 @@ async def latest_version(
 async def diff_versions(
     from_version: str = Query(...),
     to_version: str = Query(...),
-    principal: AuthPrincipal = Depends(require_perm(KnowledgePermission.KNOWLEDGE_READ)),
+    principal: AuthPrincipal = Depends(
+        require_perm(KnowledgePermission.KNOWLEDGE_READ)
+    ),
     container: Container = Depends(container_dep),
 ) -> ObservabilityEnvelope:
     started = time.perf_counter()
@@ -145,7 +178,9 @@ async def diff_versions(
 @router.post("/knowledge/reindex")
 async def reindex(
     domain: str | None = None,
-    principal: AuthPrincipal = Depends(require_perm(KnowledgePermission.KNOWLEDGE_REINDEX)),
+    principal: AuthPrincipal = Depends(
+        require_perm(KnowledgePermission.KNOWLEDGE_REINDEX)
+    ),
     container: Container = Depends(container_dep),
 ) -> ObservabilityEnvelope:
     started = time.perf_counter()

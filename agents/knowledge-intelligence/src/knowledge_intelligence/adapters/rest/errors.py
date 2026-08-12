@@ -14,15 +14,21 @@ from knowledge_intelligence.version import AGENT_VERSION
 def register_exception_handlers(app: FastAPI) -> None:
     @app.exception_handler(NotFoundError)
     async def not_found(request: Request, exc: NotFoundError):
-        return JSONResponse(status_code=404, content=_err(request, exc.code, exc.message, False))
+        return JSONResponse(
+            status_code=404, content=_err(request, exc.code, exc.message, False)
+        )
 
     @app.exception_handler(KnowledgeError)
     async def knowledge_err(request: Request, exc: KnowledgeError):
-        return JSONResponse(status_code=400, content=_err(request, exc.code, exc.message, exc.retryable))
+        return JSONResponse(
+            status_code=400, content=_err(request, exc.code, exc.message, exc.retryable)
+        )
 
     @app.exception_handler(PermissionDeniedError)
     async def denied(request: Request, exc: PermissionDeniedError):
-        return JSONResponse(status_code=403, content=_err(request, "forbidden", str(exc), False))
+        return JSONResponse(
+            status_code=403, content=_err(request, "forbidden", str(exc), False)
+        )
 
 
 def _err(request: Request, code: str, message: str, retryable: bool) -> dict:

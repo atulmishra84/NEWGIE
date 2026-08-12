@@ -11,21 +11,36 @@ DEFAULT_SCENARIOS = [
     {
         "name": "benign_user_query",
         "actions": [
-            {"action": "invoke", "prompt_injection_score": 0.1, "contains_pii": False, "tool_name": None},
+            {
+                "action": "invoke",
+                "prompt_injection_score": 0.1,
+                "contains_pii": False,
+                "tool_name": None,
+            },
         ],
         "expect_allow": True,
     },
     {
         "name": "prompt_injection_attempt",
         "actions": [
-            {"action": "invoke", "prompt_injection_score": 0.95, "contains_pii": False, "tool_name": None},
+            {
+                "action": "invoke",
+                "prompt_injection_score": 0.95,
+                "contains_pii": False,
+                "tool_name": None,
+            },
         ],
         "expect_allow": False,
     },
     {
         "name": "pii_egress",
         "actions": [
-            {"action": "invoke", "prompt_injection_score": 0.1, "contains_pii": True, "tool_name": None},
+            {
+                "action": "invoke",
+                "prompt_injection_score": 0.1,
+                "contains_pii": True,
+                "tool_name": None,
+            },
         ],
         "expect_allow": False,
     },
@@ -56,9 +71,20 @@ def _policy_rules(docs: list[dict[str, Any]]) -> dict[str, Any]:
     }
     for d in docs:
         body = d.get("body") or {}
-        rules = body.get("rules") or (body.get("spec") or {}).get("rules") or body.get("settings") or {}
+        rules = (
+            body.get("rules")
+            or (body.get("spec") or {}).get("rules")
+            or body.get("settings")
+            or {}
+        )
         if isinstance(rules, dict):
-            merged.update({k: v for k, v in rules.items() if isinstance(v, (bool, str, int, float, list))})
+            merged.update(
+                {
+                    k: v
+                    for k, v in rules.items()
+                    if isinstance(v, (bool, str, int, float, list))
+                }
+            )
         # openai steps imply filters
         for step in body.get("steps") or []:
             if isinstance(step, dict) and step.get("type") == "input_filters":
@@ -70,7 +96,10 @@ def _policy_rules(docs: list[dict[str, Any]]) -> dict[str, Any]:
 
 
 def _decide(action: dict[str, Any], rules: dict[str, Any]) -> tuple[bool, str]:
-    if rules.get("block_prompt_injection") and float(action.get("prompt_injection_score") or 0) > 0.7:
+    if (
+        rules.get("block_prompt_injection")
+        and float(action.get("prompt_injection_score") or 0) > 0.7
+    ):
         return False, "denied: prompt_injection"
     if rules.get("redact_pii") and action.get("contains_pii"):
         return False, "denied: pii"
@@ -79,7 +108,11 @@ def _decide(action: dict[str, Any], rules: dict[str, Any]) -> tuple[bool, str]:
         allowed = set(rules.get("allowed_tools") or ["search"])
         if tool not in allowed:
             return False, f"denied: tool {tool} not allowlisted"
-    if rules.get("require_human_approval") and action.get("requires_approval") and not action.get("human_approved"):
+    if (
+        rules.get("require_human_approval")
+        and action.get("requires_approval")
+        and not action.get("human_approved")
+    ):
         return False, "denied: human_approval_required"
     return True, "allowed"
 
@@ -118,7 +151,8 @@ def run_simulations(
                 scenario_name=str(scen.get("name") or "scenario"),
                 passed=ok,
                 steps=steps,
-                summary=("passed" if ok else "failed") + f" under rules={list(rules.keys())}",
+                summary=("passed" if ok else "failed")
+                + f" under rules={list(rules.keys())}",
             )
         )
     return reports

@@ -52,7 +52,9 @@ class Neo4jKnowledgeGraph(GraphRepository):
                     version=e.version,
                 )
 
-    async def shortest_paths(self, source_id: str, target_id: str, max_depth: int = 4) -> list[list[str]]:
+    async def shortest_paths(
+        self, source_id: str, target_id: str, max_depth: int = 4
+    ) -> list[list[str]]:
         async with self._driver.session() as session:
             result = await session.run(
                 """
@@ -61,7 +63,8 @@ class Neo4jKnowledgeGraph(GraphRepository):
                 )
                 RETURN [n IN nodes(p) | n.node_id] AS path
                 LIMIT 5
-                """ % max_depth,
+                """
+                % max_depth,
                 src=source_id,
                 tgt=target_id,
             )
@@ -70,7 +73,9 @@ class Neo4jKnowledgeGraph(GraphRepository):
                 paths.append(list(record["path"]))
             return paths
 
-    async def expand(self, node_ids: list[str], hops: int = 1) -> tuple[list[str], list[dict[str, Any]]]:
+    async def expand(
+        self, node_ids: list[str], hops: int = 1
+    ) -> tuple[list[str], list[dict[str, Any]]]:
         async with self._driver.session() as session:
             result = await session.run(
                 """
@@ -78,14 +83,22 @@ class Neo4jKnowledgeGraph(GraphRepository):
                 WHERE n.node_id IN $ids AND NOT m.node_id IN $ids
                 RETURN DISTINCT m.node_id AS id, m.title AS title, m.kind AS kind, m.domain AS domain
                 LIMIT 50
-                """ % hops,
+                """
+                % hops,
                 ids=node_ids,
             )
             rows = []
             ids = []
             async for record in result:
                 ids.append(record["id"])
-                rows.append({"id": record["id"], "title": record["title"], "kind": record["kind"], "domain": record["domain"]})
+                rows.append(
+                    {
+                        "id": record["id"],
+                        "title": record["title"],
+                        "kind": record["kind"],
+                        "domain": record["domain"],
+                    }
+                )
             return ids, rows
 
     async def ping(self) -> bool:

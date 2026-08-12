@@ -13,7 +13,9 @@ from context_intelligence.version import AGENT_NAME, AGENT_VERSION
 
 
 class ObservabilityMiddleware(BaseHTTPMiddleware):
-    async def dispatch(self, request: Request, call_next: RequestResponseEndpoint) -> Response:
+    async def dispatch(
+        self, request: Request, call_next: RequestResponseEndpoint
+    ) -> Response:
         correlation_id = request.headers.get("X-Correlation-ID") or uuid4().hex
         request_id = request.headers.get("X-Request-ID") or uuid4().hex
         tenant_id = request.headers.get("X-Tenant-ID")

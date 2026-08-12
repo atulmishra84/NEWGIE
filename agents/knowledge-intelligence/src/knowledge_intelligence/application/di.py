@@ -5,7 +5,9 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 from knowledge_intelligence.application.commands.reindex import ReindexHandler
-from knowledge_intelligence.application.commands.upsert_knowledge import UpsertKnowledgeHandler
+from knowledge_intelligence.application.commands.upsert_knowledge import (
+    UpsertKnowledgeHandler,
+)
 from knowledge_intelligence.application.queries.diff_versions import DiffVersionsHandler
 from knowledge_intelligence.application.queries.get_node import GetNodeHandler
 from knowledge_intelligence.application.query_engine import HybridQueryEngine
@@ -19,7 +21,7 @@ from knowledge_intelligence.domain.ports import (
     VectorStore,
     VersionRepository,
 )
-from knowledge_intelligence.settings import Settings, get_settings
+from knowledge_intelligence.settings import Settings
 
 
 @dataclass
@@ -60,7 +62,12 @@ class Container:
 
     @property
     def reindex(self) -> ReindexHandler:
-        return ReindexHandler(nodes=self.nodes, vectors=self.vectors, embeddings=self.embeddings, settings=self.settings)
+        return ReindexHandler(
+            nodes=self.nodes,
+            vectors=self.vectors,
+            embeddings=self.embeddings,
+            settings=self.settings,
+        )
 
     @property
     def get_node(self) -> GetNodeHandler:

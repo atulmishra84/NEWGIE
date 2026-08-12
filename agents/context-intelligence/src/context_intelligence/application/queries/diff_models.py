@@ -6,7 +6,6 @@ from dataclasses import dataclass, field
 from typing import Any
 from uuid import UUID
 
-from gie_contracts.context_model import ContextModel
 from gie_security.auth import AuthPrincipal
 from gie_security.rbac import Permission, PermissionDeniedError, require_permission
 
@@ -61,7 +60,9 @@ class DiffModelsHandler:
         if base is None:
             raise ModelNotFoundError(query.base_model_id, query.tenant_id)
 
-        compare = await self._repository.get_model(query.compare_model_id, query.tenant_id)
+        compare = await self._repository.get_model(
+            query.compare_model_id, query.tenant_id
+        )
         if compare is None:
             raise ModelNotFoundError(query.compare_model_id, query.tenant_id)
 
@@ -71,7 +72,9 @@ class DiffModelsHandler:
         for section_name in self._SECTIONS:
             base_section = getattr(base, section_name).model_dump()
             compare_section = getattr(compare, section_name).model_dump()
-            section_diff = self._diff_section(section_name, base_section, compare_section)
+            section_diff = self._diff_section(
+                section_name, base_section, compare_section
+            )
             sections.append(section_diff)
             totals["added"] += len(section_diff.added)
             totals["removed"] += len(section_diff.removed)
@@ -124,9 +127,13 @@ class DiffModelsHandler:
                 elif compare_value is None:
                     removed.append({"field": key, "value": base_value})
                 else:
-                    changed.append({"field": key, "before": base_value, "after": compare_value})
+                    changed.append(
+                        {"field": key, "before": base_value, "after": compare_value}
+                    )
 
-        return SectionDiff(section=section_name, added=added, removed=removed, changed=changed)
+        return SectionDiff(
+            section=section_name, added=added, removed=removed, changed=changed
+        )
 
 
 def _item_key(item: Any) -> str:

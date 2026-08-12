@@ -1,5 +1,6 @@
 from policy_generator.domain.templates import list_templates
 
+
 def test_templates_cover_mission_formats():
     items = list_templates()
     assert len(items) >= 18

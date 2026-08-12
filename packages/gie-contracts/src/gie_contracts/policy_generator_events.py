@@ -4,8 +4,10 @@ from typing import Literal
 from uuid import UUID, uuid4
 from pydantic import BaseModel, Field
 
+
 def utcnow() -> datetime:
     return datetime.now(timezone.utc)
+
 
 class PolicyGenEventEnvelope(BaseModel):
     event_id: UUID = Field(default_factory=uuid4)
@@ -17,16 +19,22 @@ class PolicyGenEventEnvelope(BaseModel):
     producer: str = "policy-generator"
     producer_version: str
 
+
 class PolicyPackageGenerationCompleted(PolicyGenEventEnvelope):
-    event_type: Literal["policygen.generation.completed"] = "policygen.generation.completed"
+    event_type: Literal["policygen.generation.completed"] = (
+        "policygen.generation.completed"
+    )
     agent_id: str
     package_id: UUID
     policy_count: int
     artifact_count: int
     duration_ms: int
 
+
 class PolicyPackageValidationCompleted(PolicyGenEventEnvelope):
-    event_type: Literal["policygen.validation.completed"] = "policygen.validation.completed"
+    event_type: Literal["policygen.validation.completed"] = (
+        "policygen.validation.completed"
+    )
     package_id: UUID | None = None
     status: str
     error_count: int

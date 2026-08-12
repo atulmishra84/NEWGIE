@@ -7,7 +7,10 @@ import json
 from typing import Any
 
 from gie_contracts.knowledge import KnowledgeUpsertRequest
-from gie_contracts.knowledge_events import KnowledgeNodeUpserted, KnowledgeVersionPublished
+from gie_contracts.knowledge_events import (
+    KnowledgeNodeUpserted,
+    KnowledgeVersionPublished,
+)
 from gie_observability.logging import get_logger
 
 from knowledge_intelligence.domain.ports import (
@@ -70,7 +73,9 @@ class UpsertKnowledgeHandler:
                 }
                 for x in request.nodes
             ]
-            await self._vectors.upsert([x.node_id for x in request.nodes], vecs, payloads)
+            await self._vectors.upsert(
+                [x.node_id for x in request.nodes], vecs, payloads
+            )
             for node in request.nodes:
                 evt = KnowledgeNodeUpserted(
                     tenant_id=tenant_id,
@@ -93,7 +98,10 @@ class UpsertKnowledgeHandler:
             version = request.version_label or self._next_version()
             checksum = hashlib.sha256(
                 json.dumps(
-                    {"nodes": [n.node_id for n in request.nodes], "edges": [e.edge_id for e in request.edges]},
+                    {
+                        "nodes": [n.node_id for n in request.nodes],
+                        "edges": [e.edge_id for e in request.edges],
+                    },
                     sort_keys=True,
                 ).encode()
             ).hexdigest()
@@ -107,9 +115,15 @@ class UpsertKnowledgeHandler:
                 edge_count=e,
                 checksum=checksum,
             )
-            await self._events.publish(self._settings.kafka_topic_events, pub.model_dump(mode="json"), key=version)
+            await self._events.publish(
+                self._settings.kafka_topic_events,
+                pub.model_dump(mode="json"),
+                key=version,
+            )
 
-        logger.info("knowledge_upserted", nodes=n, edges=e, actor=actor, tenant_id=tenant_id)
+        logger.info(
+            "knowledge_upserted", nodes=n, edges=e, actor=actor, tenant_id=tenant_id
+        )
         return {
             "nodes_upserted": n,
             "edges_upserted": e,

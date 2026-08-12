@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import json
 from typing import Annotated, Any
 from uuid import UUID
 
@@ -48,13 +47,19 @@ async def get_context_model(
     cached = await cache.get(auth.tenant_id, model_id, version)
     if cached:
         model = ContextModel.model_validate_json(cached)
-        return ObservabilityEnvelope(data=model, meta=_meta(request, confidence=model.overall_confidence()))
+        return ObservabilityEnvelope(
+            data=model, meta=_meta(request, confidence=model.overall_confidence())
+        )
 
     model = await repo.get_context_model(model_id, auth.tenant_id, version=version)
     if not model:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Context model not found")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Context model not found"
+        )
     await cache.set(auth.tenant_id, model_id, version, model.model_dump_json())
-    return ObservabilityEnvelope(data=model, meta=_meta(request, confidence=model.overall_confidence()))
+    return ObservabilityEnvelope(
+        data=model, meta=_meta(request, confidence=model.overall_confidence())
+    )
 
 
 @router.get("/{model_id}/versions")
@@ -66,8 +71,12 @@ async def list_model_versions(
 ) -> ObservabilityEnvelope[dict[str, Any]]:
     versions = await repo.list_model_versions(model_id, auth.tenant_id)
     if not versions:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Context model not found")
-    return ObservabilityEnvelope(data={"model_id": str(model_id), "versions": versions}, meta=_meta(request))
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Context model not found"
+        )
+    return ObservabilityEnvelope(
+        data={"model_id": str(model_id), "versions": versions}, meta=_meta(request)
+    )
 
 
 @router.get("/{model_id}/diff")
@@ -81,7 +90,9 @@ async def diff_models(
 ) -> ObservabilityEnvelope[dict[str, Any]]:
     diff = await repo.diff_models(model_id, auth.tenant_id, from_version, to_version)
     if diff.get("error"):
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Version not found")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Version not found"
+        )
     return ObservabilityEnvelope(data=diff, meta=_meta(request))
 
 
@@ -93,5 +104,7 @@ async def list_findings(
     repo: Annotated[ContextRepository, Depends(get_repository)],
     limit: int = Query(default=100, ge=1, le=500),
 ) -> ObservabilityEnvelope[dict[str, Any]]:
-    findings = await repo.list_findings(tenant_id=auth.tenant_id, model_id=model_id, limit=limit)
+    findings = await repo.list_findings(
+        tenant_id=auth.tenant_id, model_id=model_id, limit=limit
+    )
     return ObservabilityEnvelope(data={"items": findings}, meta=_meta(request))

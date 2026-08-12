@@ -1,4 +1,3 @@
-import os
 from pathlib import Path
 
 import pytest
@@ -19,7 +18,9 @@ def _seed_env(monkeypatch):
 
 @pytest.fixture
 def settings():
-    return Settings(gie_env="test", require_auth=False, flag_enable_reindex_on_start=False)
+    return Settings(
+        gie_env="test", require_auth=False, flag_enable_reindex_on_start=False
+    )
 
 
 @pytest_asyncio.fixture

@@ -21,7 +21,9 @@ def is_demo_request(payload: dict[str, Any]) -> bool:
     return any(m in path for m in markers)
 
 
-def demo_payload(agent_id: str, version: str, payload: dict[str, Any]) -> dict[str, Any]:
+def demo_payload(
+    agent_id: str, version: str, payload: dict[str, Any]
+) -> dict[str, Any]:
     """Return a realistic per-agent analysis slice for dashboard E2E demos."""
     tenant = payload.get("tenant_id") or "demo"
     source = payload.get("source") or {}
@@ -32,8 +34,18 @@ def demo_payload(agent_id: str, version: str, payload: dict[str, Any]) -> dict[s
         "context": {
             "summary": "Discovered ACME AI Assistant: FastAPI + RAG chat service with Azure OpenAI.",
             "assets": [
-                {"id": "svc-chat", "type": "service", "name": "chat-api", "runtime": "python3.12"},
-                {"id": "model-gpt", "type": "model", "name": "gpt-4o-mini", "provider": "azure-openai"},
+                {
+                    "id": "svc-chat",
+                    "type": "service",
+                    "name": "chat-api",
+                    "runtime": "python3.12",
+                },
+                {
+                    "id": "model-gpt",
+                    "type": "model",
+                    "name": "gpt-4o-mini",
+                    "provider": "azure-openai",
+                },
                 {"id": "store-vec", "type": "vector_store", "name": "acme-docs-qdrant"},
             ],
             "data_flows": [
@@ -47,8 +59,16 @@ def demo_payload(agent_id: str, version: str, payload: dict[str, Any]) -> dict[s
             "summary": "Mapped frameworks: NIST AI RMF, ISO 42001, SOC2; 14 control themes applicable.",
             "frameworks": ["NIST-AI-RMF", "ISO-42001", "SOC2-CC6"],
             "evidence": [
-                {"id": "ev-1", "title": "Model card missing for gpt-4o-mini", "severity": "high"},
-                {"id": "ev-2", "title": "Prompt logging retains PII 90 days", "severity": "medium"},
+                {
+                    "id": "ev-1",
+                    "title": "Model card missing for gpt-4o-mini",
+                    "severity": "high",
+                },
+                {
+                    "id": "ev-2",
+                    "title": "Prompt logging retains PII 90 days",
+                    "severity": "medium",
+                },
             ],
             "confidence": 0.88,
         },
@@ -56,18 +76,45 @@ def demo_payload(agent_id: str, version: str, payload: dict[str, Any]) -> dict[s
             "summary": "Overall risk score 72/100 (elevated). Top risks: prompt injection, PII retention, model drift.",
             "score": 72,
             "findings": [
-                {"id": "r1", "title": "Unvalidated user prompts reach LLM", "severity": "high", "likelihood": 0.8},
-                {"id": "r2", "title": "Chat history stores emails without redaction", "severity": "high", "likelihood": 0.7},
-                {"id": "r3", "title": "No offline eval gate before model swap", "severity": "medium", "likelihood": 0.6},
+                {
+                    "id": "r1",
+                    "title": "Unvalidated user prompts reach LLM",
+                    "severity": "high",
+                    "likelihood": 0.8,
+                },
+                {
+                    "id": "r2",
+                    "title": "Chat history stores emails without redaction",
+                    "severity": "high",
+                    "likelihood": 0.7,
+                },
+                {
+                    "id": "r3",
+                    "title": "No offline eval gate before model swap",
+                    "severity": "medium",
+                    "likelihood": 0.6,
+                },
             ],
             "confidence": 0.86,
         },
         "compliance": {
             "summary": "6 gaps vs NIST AI RMF Govern/Map; SOC2 logging retention exceeds policy.",
             "gaps": [
-                {"control": "GOVERN-1.2", "status": "gap", "note": "No AI accountability owner documented"},
-                {"control": "MAP-2.3", "status": "gap", "note": "Data classification incomplete for prompts"},
-                {"control": "CC6.1", "status": "partial", "note": "Access reviews quarterly but AI roles omitted"},
+                {
+                    "control": "GOVERN-1.2",
+                    "status": "gap",
+                    "note": "No AI accountability owner documented",
+                },
+                {
+                    "control": "MAP-2.3",
+                    "status": "gap",
+                    "note": "Data classification incomplete for prompts",
+                },
+                {
+                    "control": "CC6.1",
+                    "status": "partial",
+                    "note": "Access reviews quarterly but AI roles omitted",
+                },
             ],
             "confidence": 0.84,
         },
@@ -83,9 +130,21 @@ def demo_payload(agent_id: str, version: str, payload: dict[str, Any]) -> dict[s
         "recommendation": {
             "summary": "Prioritize prompt firewall, PII redaction, and model change control this sprint.",
             "actions": [
-                {"id": "a1", "priority": 1, "title": "Add prompt-injection filter before LLM call"},
-                {"id": "a2", "priority": 1, "title": "Redact email/phone in chat_history writes"},
-                {"id": "a3", "priority": 2, "title": "Require eval suite pass before model upgrade"},
+                {
+                    "id": "a1",
+                    "priority": 1,
+                    "title": "Add prompt-injection filter before LLM call",
+                },
+                {
+                    "id": "a2",
+                    "priority": 1,
+                    "title": "Redact email/phone in chat_history writes",
+                },
+                {
+                    "id": "a3",
+                    "priority": 2,
+                    "title": "Require eval suite pass before model upgrade",
+                },
             ],
             "confidence": 0.9,
         },
@@ -103,7 +162,11 @@ def demo_payload(agent_id: str, version: str, payload: dict[str, Any]) -> dict[s
             "results": [
                 {"artifact": "acme-prompt-firewall.yaml", "status": "pass"},
                 {"artifact": "acme-pii-redaction.yaml", "status": "pass"},
-                {"artifact": "acme-model-drift-check.yaml", "status": "warn", "note": "Needs baseline metrics"},
+                {
+                    "artifact": "acme-model-drift-check.yaml",
+                    "status": "warn",
+                    "note": "Needs baseline metrics",
+                },
             ],
             "confidence": 0.82,
         },
@@ -128,7 +191,10 @@ def demo_payload(agent_id: str, version: str, payload: dict[str, Any]) -> dict[s
         },
         "integration": {
             "summary": "Demo integrations ready: webhook + Jira ticket stubs for top actions.",
-            "targets": [{"system": "jira", "project": "ACME-SEC"}, {"system": "webhook", "url": "https://example.invalid/gie"}],
+            "targets": [
+                {"system": "jira", "project": "ACME-SEC"},
+                {"system": "webhook", "url": "https://example.invalid/gie"},
+            ],
             "confidence": 0.78,
         },
     }
@@ -147,6 +213,9 @@ def demo_payload(agent_id: str, version: str, payload: dict[str, Any]) -> dict[s
         "demo": True,
         "tenant_id": tenant,
         "source_path": path,
-        "artifacts": {"id": art, **({"items": body.get("artifacts")} if "artifacts" in body else {})},
+        "artifacts": {
+            "id": art,
+            **({"items": body.get("artifacts")} if "artifacts" in body else {}),
+        },
         **{k: v for k, v in body.items() if k != "artifacts"},
     }

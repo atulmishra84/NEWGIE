@@ -79,7 +79,9 @@ class DetectionFinding:
         """Combine duplicate findings by keeping higher confidence and union evidence."""
         if self.merge_key() != other.merge_key():
             raise ValueError("Cannot merge findings with different merge keys")
-        winner, loser = (self, other) if self.confidence >= other.confidence else (other, self)
+        winner, loser = (
+            (self, other) if self.confidence >= other.confidence else (other, self)
+        )
         evidence_ids = {e.evidence_id for e in winner.evidence}
         merged_evidence = list(winner.evidence)
         for ref in loser.evidence:

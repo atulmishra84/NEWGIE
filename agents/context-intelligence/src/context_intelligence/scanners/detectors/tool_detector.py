@@ -7,7 +7,11 @@ import re
 from pathlib import Path
 
 from context_intelligence.domain.findings import FindingCategory, FindingSection
-from context_intelligence.scanners.detectors.base import BaseDetector, iter_files, read_text
+from context_intelligence.scanners.detectors.base import (
+    BaseDetector,
+    iter_files,
+    read_text,
+)
 from context_intelligence.scanners.registry import DEFAULT_DETECTOR_REGISTRY
 
 TOOL_PATTERNS = [
@@ -28,7 +32,9 @@ class ToolDetector(BaseDetector):
     async def detect(self, workspace_path: Path) -> list:
         findings = []
 
-        for path in iter_files(workspace_path, extensions={".py", ".ts", ".js", ".json", ".yaml", ".yml"}):
+        for path in iter_files(
+            workspace_path, extensions={".py", ".ts", ".js", ".json", ".yaml", ".yml"}
+        ):
             text = read_text(path)
             if not text:
                 continue

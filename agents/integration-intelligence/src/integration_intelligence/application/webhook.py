@@ -1,16 +1,33 @@
 from __future__ import annotations
-from gie_contracts.integration import AuditLogEntry, PlatformId, WebhookEvent, WebhookIngressRequest
+from gie_contracts.integration import (
+    AuditLogEntry,
+    PlatformId,
+    WebhookEvent,
+    WebhookIngressRequest,
+)
 from gie_contracts.integration_events import WebhookReceived
 from gie_observability.logging import get_logger
 from integration_intelligence.domain.engine import ingest_webhook
-from integration_intelligence.domain.ports import AuditRepository, EventPublisher, WebhookRepository
+from integration_intelligence.domain.ports import (
+    AuditRepository,
+    EventPublisher,
+    WebhookRepository,
+)
 from integration_intelligence.settings import Settings
 from integration_intelligence.version import AGENT_VERSION
 
 logger = get_logger(__name__)
 
+
 class WebhookHandler:
-    def __init__(self, *, webhooks: WebhookRepository, audits: AuditRepository, events: EventPublisher, settings: Settings):
+    def __init__(
+        self,
+        *,
+        webhooks: WebhookRepository,
+        audits: AuditRepository,
+        events: EventPublisher,
+        settings: Settings,
+    ):
         self._webhooks = webhooks
         self._audits = audits
         self._events = events
@@ -43,7 +60,10 @@ class WebhookHandler:
                 resource_id=str(event.event_id),
                 platform_id=platform_id,
                 outcome=event.delivery_status.value,
-                detail={"event_type": event.event_type, "signature_valid": event.signature_valid},
+                detail={
+                    "event_type": event.event_type,
+                    "signature_valid": event.signature_valid,
+                },
             )
         )
         evt = WebhookReceived(
@@ -54,6 +74,14 @@ class WebhookHandler:
             platform_id=platform_id.value,
             event_type_name=event.event_type,
         )
-        await self._events.publish(self._settings.kafka_topic_events, evt.model_dump(mode="json"), key=str(event.event_id))
-        logger.info("webhook_received", platform=platform_id.value, status=event.delivery_status.value)
+        await self._events.publish(
+            self._settings.kafka_topic_events,
+            evt.model_dump(mode="json"),
+            key=str(event.event_id),
+        )
+        logger.info(
+            "webhook_received",
+            platform=platform_id.value,
+            status=event.delivery_status.value,
+        )
         return event

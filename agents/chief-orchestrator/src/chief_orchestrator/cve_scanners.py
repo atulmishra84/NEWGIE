@@ -77,7 +77,9 @@ async def scan_osv(packages: list[dict[str, str]] | None = None) -> list[Finding
                     sev = mapped
                 finding_id = vuln.get("id") or "OSV-UNKNOWN"
                 block_high = settings.cve_block_high
-                blocking = sev == Severity.CRITICAL or (block_high and sev == Severity.HIGH)
+                blocking = sev == Severity.CRITICAL or (
+                    block_high and sev == Severity.HIGH
+                )
                 findings.append(
                     Finding(
                         source_agent=AgentId.VULNERABILITY_ENGINEER,
@@ -138,7 +140,9 @@ async def scan_snyk(packages: list[dict[str, str]] | None = None) -> list[Findin
     return findings
 
 
-async def run_cve_providers(*, inject_critical: bool = False) -> tuple[list[Finding], dict[str, Any]]:
+async def run_cve_providers(
+    *, inject_critical: bool = False
+) -> tuple[list[Finding], dict[str, Any]]:
     packages = load_packages()
     findings: list[Finding] = []
     meta: dict[str, Any] = {"providers": [], "packages": packages}

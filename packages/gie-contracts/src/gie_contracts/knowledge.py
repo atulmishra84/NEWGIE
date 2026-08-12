@@ -144,6 +144,7 @@ class ExplainableRetrievalResult(BaseModel):
     took_ms: float = 0.0
     agent_version: str = "1.0.0"
     schema_version: str = KNOWLEDGE_SCHEMA
+    llm_enhancement: dict[str, Any] | None = None
 
 
 class KnowledgeGraphSnapshot(BaseModel):

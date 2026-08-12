@@ -9,7 +9,14 @@ from typing import Any
 import jwt
 from gie_contracts.integration import AuthMethod, AuthTokenRequest, AuthTokenResponse
 
-def issue_token(request: AuthTokenRequest, *, jwt_secret: str, jwt_algorithm: str, mtls_enabled: bool) -> AuthTokenResponse:
+
+def issue_token(
+    request: AuthTokenRequest,
+    *,
+    jwt_secret: str,
+    jwt_algorithm: str,
+    mtls_enabled: bool,
+) -> AuthTokenResponse:
     if request.auth_method == AuthMethod.JWT:
         now = int(time.time())
         payload: dict[str, Any] = {
@@ -52,7 +59,9 @@ def issue_token(request: AuthTokenRequest, *, jwt_secret: str, jwt_algorithm: st
         )
     if request.auth_method == AuthMethod.MTLS:
         # Client cert fingerprint placeholder — real mTLS terminates at ingress
-        fp = hashlib.sha256(f"{request.tenant_id}:{request.subject}".encode()).hexdigest()[:32]
+        fp = hashlib.sha256(
+            f"{request.tenant_id}:{request.subject}".encode()
+        ).hexdigest()[:32]
         return AuthTokenResponse(
             token_type="mTLS",
             access_token=f"mtls:{fp}",
@@ -63,7 +72,10 @@ def issue_token(request: AuthTokenRequest, *, jwt_secret: str, jwt_algorithm: st
         )
     raise ValueError(f"Unsupported auth method {request.auth_method}")
 
-def verify_webhook_signature(payload: bytes, signature: str | None, secret: str) -> bool:
+
+def verify_webhook_signature(
+    payload: bytes, signature: str | None, secret: str
+) -> bool:
     if not signature:
         return False
     digest = hmac.new(secret.encode(), payload, hashlib.sha256).hexdigest()

@@ -11,7 +11,9 @@ def _safe_id(prefix: str, n: int) -> str:
     return f"{prefix}{n}"
 
 
-def build_mermaid(steps: list[ReasoningStep], *, title: str = "Decision reasoning") -> str:
+def build_mermaid(
+    steps: list[ReasoningStep], *, title: str = "Decision reasoning"
+) -> str:
     lines = [
         "flowchart LR",
         f'  startNode(["{title}"])',
@@ -23,16 +25,18 @@ def build_mermaid(steps: list[ReasoningStep], *, title: str = "Decision reasonin
         label = label.replace('"', "'")[:60]
         detail = step.detail.replace('"', "'")[:80]
         lines.append(f'  {nid}["{label}"]')
-        lines.append(f'  {prev} --> {nid}')
+        lines.append(f"  {prev} --> {nid}")
         lines.append(f'  note{i}["{detail}"]')
-        lines.append(f'  {nid} -.-> note{i}')
+        lines.append(f"  {nid} -.-> note{i}")
         prev = nid
-    lines.append('  outcomeNode([Expected outcome])')
-    lines.append(f'  {prev} ==> outcomeNode')
+    lines.append("  outcomeNode([Expected outcome])")
+    lines.append(f"  {prev} ==> outcomeNode")
     return "\n".join(lines)
 
 
-def figma_diagram_payload(mermaid: str, *, name: str = "GIE Decision Explanation") -> dict[str, Any]:
+def figma_diagram_payload(
+    mermaid: str, *, name: str = "GIE Decision Explanation"
+) -> dict[str, Any]:
     """Payload consumable by Figma generate_diagram / FigJam workflows."""
     return {
         "tool": "generate_diagram",

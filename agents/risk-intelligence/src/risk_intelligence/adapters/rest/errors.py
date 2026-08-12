@@ -7,18 +7,26 @@ from gie_security.rbac import PermissionDeniedError
 from risk_intelligence.application.errors import NotFoundError, RiskError
 from risk_intelligence.version import AGENT_VERSION
 
+
 def register_exception_handlers(app: FastAPI) -> None:
     @app.exception_handler(NotFoundError)
     async def nf(request: Request, exc: NotFoundError):
-        return JSONResponse(status_code=404, content=_err(request, exc.code, exc.message))
+        return JSONResponse(
+            status_code=404, content=_err(request, exc.code, exc.message)
+        )
 
     @app.exception_handler(RiskError)
     async def re(request: Request, exc: RiskError):
-        return JSONResponse(status_code=400, content=_err(request, exc.code, exc.message, exc.retryable))
+        return JSONResponse(
+            status_code=400, content=_err(request, exc.code, exc.message, exc.retryable)
+        )
 
     @app.exception_handler(PermissionDeniedError)
     async def denied(request: Request, exc: PermissionDeniedError):
-        return JSONResponse(status_code=403, content=_err(request, "forbidden", str(exc)))
+        return JSONResponse(
+            status_code=403, content=_err(request, "forbidden", str(exc))
+        )
+
 
 def _err(request, code, message, retryable=False):
     obs = getattr(request.state, "obs", None)

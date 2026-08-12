@@ -5,7 +5,6 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any
 
 from gie_contracts.context_model import ContextModel
 
@@ -35,11 +34,15 @@ class DetectorRegistry:
     def all(self) -> list[Detector]:
         return list(self._detectors)
 
-    def run_all(self, root: Path, *, tenant_id: str, scan_id: str) -> list[DetectorResult]:
+    def run_all(
+        self, root: Path, *, tenant_id: str, scan_id: str
+    ) -> list[DetectorResult]:
         results: list[DetectorResult] = []
         for detector in self._detectors:
             try:
-                results.append(detector.detect(root, tenant_id=tenant_id, scan_id=scan_id))
+                results.append(
+                    detector.detect(root, tenant_id=tenant_id, scan_id=scan_id)
+                )
             except Exception as exc:  # noqa: BLE001 — isolated per detector
                 results.append(
                     DetectorResult(

@@ -36,7 +36,9 @@ class KnowledgeIngestJob:
     completed_at: datetime | None = None
 
     @classmethod
-    def create(cls, *, tenant_id: str, idempotency_key: str, requested_by: str) -> "KnowledgeIngestJob":
+    def create(
+        cls, *, tenant_id: str, idempotency_key: str, requested_by: str
+    ) -> "KnowledgeIngestJob":
         return cls(
             job_id=uuid4(),
             tenant_id=tenant_id,

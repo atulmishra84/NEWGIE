@@ -98,7 +98,11 @@ class SqlAlchemyContextRepository(ContextRepository):
         offset: int = 0,
         status: str | None = None,
     ) -> list[dict[str, Any]]:
-        stmt = select(Scan).where(Scan.tenant_id == tenant_id).order_by(Scan.created_at.desc())
+        stmt = (
+            select(Scan)
+            .where(Scan.tenant_id == tenant_id)
+            .order_by(Scan.created_at.desc())
+        )
         if status:
             stmt = stmt.where(Scan.status == status)
         stmt = stmt.limit(limit).offset(offset)
@@ -127,7 +131,9 @@ class SqlAlchemyContextRepository(ContextRepository):
             values["started_at"] = started_at
         if completed_at is not None:
             values["completed_at"] = completed_at
-        await self._session.execute(update(Scan).where(Scan.id == scan_id).values(**values))
+        await self._session.execute(
+            update(Scan).where(Scan.id == scan_id).values(**values)
+        )
 
     async def save_context_model(
         self,
@@ -167,7 +173,9 @@ class SqlAlchemyContextRepository(ContextRepository):
         await self._session.flush()
         return version_num
 
-    async def _persist_findings(self, model: ContextModel, scan_id: UUID, tenant_id: str) -> None:
+    async def _persist_findings(
+        self, model: ContextModel, scan_id: UUID, tenant_id: str
+    ) -> None:
         for secret in model.data.secret_findings:
             self._session.add(
                 Finding(
@@ -203,7 +211,9 @@ class SqlAlchemyContextRepository(ContextRepository):
             return None
         return ContextModel.model_validate(mv.payload)
 
-    async def list_model_versions(self, model_id: UUID, tenant_id: str) -> list[dict[str, Any]]:
+    async def list_model_versions(
+        self, model_id: UUID, tenant_id: str
+    ) -> list[dict[str, Any]]:
         record = await self._session.get(ContextModelRecord, model_id)
         if not record or record.tenant_id != tenant_id:
             return []
@@ -237,7 +247,15 @@ class SqlAlchemyContextRepository(ContextRepository):
         left_json = left.model_dump(mode="json")
         right_json = right.model_dump(mode="json")
         changed_sections: list[str] = []
-        for section in ("identity", "ai", "interfaces", "data", "security", "deployment", "graph"):
+        for section in (
+            "identity",
+            "ai",
+            "interfaces",
+            "data",
+            "security",
+            "deployment",
+            "graph",
+        ):
             if left_json.get(section) != right_json.get(section):
                 changed_sections.append(section)
         return {
@@ -256,7 +274,11 @@ class SqlAlchemyContextRepository(ContextRepository):
         model_id: UUID | None = None,
         limit: int = 100,
     ) -> list[dict[str, Any]]:
-        stmt = select(Finding).where(Finding.tenant_id == tenant_id).order_by(Finding.created_at.desc())
+        stmt = (
+            select(Finding)
+            .where(Finding.tenant_id == tenant_id)
+            .order_by(Finding.created_at.desc())
+        )
         if scan_id:
             stmt = stmt.where(Finding.scan_id == scan_id)
         if model_id:
@@ -339,7 +361,9 @@ class SqlAlchemyContextRepository(ContextRepository):
     async def validate_api_key(self, raw_key: str) -> dict[str, Any] | None:
         settings = get_settings()
         key_hash = _hash_api_key(raw_key, settings.api_key_pepper)
-        stmt = select(ApiKey).where(ApiKey.key_hash == key_hash, ApiKey.active.is_(True))
+        stmt = select(ApiKey).where(
+            ApiKey.key_hash == key_hash, ApiKey.active.is_(True)
+        )
         row = (await self._session.execute(stmt)).scalar_one_or_none()
         if not row:
             return None

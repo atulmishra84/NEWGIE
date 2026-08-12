@@ -2,7 +2,10 @@ from __future__ import annotations
 from typing import Any
 from gie_contracts.policy import GuardrailRecommendation, PolicyInputBundle
 
-def render(recs: list[GuardrailRecommendation], bundle: PolicyInputBundle) -> dict[str, Any]:
+
+def render(
+    recs: list[GuardrailRecommendation], bundle: PolicyInputBundle
+) -> dict[str, Any]:
     colang = """define user ask general
   ".*"
 
@@ -23,7 +26,9 @@ define bot refuse jailbreak
     return {
         "vendor": "nvidia_nemo",
         "version": "1.0",
-        "controls": [{"id": c, "guardrail": r.guardrail_id} for r in recs for c in r.controls],
+        "controls": [
+            {"id": c, "guardrail": r.guardrail_id} for r in recs for c in r.controls
+        ],
         "nemo_guardrails": {
             "rails": {
                 "input": {"flows": ["jailbreak attempt", "self check input"]},

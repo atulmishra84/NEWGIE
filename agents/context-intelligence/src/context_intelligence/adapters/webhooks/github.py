@@ -38,19 +38,28 @@ async def github_push(
     settings = get_settings()
     body = await request.body()
     if settings.github_webhook_secret:
-        if not _verify_signature(body, x_hub_signature_256, settings.github_webhook_secret):
-            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid signature")
+        if not _verify_signature(
+            body, x_hub_signature_256, settings.github_webhook_secret
+        ):
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid signature"
+            )
 
     if x_github_event != "push":
         return {"status": "ignored", "reason": "not_a_push_event"}
 
     payload = await request.json()
     repo = payload.get("repository") or {}
-    owner = (repo.get("owner") or {}).get("login") or repo.get("full_name", "").split("/")[0]
+    owner = (repo.get("owner") or {}).get("login") or repo.get("full_name", "").split(
+        "/"
+    )[0]
     name = repo.get("name")
     ref = (payload.get("ref") or "refs/heads/main").replace("refs/heads/", "")
     if not owner or not name:
-        raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail="Missing repository info")
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail="Missing repository info",
+        )
 
     tenant_id = request.headers.get("X-Tenant-ID") or "github-webhook"
     source = GitHubSource(owner=owner, repo=name, ref=ref)

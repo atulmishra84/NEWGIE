@@ -7,7 +7,10 @@ import os
 from gie_contracts.sources import GitHubSource, GitSource, ScanSource, SourceType
 
 from context_intelligence.scanners.registry import DEFAULT_READER_REGISTRY
-from context_intelligence.scanners.sources.base import SourceMaterializationError, SourceReader
+from context_intelligence.scanners.sources.base import (
+    SourceMaterializationError,
+    SourceReader,
+)
 from context_intelligence.scanners.sources.git_reader import GitReader
 from context_intelligence.scanners.workspace import MaterializedWorkspace
 

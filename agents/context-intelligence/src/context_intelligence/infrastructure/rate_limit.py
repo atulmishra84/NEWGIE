@@ -15,7 +15,9 @@ class RedisRateLimiter(RateLimiter):
     def __init__(self, client: aioredis.Redis) -> None:
         self._client = client
 
-    async def allow(self, tenant_id: str, action: str, limit: int, window_seconds: int) -> bool:
+    async def allow(
+        self, tenant_id: str, action: str, limit: int, window_seconds: int
+    ) -> bool:
         key = f"ratelimit:{tenant_id}:{action}"
         now = time.time()
         window_start = now - window_seconds

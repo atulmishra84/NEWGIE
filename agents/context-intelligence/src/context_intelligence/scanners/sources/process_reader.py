@@ -52,7 +52,11 @@ class ProcessReader(SourceReader):
 
         cmdline_path = proc_root / "cmdline"
         if cmdline_path.exists():
-            raw = cmdline_path.read_bytes().replace(b"\x00", b" ").decode("utf-8", errors="replace")
+            raw = (
+                cmdline_path.read_bytes()
+                .replace(b"\x00", b" ")
+                .decode("utf-8", errors="replace")
+            )
             (workspace.path / "cmdline.txt").write_text(raw.strip(), encoding="utf-8")
 
         write_metadata(workspace, source)

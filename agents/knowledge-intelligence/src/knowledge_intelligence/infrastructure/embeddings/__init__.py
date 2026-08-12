@@ -1,1 +1,3 @@
-from knowledge_intelligence.infrastructure.embeddings.hash_embedder import HashEmbeddingService
+from knowledge_intelligence.infrastructure.embeddings.hash_embedder import (
+    HashEmbeddingService as HashEmbeddingService,
+)

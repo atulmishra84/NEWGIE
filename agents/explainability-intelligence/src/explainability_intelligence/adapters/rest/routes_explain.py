@@ -15,6 +15,7 @@ from explainability_intelligence.version import AGENT_NAME, AGENT_VERSION
 router = APIRouter(prefix="/v1", tags=["explainability"])
 alias = APIRouter(tags=["explainability-alias"])
 
+
 def _meta(started: float, confidence=None, reasoning=None) -> ResponseMeta:
     return ResponseMeta(
         trace_id=uuid4().hex,
@@ -27,21 +28,31 @@ def _meta(started: float, confidence=None, reasoning=None) -> ResponseMeta:
         agent_name=AGENT_NAME,
     )
 
+
 @router.post("/explain")
 @alias.post("/explain")
 async def explain(
     body: ExplainRequest,
-    principal: AuthPrincipal = Depends(require_perm(ExplainPermission.EXPLAIN_GENERATE)),
+    principal: AuthPrincipal = Depends(
+        require_perm(ExplainPermission.EXPLAIN_GENERATE)
+    ),
     container: Container = Depends(container_dep),
 ):
     started = time.perf_counter()
     if not body.bundle.tenant_id:
         body.bundle.tenant_id = principal.tenant_id
-    report = await container.explain.handle(body, actor=principal.subject_id, correlation_id=uuid4().hex)
+    report = await container.explain.handle(
+        body, actor=principal.subject_id, correlation_id=uuid4().hex
+    )
     return ObservabilityEnvelope(
         data=report,
-        meta=_meta(started, report.confidence.score, [s.model_dump() for s in report.reasoning_path]),
+        meta=_meta(
+            started,
+            report.confidence.score,
+            [s.model_dump() for s in report.reasoning_path],
+        ),
     )
+
 
 @router.get("/explanation/{explanation_id}")
 @alias.get("/explanation/{explanation_id}")
@@ -54,20 +65,28 @@ async def get_explanation(
     report = await container.explanations.get(explanation_id)
     if not report:
         raise NotFoundError(f"Explanation {explanation_id} not found")
-    return ObservabilityEnvelope(data=report, meta=_meta(started, report.confidence.score))
+    return ObservabilityEnvelope(
+        data=report, meta=_meta(started, report.confidence.score)
+    )
+
 
 @router.post("/reasoning/path")
 @alias.post("/reasoning/path")
 async def reasoning_path(
     body: ReasoningPathRequest,
-    principal: AuthPrincipal = Depends(require_perm(ExplainPermission.EXPLAIN_GENERATE)),
+    principal: AuthPrincipal = Depends(
+        require_perm(ExplainPermission.EXPLAIN_GENERATE)
+    ),
     container: Container = Depends(container_dep),
 ):
     started = time.perf_counter()
     if not body.tenant_id:
         body.tenant_id = principal.tenant_id
-    result = await container.reasoning.handle(body, actor=principal.subject_id, correlation_id=uuid4().hex)
+    result = await container.reasoning.handle(
+        body, actor=principal.subject_id, correlation_id=uuid4().hex
+    )
     return ObservabilityEnvelope(data=result, meta=_meta(started))
+
 
 @router.get("/figma-generate-diagram")
 @alias.get("/figma-generate-diagram")

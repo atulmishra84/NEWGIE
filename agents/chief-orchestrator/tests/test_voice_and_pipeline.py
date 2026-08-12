@@ -45,7 +45,9 @@ async def test_status_and_golden_and_gates():
         health = await client.get("/healthz")
         assert health.status_code == 200
 
-        status = await client.post("/v1/command", json={"text": "status", "channel": "text"})
+        status = await client.post(
+            "/v1/command", json={"text": "status", "channel": "text"}
+        )
         assert status.status_code == 200
         body = status.json()
         assert body["result"]["fleet_size"] >= 16

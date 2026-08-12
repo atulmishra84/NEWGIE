@@ -4,13 +4,22 @@ from gie_contracts.integration import AuthMethod, ConnectRequest, PlatformId
 from integration_intelligence.infrastructure.bootstrap import build_container
 from integration_intelligence.settings import Settings
 
+
 @pytest.fixture
 def settings():
-    return Settings(gie_env="test", require_auth=False, circuit_failure_threshold=3, retry_max_attempts=2, retry_base_delay_ms=1)
+    return Settings(
+        gie_env="test",
+        require_auth=False,
+        circuit_failure_threshold=3,
+        retry_max_attempts=2,
+        retry_base_delay_ms=1,
+    )
+
 
 @pytest_asyncio.fixture
 async def container(settings):
     return await build_container(memory=True, settings=settings)
+
 
 @pytest.fixture
 def sample_connect():

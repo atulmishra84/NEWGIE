@@ -5,7 +5,11 @@ from __future__ import annotations
 from pathlib import Path
 
 from context_intelligence.domain.findings import FindingCategory, FindingSection
-from context_intelligence.scanners.detectors.base import BaseDetector, iter_files, read_text
+from context_intelligence.scanners.detectors.base import (
+    BaseDetector,
+    iter_files,
+    read_text,
+)
 from context_intelligence.scanners.registry import DEFAULT_DETECTOR_REGISTRY
 
 VECTOR_DBS: list[tuple[str, list[str], float]] = [
@@ -31,7 +35,17 @@ class VectorDbDetector(BaseDetector):
 
         for path in iter_files(
             workspace_path,
-            extensions={".py", ".ts", ".js", ".yaml", ".yml", ".env", ".toml", ".txt", ".json"},
+            extensions={
+                ".py",
+                ".ts",
+                ".js",
+                ".yaml",
+                ".yml",
+                ".env",
+                ".toml",
+                ".txt",
+                ".json",
+            },
         ):
             text = read_text(path)
             if not text:

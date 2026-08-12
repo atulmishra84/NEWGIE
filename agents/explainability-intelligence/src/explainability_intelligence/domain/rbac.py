@@ -2,17 +2,24 @@ from __future__ import annotations
 from enum import StrEnum
 from gie_security.rbac import PermissionDeniedError, Role
 
+
 class ExplainPermission(StrEnum):
     EXPLAIN_READ = "explainability:read"
     EXPLAIN_GENERATE = "explainability:generate"
     EXPLAIN_ADMIN = "explainability:admin"
 
+
 ROLE_PERMS = {
     Role.VIEWER: frozenset({ExplainPermission.EXPLAIN_READ}),
-    Role.ANALYST: frozenset({ExplainPermission.EXPLAIN_READ, ExplainPermission.EXPLAIN_GENERATE}),
-    Role.OPERATOR: frozenset({ExplainPermission.EXPLAIN_READ, ExplainPermission.EXPLAIN_GENERATE}),
+    Role.ANALYST: frozenset(
+        {ExplainPermission.EXPLAIN_READ, ExplainPermission.EXPLAIN_GENERATE}
+    ),
+    Role.OPERATOR: frozenset(
+        {ExplainPermission.EXPLAIN_READ, ExplainPermission.EXPLAIN_GENERATE}
+    ),
     Role.ADMIN: frozenset(set(ExplainPermission)),
 }
+
 
 def require_explain_permission(roles, permission: ExplainPermission) -> None:
     granted = set()

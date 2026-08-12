@@ -1,5 +1,6 @@
 from policy_generator.adapters.rest.app import create_app
 
+
 def test_openapi_has_policy_paths():
     app = create_app()
     paths = app.openapi()["paths"]

@@ -34,7 +34,9 @@ def test_multi_region_topology_loads():
 async def test_status_exposes_expanded_capabilities():
     transport = ASGITransport(app=app)
     async with AsyncClient(transport=transport, base_url="http://test") as client:
-        status = await client.post("/v1/command", json={"text": "status", "channel": "text"})
+        status = await client.post(
+            "/v1/command", json={"text": "status", "channel": "text"}
+        )
         body = status.json()["result"]
         assert "regions" in body
         assert body["voice"]["stt_provider"]

@@ -4,6 +4,7 @@ from explainability_intelligence.adapters.rest.app import create_app
 from explainability_intelligence.infrastructure.bootstrap import build_container
 from explainability_intelligence.settings import Settings
 
+
 @pytest.mark.asyncio
 async def test_explain_get_reasoning_figma(sample_bundle):
     settings = Settings(gie_env="test", require_auth=False)
@@ -27,12 +28,20 @@ async def test_explain_get_reasoning_figma(sample_bundle):
 
         path = await client.post(
             "/reasoning/path",
-            json={"tenant_id": "acme", "decision_id": "rec-prompt-injection-abc", "steps": []},
+            json={
+                "tenant_id": "acme",
+                "decision_id": "rec-prompt-injection-abc",
+                "steps": [],
+            },
             headers={"x-tenant-id": "acme"},
         )
         assert path.status_code == 200
         assert path.json()["data"]["mermaid_diagram"]
 
-        fig = await client.get("/figma-generate-diagram", params={"explanation_id": eid}, headers={"x-tenant-id": "acme"})
+        fig = await client.get(
+            "/figma-generate-diagram",
+            params={"explanation_id": eid},
+            headers={"x-tenant-id": "acme"},
+        )
         assert fig.status_code == 200
         assert fig.json()["data"]["tool"] == "generate_diagram"

@@ -245,7 +245,9 @@ def _haystack(bundle: RecommendationInputBundle) -> str:
     ).lower()
 
 
-def _extract_evidence(bundle: RecommendationInputBundle, signals: list[str]) -> list[str]:
+def _extract_evidence(
+    bundle: RecommendationInputBundle, signals: list[str]
+) -> list[str]:
     evidence: list[str] = []
     hay = _haystack(bundle)
     for s in signals:
@@ -257,8 +259,13 @@ def _extract_evidence(bundle: RecommendationInputBundle, signals: list[str]) -> 
         evidence.append(f"Overall AI risk score={risk['overall_ai_risk_score']}")
     for f in (risk.get("factors") or [])[:8]:
         if isinstance(f, dict) and f.get("category") and f.get("score") is not None:
-            if any(sig in str(f.get("category", "")).lower() for sig in signals) or float(f.get("score", 0)) >= 0.6:
-                evidence.append(f"Risk factor {f.get('category')}={f.get('score')} ({f.get('severity', 'n/a')})")
+            if (
+                any(sig in str(f.get("category", "")).lower() for sig in signals)
+                or float(f.get("score", 0)) >= 0.6
+            ):
+                evidence.append(
+                    f"Risk factor {f.get('category')}={f.get('score')} ({f.get('severity', 'n/a')})"
+                )
     for rem in (risk.get("remediations") or [])[:5]:
         if isinstance(rem, dict) and rem.get("title"):
             evidence.append(f"Risk remediation: {rem['title']}")
@@ -267,15 +274,17 @@ def _extract_evidence(bundle: RecommendationInputBundle, signals: list[str]) -> 
         evidence.append(f"Compliance score={comp.get('compliance_score')}")
     for g in (comp.get("gaps") or [])[:6]:
         if isinstance(g, dict):
-            evidence.append(f"Compliance gap: {g.get('control_id') or g.get('title')} ({g.get('severity')})")
+            evidence.append(
+                f"Compliance gap: {g.get('control_id') or g.get('title')} ({g.get('severity')})"
+            )
     for hit in (bundle.knowledge.get("hits") or [])[:5]:
         if isinstance(hit, dict) and hit.get("node_id"):
             evidence.append(f"Knowledge: {hit['node_id']}")
     ctx = bundle.context or {}
-    secrets = ((ctx.get("data") or {}).get("secret_findings") or [])
+    secrets = (ctx.get("data") or {}).get("secret_findings") or []
     if secrets:
         evidence.append(f"Context secret findings count={len(secrets)}")
-    tools = ((ctx.get("interfaces") or {}).get("tools") or [])
+    tools = (ctx.get("interfaces") or {}).get("tools") or []
     if tools:
         evidence.append(f"Context tools count={len(tools)}")
     if not evidence:
@@ -283,17 +292,35 @@ def _extract_evidence(bundle: RecommendationInputBundle, signals: list[str]) -> 
     return evidence[:12]
 
 
-def _priority_score(priority: Priority, risk_reduction: float, effort: ImplementationEffort, confidence: float) -> float:
-    p_w = {Priority.CRITICAL: 40, Priority.HIGH: 30, Priority.MEDIUM: 18, Priority.LOW: 8}[priority]
-    e_w = {ImplementationEffort.LOW: 12, ImplementationEffort.MEDIUM: 8, ImplementationEffort.HIGH: 4}[effort]
-    return round(min(100.0, p_w + risk_reduction * 100 * 0.35 + e_w + confidence * 10), 2)
+def _priority_score(
+    priority: Priority,
+    risk_reduction: float,
+    effort: ImplementationEffort,
+    confidence: float,
+) -> float:
+    p_w = {
+        Priority.CRITICAL: 40,
+        Priority.HIGH: 30,
+        Priority.MEDIUM: 18,
+        Priority.LOW: 8,
+    }[priority]
+    e_w = {
+        ImplementationEffort.LOW: 12,
+        ImplementationEffort.MEDIUM: 8,
+        ImplementationEffort.HIGH: 4,
+    }[effort]
+    return round(
+        min(100.0, p_w + risk_reduction * 100 * 0.35 + e_w + confidence * 10), 2
+    )
 
 
 def _adjust_priority(hint: Priority, evidence: list[str], hay: str) -> Priority:
     critical_markers = ("critical", "secret", "phi", "prompt_injection", "shell", "gap")
     if hint == Priority.CRITICAL:
         return Priority.CRITICAL
-    if any(m in " ".join(evidence).lower() or m in hay for m in critical_markers) and hint in {Priority.HIGH, Priority.MEDIUM}:
+    if any(
+        m in " ".join(evidence).lower() or m in hay for m in critical_markers
+    ) and hint in {Priority.HIGH, Priority.MEDIUM}:
         # bump one level
         order = [Priority.LOW, Priority.MEDIUM, Priority.HIGH, Priority.CRITICAL]
         return order[min(order.index(hint) + 1, 3)]
@@ -305,8 +332,16 @@ def _adjust_priority(hint: Priority, evidence: list[str], hay: str) -> Priority:
 def generate_recommendations(bundle: RecommendationInputBundle) -> RecommendationReport:
     hay = _haystack(bundle)
     reasoning: list[dict[str, Any]] = [
-        {"step": 1, "action": "ingest_inputs", "detail": "Normalized risk, compliance, context, knowledge, policies, identity, runtime"},
-        {"step": 2, "action": "match_templates", "detail": f"Evaluating {len(TEMPLATES)} recommendation templates"},
+        {
+            "step": 1,
+            "action": "ingest_inputs",
+            "detail": "Normalized risk, compliance, context, knowledge, policies, identity, runtime",
+        },
+        {
+            "step": 2,
+            "action": "match_templates",
+            "detail": f"Evaluating {len(TEMPLATES)} recommendation templates",
+        },
     ]
     items: list[RecommendationItem] = []
     for tmpl in TEMPLATES:
@@ -315,7 +350,11 @@ def generate_recommendations(bundle: RecommendationInputBundle) -> Recommendatio
         if not matched and tmpl["id"] not in {"rec-rate-limit", "rec-observability"}:
             continue
         if not matched and tmpl["id"] in {"rec-rate-limit", "rec-observability"}:
-            if "runtime" not in hay and "operational" not in hay and "exposure" not in hay:
+            if (
+                "runtime" not in hay
+                and "operational" not in hay
+                and "exposure" not in hay
+            ):
                 continue
             matched = ["baseline-ops"]
         evidence = _extract_evidence(bundle, tmpl["signals"])
@@ -323,19 +362,26 @@ def generate_recommendations(bundle: RecommendationInputBundle) -> Recommendatio
         priority = _adjust_priority(tmpl["priority_hint"], evidence, hay)
         # Soften if overall risk very low
         overall = bundle.risk.get("overall_ai_risk_score")
-        if isinstance(overall, (int, float)) and overall < 0.25 and priority == Priority.CRITICAL:
+        if (
+            isinstance(overall, (int, float))
+            and overall < 0.25
+            and priority == Priority.CRITICAL
+        ):
             priority = Priority.HIGH
         item = RecommendationItem(
             recommendation_id=f"{tmpl['id']}-{uuid4().hex[:6]}",
             title=tmpl["title"],
-            reason=tmpl["reason"] + (f" Matched: {', '.join(matched[:5])}." if matched else ""),
+            reason=tmpl["reason"]
+            + (f" Matched: {', '.join(matched[:5])}." if matched else ""),
             business_impact=tmpl["business_impact"],
             risk_reduction=tmpl["risk_reduction"],
             implementation_cost=tmpl["cost"],
             implementation_effort=tmpl["effort"],
             estimated_time=tmpl["time"],
             priority=priority,
-            confidence=Confidence(score=round(conf, 3), rationale="signal + evidence match"),
+            confidence=Confidence(
+                score=round(conf, 3), rationale="signal + evidence match"
+            ),
             supporting_evidence=evidence,
             dependencies=list(tmpl.get("deps") or []),
             category=tmpl["category"],
@@ -343,7 +389,9 @@ def generate_recommendations(bundle: RecommendationInputBundle) -> Recommendatio
             related_guardrails=list(tmpl.get("guardrails") or []),
             knowledge_refs=list(tmpl.get("knowledge") or []),
             status=RecommendationStatus.PROPOSED,
-            priority_score=_priority_score(priority, tmpl["risk_reduction"], tmpl["effort"], conf),
+            priority_score=_priority_score(
+                priority, tmpl["risk_reduction"], tmpl["effort"], conf
+            ),
         )
         items.append(item)
         reasoning.append(
@@ -414,7 +462,9 @@ def generate_recommendations(bundle: RecommendationInputBundle) -> Recommendatio
         developer_recommendations=dev_items,
         security_team_recommendations=sec_items,
         platform_team_recommendations=plat_items,
-        confidence=Confidence(score=round(avg_conf, 3), rationale="aggregate template confidence"),
+        confidence=Confidence(
+            score=round(avg_conf, 3), rationale="aggregate template confidence"
+        ),
         reasoning_path=reasoning,
         summary=summary,
         counts=counts,
@@ -436,10 +486,23 @@ def approve_recommendations(
         updated.append(data)
     report.recommendations = updated
     # rebuild audience slices with updated status
-    report.executive_recommendations = [i for i in updated if Audience.EXECUTIVE in i.audiences]
-    report.developer_recommendations = [i for i in updated if Audience.DEVELOPER in i.audiences]
-    report.security_team_recommendations = [i for i in updated if Audience.SECURITY in i.audiences]
-    report.platform_team_recommendations = [i for i in updated if Audience.PLATFORM in i.audiences]
-    report.by_priority = {p.value: [i for i in updated if i.priority == p] for p in Priority}
-    report.summary = report.summary + f"; approved={sum(1 for i in updated if i.status == RecommendationStatus.APPROVED)}"
+    report.executive_recommendations = [
+        i for i in updated if Audience.EXECUTIVE in i.audiences
+    ]
+    report.developer_recommendations = [
+        i for i in updated if Audience.DEVELOPER in i.audiences
+    ]
+    report.security_team_recommendations = [
+        i for i in updated if Audience.SECURITY in i.audiences
+    ]
+    report.platform_team_recommendations = [
+        i for i in updated if Audience.PLATFORM in i.audiences
+    ]
+    report.by_priority = {
+        p.value: [i for i in updated if i.priority == p] for p in Priority
+    }
+    report.summary = (
+        report.summary
+        + f"; approved={sum(1 for i in updated if i.status == RecommendationStatus.APPROVED)}"
+    )
     return report

@@ -70,7 +70,9 @@ class RecommendationItem(BaseModel):
     title: str
     reason: str
     business_impact: str
-    risk_reduction: float = Field(ge=0.0, le=1.0, description="Expected risk score reduction 0-1")
+    risk_reduction: float = Field(
+        ge=0.0, le=1.0, description="Expected risk score reduction 0-1"
+    )
     implementation_cost: ImplementationCost = ImplementationCost.MEDIUM
     implementation_effort: ImplementationEffort = ImplementationEffort.MEDIUM
     estimated_time: str = "1-2 weeks"
@@ -117,12 +119,17 @@ class RecommendationReport(BaseModel):
     by_audience: dict[str, AudienceBundle] = Field(default_factory=dict)
     executive_recommendations: list[RecommendationItem] = Field(default_factory=list)
     developer_recommendations: list[RecommendationItem] = Field(default_factory=list)
-    security_team_recommendations: list[RecommendationItem] = Field(default_factory=list)
-    platform_team_recommendations: list[RecommendationItem] = Field(default_factory=list)
+    security_team_recommendations: list[RecommendationItem] = Field(
+        default_factory=list
+    )
+    platform_team_recommendations: list[RecommendationItem] = Field(
+        default_factory=list
+    )
     confidence: Confidence = Field(default_factory=Confidence)
     reasoning_path: list[dict[str, Any]] = Field(default_factory=list)
     summary: str = ""
     counts: dict[str, int] = Field(default_factory=dict)
+    llm_enhancement: dict[str, Any] | None = None
 
 
 class RecommendationGenerateRequest(BaseModel):

@@ -53,7 +53,10 @@ class ManifestDetector(Detector):
             hint = AI_PACKAGE_HINTS.get(pkg.lower())
             if hint:
                 item = to_detected_item(
-                    hint[0], version=str(version), detector_id=self.detector_id, path=str(path)
+                    hint[0],
+                    version=str(version),
+                    detector_id=self.detector_id,
+                    path=str(path),
                 )
                 if hint[1] == "ai.frameworks":
                     model.ai.frameworks.append(item)
@@ -73,7 +76,9 @@ class ManifestDetector(Detector):
         )
         for pkg, (name, section) in AI_PACKAGE_HINTS.items():
             if pkg in text.lower():
-                item = to_detected_item(name, detector_id=self.detector_id, path=str(path))
+                item = to_detected_item(
+                    name, detector_id=self.detector_id, path=str(path)
+                )
                 if section == "ai.frameworks":
                     model.ai.frameworks.append(item)
                 else:
@@ -87,7 +92,9 @@ class ManifestDetector(Detector):
             servers = data.get("mcpServers") or data.get("servers") or {}
             for name in servers:
                 model.interfaces.mcp_servers.append(
-                    to_detected_item(name, detector_id=self.detector_id, path=str(candidate))
+                    to_detected_item(
+                        name, detector_id=self.detector_id, path=str(candidate)
+                    )
                 )
 
     def _scan_prompts(self, root: Path, model: ContextModel) -> None:

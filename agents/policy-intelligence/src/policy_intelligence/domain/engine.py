@@ -6,7 +6,6 @@ import json
 from typing import Any
 
 from gie_contracts.policy import (
-    BusinessImpact,
     Confidence,
     GuardrailRecommendation,
     PolicyInputBundle,
@@ -42,11 +41,23 @@ def _boost_priority(priority: Priority, business: dict[str, Any]) -> Priority:
     return priority
 
 
-def determine_guardrails(bundle: PolicyInputBundle) -> tuple[list[GuardrailRecommendation], list[ReasoningStep], Confidence]:
+def determine_guardrails(
+    bundle: PolicyInputBundle,
+) -> tuple[list[GuardrailRecommendation], list[ReasoningStep], Confidence]:
     haystack = _flatten_signals(bundle)
     steps: list[ReasoningStep] = [
-        ReasoningStep(step=1, action="ingest_inputs", detail="Normalized context/risk/compliance/knowledge/identity/business metadata", confidence=Confidence(score=1.0)),
-        ReasoningStep(step=2, action="scan_catalog", detail=f"Evaluating {len(CATALOG)} guardrail templates against input signals", confidence=Confidence(score=1.0)),
+        ReasoningStep(
+            step=1,
+            action="ingest_inputs",
+            detail="Normalized context/risk/compliance/knowledge/identity/business metadata",
+            confidence=Confidence(score=1.0),
+        ),
+        ReasoningStep(
+            step=2,
+            action="scan_catalog",
+            detail=f"Evaluating {len(CATALOG)} guardrail templates against input signals",
+            confidence=Confidence(score=1.0),
+        ),
     ]
     recs: list[GuardrailRecommendation] = []
     for spec in CATALOG:
@@ -56,19 +67,28 @@ def determine_guardrails(bundle: PolicyInputBundle) -> tuple[list[GuardrailRecom
         if not matched:
             matched = ["baseline_secure_default"]
         conf = min(0.98, 0.55 + 0.08 * len(matched))
-        if bundle.risk.get("overall_score", 0) and float(bundle.risk.get("overall_score", 0)) >= 0.7:
+        if (
+            bundle.risk.get("overall_score", 0)
+            and float(bundle.risk.get("overall_score", 0)) >= 0.7
+        ):
             conf = min(0.99, conf + 0.1)
         priority = _boost_priority(spec.priority, bundle.business)
         why = [spec.why_template.format(signals=", ".join(matched[:6]))]
         if bundle.compliance:
-            frameworks = bundle.compliance.get("frameworks") or bundle.compliance.get("controls") or []
+            frameworks = (
+                bundle.compliance.get("frameworks")
+                or bundle.compliance.get("controls")
+                or []
+            )
             if frameworks:
                 why.append(
-                f"Compliance context references: "
-                f"{frameworks if isinstance(frameworks, str) else ', '.join(str(x) for x in list(frameworks)[:8])}"
-            )
+                    f"Compliance context references: "
+                    f"{frameworks if isinstance(frameworks, str) else ', '.join(str(x) for x in list(frameworks)[:8])}"
+                )
         if bundle.identity:
-            why.append("Identity metadata indicates authenticated AI workload requiring policy binding.")
+            why.append(
+                "Identity metadata indicates authenticated AI workload requiring policy binding."
+            )
         recs.append(
             GuardrailRecommendation(
                 guardrail_id=spec.guardrail_id,
@@ -77,7 +97,9 @@ def determine_guardrails(bundle: PolicyInputBundle) -> tuple[list[GuardrailRecom
                 applies=True,
                 why=why,
                 priority=priority,
-                confidence=Confidence(score=round(conf, 3), rationale=f"matched triggers: {matched[:5]}"),
+                confidence=Confidence(
+                    score=round(conf, 3), rationale=f"matched triggers: {matched[:5]}"
+                ),
                 business_impact=spec.business_impact,
                 implementation_effort=spec.effort,
                 knowledge_refs=list(spec.knowledge_ids),
@@ -108,19 +130,36 @@ def determine_guardrails(bundle: PolicyInputBundle) -> tuple[list[GuardrailRecom
             confidence=Confidence(score=overall),
         )
     )
-    return recs, steps, Confidence(score=round(overall, 3), rationale="mean recommendation confidence")
+    return (
+        recs,
+        steps,
+        Confidence(score=round(overall, 3), rationale="mean recommendation confidence"),
+    )
 
 
 def _force_baseline(spec: GuardrailSpec, bundle: PolicyInputBundle) -> bool:
     # Always recommend core rails when any AI framework present
-    frameworks = json.dumps(bundle.context.get("ai", bundle.context), default=str).lower()
-    has_ai = any(x in frameworks for x in ("openai", "langgraph", "crewai", "autogen", "foundry", "llm", "agent"))
-    return has_ai and spec.guardrail_id in {"gr-prompt-injection", "gr-output-filter", "gr-tool-allowlist"}
+    frameworks = json.dumps(
+        bundle.context.get("ai", bundle.context), default=str
+    ).lower()
+    has_ai = any(
+        x in frameworks
+        for x in ("openai", "langgraph", "crewai", "autogen", "foundry", "llm", "agent")
+    )
+    return has_ai and spec.guardrail_id in {
+        "gr-prompt-injection",
+        "gr-output-filter",
+        "gr-tool-allowlist",
+    }
 
 
 def _risk_refs(bundle: PolicyInputBundle, matched: list[str]) -> list[str]:
     refs = []
-    for item in bundle.risk.get("findings", []) if isinstance(bundle.risk.get("findings"), list) else []:
+    for item in (
+        bundle.risk.get("findings", [])
+        if isinstance(bundle.risk.get("findings"), list)
+        else []
+    ):
         if isinstance(item, dict) and item.get("id"):
             refs.append(str(item["id"]))
     if not refs and matched:

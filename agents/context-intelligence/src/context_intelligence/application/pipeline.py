@@ -77,7 +77,9 @@ class DetectionPipeline:
             result = await coro
             return result
         finally:
-            PIPELINE_STAGE_DURATION.labels(stage=name).observe(time.perf_counter() - start)
+            PIPELINE_STAGE_DURATION.labels(stage=name).observe(
+                time.perf_counter() - start
+            )
 
     async def _materialize(self, scan: ContextScan, workspace: ScanWorkspace) -> str:
         digest = await self._source_reader.materialize(scan.source, workspace)

@@ -11,6 +11,8 @@ dependencies = [
   "python-multipart>=0.0.9",
   "pyyaml>=6.0",
   "gie-contracts",
+  "boto3>=1.34",
+  "gie-llm",
 ]
 
 [project.optional-dependencies]
@@ -25,6 +27,7 @@ packages = ["src/chief_orchestrator"]
 
 [tool.uv.sources]
 gie-contracts = { path = "../../packages/gie-contracts", editable = true }
+gie-llm = { path = "../../packages/gie-llm", editable = true }
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"

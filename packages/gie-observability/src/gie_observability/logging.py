@@ -10,7 +10,9 @@ import structlog
 from gie_observability.context import get_context
 
 
-def _add_obs_context(logger: logging.Logger, method_name: str, event_dict: dict) -> dict:
+def _add_obs_context(
+    logger: logging.Logger, method_name: str, event_dict: dict
+) -> dict:
     ctx = get_context()
     if ctx:
         event_dict.setdefault("trace_id", ctx.trace_id)
@@ -33,7 +35,9 @@ def configure_logging(level: str = "INFO", json_logs: bool = True) -> None:
         structlog.processors.format_exc_info,
     ]
     renderer: structlog.types.Processor = (
-        structlog.processors.JSONRenderer() if json_logs else structlog.dev.ConsoleRenderer()
+        structlog.processors.JSONRenderer()
+        if json_logs
+        else structlog.dev.ConsoleRenderer()
     )
     structlog.configure(
         processors=[*shared, structlog.stdlib.ProcessorFormatter.wrap_for_formatter],

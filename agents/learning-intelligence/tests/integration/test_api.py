@@ -4,6 +4,7 @@ from learning_intelligence.adapters.rest.app import create_app
 from learning_intelligence.infrastructure.bootstrap import build_container
 from learning_intelligence.settings import Settings
 
+
 @pytest.mark.asyncio
 async def test_feedback_learn_history_knowledge(sample_bundle):
     settings = Settings(gie_env="test", require_auth=False, allow_auto_publish=False)
@@ -36,11 +37,17 @@ async def test_feedback_learn_history_knowledge(sample_bundle):
         assert data["knowledge_changes"]
         assert data["improved_recommendations"]
 
-        hist = await client.get("/learning/history", params={"agent_id": "agent-checkout-bot"}, headers={"x-tenant-id": "acme"})
+        hist = await client.get(
+            "/learning/history",
+            params={"agent_id": "agent-checkout-bot"},
+            headers={"x-tenant-id": "acme"},
+        )
         assert hist.status_code == 200
         assert hist.json()["data"]["count"] >= 1
 
-        changes = await client.get("/knowledge/changes", headers={"x-tenant-id": "acme"})
+        changes = await client.get(
+            "/knowledge/changes", headers={"x-tenant-id": "acme"}
+        )
         assert changes.status_code == 200
         body = changes.json()["data"]
         assert body["count"] >= 1

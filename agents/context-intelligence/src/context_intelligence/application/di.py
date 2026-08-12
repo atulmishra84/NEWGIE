@@ -11,7 +11,9 @@ from context_intelligence.application.commands.start_scan import StartScanHandle
 from context_intelligence.application.normalizer import ContextModelNormalizer
 from context_intelligence.application.pipeline import DetectionPipeline
 from context_intelligence.application.queries.diff_models import DiffModelsHandler
-from context_intelligence.application.queries.get_context_model import GetContextModelHandler
+from context_intelligence.application.queries.get_context_model import (
+    GetContextModelHandler,
+)
 from context_intelligence.application.queries.get_scan import GetScanHandler
 from context_intelligence.application.queries.list_scans import ListScansHandler
 from context_intelligence.config import Settings, get_settings

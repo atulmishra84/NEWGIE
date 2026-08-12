@@ -32,7 +32,10 @@ from integration_intelligence.domain.resilience import (
 )
 from integration_intelligence.version import AGENT_VERSION
 
-def build_connection(request: ConnectRequest, *, warnings: list[str]) -> IntegrationConnection:
+
+def build_connection(
+    request: ConnectRequest, *, warnings: list[str]
+) -> IntegrationConnection:
     platform = get_platform(request.platform_id)
     assert platform
     status = ConnectionStatus.CONNECTED if not warnings else ConnectionStatus.DEGRADED
@@ -44,11 +47,20 @@ def build_connection(request: ConnectRequest, *, warnings: list[str]) -> Integra
         name=request.name,
         status=status,
         auth_method=request.auth_method,
-        config={k: v for k, v in (request.config or {}).items() if "secret" not in k.lower() and "password" not in k.lower()},
+        config={
+            k: v
+            for k, v in (request.config or {}).items()
+            if "secret" not in k.lower() and "password" not in k.lower()
+        },
         scopes=request.scopes,
         endpoint_url=request.endpoint_url,
-        metadata={"warnings": warnings, "capabilities": platform.capabilities, "dry_run": request.dry_run},
+        metadata={
+            "warnings": warnings,
+            "capabilities": platform.capabilities,
+            "dry_run": request.dry_run,
+        },
     )
+
 
 async def run_sync(
     conn: IntegrationConnection,
@@ -61,25 +73,37 @@ async def run_sync(
 ) -> SyncResult:
     ensure_circuit_allows(conn, open_seconds=open_seconds)
     import time
+
     started = time.perf_counter()
     retries = 0
     try:
+
         async def _do():
             if request.direction == "inbound":
                 return await simulate_inbound_sync(conn.platform_id, request.payload)
             if request.direction == "bidirectional":
-                out_s, _, _ = await simulate_outbound_sync(conn.platform_id, request.payload)
-                _, in_r, msg = await simulate_inbound_sync(conn.platform_id, request.payload)
+                out_s, _, _ = await simulate_outbound_sync(
+                    conn.platform_id, request.payload
+                )
+                _, in_r, msg = await simulate_inbound_sync(
+                    conn.platform_id, request.payload
+                )
                 return out_s, in_r, msg
             return await simulate_outbound_sync(conn.platform_id, request.payload)
 
         # force failure for tests / chaos
         if request.payload.get("_force_fail") and not request.force:
+
             async def _fail():
                 raise RuntimeError("Forced connector failure")
-            result, retries = await with_retry(_fail, max_attempts=max_attempts, base_delay_ms=base_delay_ms)
+
+            result, retries = await with_retry(
+                _fail, max_attempts=max_attempts, base_delay_ms=base_delay_ms
+            )
         else:
-            result, retries = await with_retry(_do, max_attempts=max_attempts, base_delay_ms=base_delay_ms)
+            result, retries = await with_retry(
+                _do, max_attempts=max_attempts, base_delay_ms=base_delay_ms
+            )
         sent, received, message = result
         record_success(conn)
         return SyncResult(
@@ -115,6 +139,7 @@ async def run_sync(
             message=str(exc),
         )
 
+
 def ingest_webhook(
     platform_id,
     body: WebhookIngressRequest,
@@ -139,6 +164,7 @@ def ingest_webhook(
         last_error=None if sig_ok is not False else "Invalid webhook signature",
     )
 
+
 def health_report(
     tenant_id: str,
     connections: list[IntegrationConnection],
@@ -147,7 +173,9 @@ def health_report(
 ) -> IntegrationHealthReport:
     connected = sum(1 for c in connections if c.status == ConnectionStatus.CONNECTED)
     degraded = sum(1 for c in connections if c.status == ConnectionStatus.DEGRADED)
-    circuit_open = sum(1 for c in connections if c.status == ConnectionStatus.CIRCUIT_OPEN)
+    circuit_open = sum(
+        1 for c in connections if c.status == ConnectionStatus.CIRCUIT_OPEN
+    )
     score = 0.9
     if circuit_open:
         score -= 0.2 * min(circuit_open, 3)
@@ -162,16 +190,24 @@ def health_report(
         circuit_open=circuit_open,
         webhook_deliveries_24h=len(webhooks),
         audit_events_24h=len(audits),
-        confidence=Confidence(score=round(score, 3), rationale="Derived from connection + circuit health"),
+        confidence=Confidence(
+            score=round(score, 3), rationale="Derived from connection + circuit health"
+        ),
         reasoning_path=[
-            {"step": "catalog", "detail": f"{len(platform_catalog())} platforms supported"},
+            {
+                "step": "catalog",
+                "detail": f"{len(platform_catalog())} platforms supported",
+            },
             {"step": "connections", "detail": f"{len(connections)} registered"},
             {"step": "circuits", "detail": f"{circuit_open} open"},
         ],
         summary=f"{connected}/{len(connections)} connected; {circuit_open} circuit(s) open",
     )
 
-def circuit_statuses(connections: list[IntegrationConnection], *, threshold: int, open_seconds: int) -> list[CircuitBreakerStatus]:
+
+def circuit_statuses(
+    connections: list[IntegrationConnection], *, threshold: int, open_seconds: int
+) -> list[CircuitBreakerStatus]:
     out: list[CircuitBreakerStatus] = []
     for c in connections:
         opened_at = None
@@ -179,6 +215,7 @@ def circuit_statuses(connections: list[IntegrationConnection], *, threshold: int
         raw = c.metadata.get("circuit_opened_at")
         if raw:
             from datetime import datetime, timedelta
+
             opened_at = datetime.fromisoformat(raw)
             next_attempt = opened_at + timedelta(seconds=open_seconds)
         out.append(
@@ -193,6 +230,7 @@ def circuit_statuses(connections: list[IntegrationConnection], *, threshold: int
             )
         )
     return out
+
 
 __all__ = [
     "ConnectorError",

@@ -24,7 +24,9 @@ class ModelsClient:
         resp.raise_for_status()
         return resp.json()["data"]
 
-    def diff(self, model_id: UUID | str, from_version: int, to_version: int) -> dict[str, Any]:
+    def diff(
+        self, model_id: UUID | str, from_version: int, to_version: int
+    ) -> dict[str, Any]:
         resp = self._client.get(
             f"/v1/context-models/{model_id}/diff",
             params={"from": from_version, "to": to_version},
@@ -32,7 +34,11 @@ class ModelsClient:
         resp.raise_for_status()
         return resp.json()["data"]
 
-    def list_findings(self, model_id: UUID | str, *, limit: int = 100) -> dict[str, Any]:
-        resp = self._client.get(f"/v1/context-models/{model_id}/findings", params={"limit": limit})
+    def list_findings(
+        self, model_id: UUID | str, *, limit: int = 100
+    ) -> dict[str, Any]:
+        resp = self._client.get(
+            f"/v1/context-models/{model_id}/findings", params={"limit": limit}
+        )
         resp.raise_for_status()
         return resp.json()["data"]

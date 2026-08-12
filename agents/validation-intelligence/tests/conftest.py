@@ -5,13 +5,16 @@ from gie_contracts.validation import ValidationInputBundle
 from validation_intelligence.infrastructure.bootstrap import build_container
 from validation_intelligence.settings import Settings
 
+
 @pytest.fixture
 def settings():
     return Settings(gie_env="test", require_auth=False)
 
+
 @pytest_asyncio.fixture
 async def container(settings):
     return await build_container(memory=True, settings=settings)
+
 
 @pytest.fixture
 def sample_bundle():
@@ -52,11 +55,30 @@ deny {
             "named_artifacts": {
                 "openai-policy.json": json.dumps(openai),
                 "opa.rego": rego,
-                "guardrails.json": json.dumps({"apiVersion": "gie.ai/v1", "kind": "GuardrailsPolicy", "metadata": {"name": "agent"}, "spec": {"rules": openai["rules"], "controls": openai["controls"]}}),
+                "guardrails.json": json.dumps(
+                    {
+                        "apiVersion": "gie.ai/v1",
+                        "kind": "GuardrailsPolicy",
+                        "metadata": {"name": "agent"},
+                        "spec": {
+                            "rules": openai["rules"],
+                            "controls": openai["controls"],
+                        },
+                    }
+                ),
             }
         },
-        context={"ai": {"frameworks": [{"name": "langgraph"}], "models": [{"name": "gpt-4o"}]}, "deployment": {"exposure": "public"}},
-        compliance={"compliance_score": 0.55, "gaps": [{"control_id": "gdpr-art32", "severity": "high"}]},
+        context={
+            "ai": {
+                "frameworks": [{"name": "langgraph"}],
+                "models": [{"name": "gpt-4o"}],
+            },
+            "deployment": {"exposure": "public"},
+        },
+        compliance={
+            "compliance_score": 0.55,
+            "gaps": [{"control_id": "gdpr-art32", "severity": "high"}],
+        },
         runtime={"exposure": "public", "allowed_tools": ["search"]},
         frameworks=["langgraph", "openai"],
         models=[{"name": "gpt-4o"}],

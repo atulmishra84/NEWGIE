@@ -158,6 +158,7 @@ class RiskReport(BaseModel):
     timeline: list[RiskTimelineEvent] = Field(default_factory=list)
     input_digest: str | None = None
     model_id: str = "default-v1"
+    llm_enhancement: dict[str, Any] | None = None
 
 
 class RiskCalculateRequest(BaseModel):

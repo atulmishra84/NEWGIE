@@ -165,3 +165,5 @@ class ContextModel(BaseModel):
 
     def overall_confidence(self) -> float:
         return self.provenance.confidence.score
+
+    llm_enhancement: dict[str, Any] | None = None

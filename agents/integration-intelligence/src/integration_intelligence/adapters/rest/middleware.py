@@ -6,6 +6,7 @@ from starlette.requests import Request
 from gie_observability.context import clear_context, new_request_context
 from integration_intelligence.version import AGENT_NAME, AGENT_VERSION
 
+
 class ObservabilityMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
         started = time.perf_counter()
@@ -25,5 +26,7 @@ class ObservabilityMiddleware(BaseHTTPMiddleware):
         response.headers["x-request-id"] = ctx.request_id
         response.headers["x-correlation-id"] = ctx.correlation_id
         response.headers["x-agent-version"] = AGENT_VERSION
-        response.headers["x-execution-ms"] = f"{(time.perf_counter() - started) * 1000:.2f}"
+        response.headers["x-execution-ms"] = (
+            f"{(time.perf_counter() - started) * 1000:.2f}"
+        )
         return response

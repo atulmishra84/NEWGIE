@@ -34,8 +34,16 @@ def test_normalize_recommendation_maps_priorities():
     out = normalize_recommendation(
         {
             "recommendations": [
-                {"recommendation_id": "r1", "title": "Add firewall", "priority": "critical"},
-                {"recommendation_id": "r2", "title": "Redact PII", "priority": "medium"},
+                {
+                    "recommendation_id": "r1",
+                    "title": "Add firewall",
+                    "priority": "critical",
+                },
+                {
+                    "recommendation_id": "r2",
+                    "title": "Redact PII",
+                    "priority": "medium",
+                },
             ],
             "confidence": {"score": 0.9},
         }
@@ -49,7 +57,13 @@ def test_normalize_compliance_and_generator_and_validation():
     c = normalize_compliance(
         {
             "compliance_score": 0.55,
-            "gaps": [{"control_id": "GOVERN-1.2", "status": "missing", "description": "No owner"}],
+            "gaps": [
+                {
+                    "control_id": "GOVERN-1.2",
+                    "status": "missing",
+                    "description": "No owner",
+                }
+            ],
             "applicable_frameworks": [{"framework": "soc2", "applicable": True}],
             "confidence": 0.7,
         }
@@ -60,7 +74,13 @@ def test_normalize_compliance_and_generator_and_validation():
     g = normalize_generator(
         {
             "package_id": "pkg1",
-            "policies": [{"metadata": {"name": "prompt-firewall"}, "format": "yaml", "content": "x: 1"}],
+            "policies": [
+                {
+                    "metadata": {"name": "prompt-firewall"},
+                    "format": "yaml",
+                    "content": "x: 1",
+                }
+            ],
             "confidence": {"score": 0.81},
         }
     )

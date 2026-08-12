@@ -190,6 +190,7 @@ class PolicyReport(BaseModel):
     reasons: list[str] = Field(default_factory=list)
     risk_score: float | None = None
     deny_on: list[str] = Field(default_factory=list)
+    llm_enhancement: dict[str, Any] | None = None
 
 
 class EvidencePackage(BaseModel):

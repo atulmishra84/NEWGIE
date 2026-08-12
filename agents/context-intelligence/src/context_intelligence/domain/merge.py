@@ -28,19 +28,27 @@ def merge_context_models(base: ContextModel, *others: ContextModel) -> ContextMo
     """Merge detector outputs; later models enrich earlier ones."""
     merged = base.model_copy(deep=True)
     for other in others:
-        merged.identity.languages = _dedupe_items([*merged.identity.languages, *other.identity.languages])
+        merged.identity.languages = _dedupe_items(
+            [*merged.identity.languages, *other.identity.languages]
+        )
         merged.identity.package_managers = _dedupe_items(
             [*merged.identity.package_managers, *other.identity.package_managers]
         )
-        merged.identity.runtimes = _dedupe_items([*merged.identity.runtimes, *other.identity.runtimes])
-        merged.ai.frameworks = _dedupe_items([*merged.ai.frameworks, *other.ai.frameworks])
+        merged.identity.runtimes = _dedupe_items(
+            [*merged.identity.runtimes, *other.identity.runtimes]
+        )
+        merged.ai.frameworks = _dedupe_items(
+            [*merged.ai.frameworks, *other.ai.frameworks]
+        )
         merged.ai.sdks = _dedupe_items([*merged.ai.sdks, *other.ai.sdks])
         merged.ai.models = _dedupe_items([*merged.ai.models, *other.ai.models])
         merged.ai.prompts = _dedupe_items([*merged.ai.prompts, *other.ai.prompts])
         merged.interfaces.mcp_servers = _dedupe_items(
             [*merged.interfaces.mcp_servers, *other.interfaces.mcp_servers]
         )
-        merged.interfaces.tools = _dedupe_items([*merged.interfaces.tools, *other.interfaces.tools])
+        merged.interfaces.tools = _dedupe_items(
+            [*merged.interfaces.tools, *other.interfaces.tools]
+        )
         merged.data.secret_findings = _dedupe_secrets(
             [*merged.data.secret_findings, *other.data.secret_findings]
         )

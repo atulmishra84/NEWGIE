@@ -1,9 +1,10 @@
 from __future__ import annotations
-import asyncio, json
+import json
 from gie_observability.logging import get_logger
 from risk_intelligence.settings import get_settings
 
 logger = get_logger(__name__)
+
 
 async def run_listener() -> None:
     settings = get_settings()
@@ -11,7 +12,11 @@ async def run_listener() -> None:
         from aiokafka import AIOKafkaConsumer
     except ImportError:
         return
-    consumer = AIOKafkaConsumer(settings.kafka_topic_commands, bootstrap_servers=settings.kafka_bootstrap_servers, group_id="risk-intelligence")
+    consumer = AIOKafkaConsumer(
+        settings.kafka_topic_commands,
+        bootstrap_servers=settings.kafka_bootstrap_servers,
+        group_id="risk-intelligence",
+    )
     await consumer.start()
     try:
         async for msg in consumer:

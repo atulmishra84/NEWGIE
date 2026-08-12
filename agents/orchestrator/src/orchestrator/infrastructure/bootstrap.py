@@ -10,7 +10,10 @@ from orchestrator.infrastructure.memory_store import (
 )
 from orchestrator.settings import Settings, get_settings
 
-async def build_container(*, memory: bool = True, settings: Settings | None = None) -> Container:
+
+async def build_container(
+    *, memory: bool = True, settings: Settings | None = None
+) -> Container:
     settings = settings or get_settings()
     executions = InMemoryExecutionRepository()
     traces = InMemoryTraceRepository()

@@ -149,6 +149,7 @@ class PolicyPackage(BaseModel):
     summary: str = ""
     validation: ValidationResult = Field(default_factory=ValidationResult)
     rollback: RollbackPlan = Field(default_factory=RollbackPlan)
+    llm_enhancement: dict[str, Any] | None = None
 
 
 class PolicyPackageGenerateRequest(BaseModel):

@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Sequence
 from pathlib import Path
-from typing import Any, Protocol, runtime_checkable
+from typing import Protocol, runtime_checkable
 from uuid import UUID
 
 from gie_contracts.context_model import ContextModel, GraphSection
@@ -71,9 +71,13 @@ class ContextRepository(Protocol):
 
     async def save_model(self, model: ContextModel) -> None: ...
 
-    async def get_model(self, model_id: UUID, tenant_id: str) -> ContextModel | None: ...
+    async def get_model(
+        self, model_id: UUID, tenant_id: str
+    ) -> ContextModel | None: ...
 
-    async def get_model_by_scan(self, scan_id: UUID, tenant_id: str) -> ContextModel | None: ...
+    async def get_model_by_scan(
+        self, scan_id: UUID, tenant_id: str
+    ) -> ContextModel | None: ...
 
     async def list_model_versions(
         self,
@@ -121,54 +125,20 @@ class CacheStore(Protocol):
 
     async def get(self, key: str) -> bytes | None: ...
 
-    async def set(self, key: str, value: bytes, ttl_seconds: int | None = None) -> None: ...
-
-    async def delete(self, key: str) -> None: ...
-
-
-@runtime_checkable
-class IdempotencyCache(Protocol):
-    """Maps tenant idempotency keys to scan ids."""
-
-    async def get(self, tenant_id: str, key: str) -> str | None: ...
-
-    async def set(self, tenant_id: str, key: str, scan_id: str) -> None: ...
-
-
-@runtime_checkable
-class ModelCache(Protocol):
-    """Caches serialized context models."""
-
-    async def get(self, tenant_id: str, model_id: UUID, version: int | None) -> str | None: ...
-
     async def set(
-        self,
-        tenant_id: str,
-        model_id: UUID,
-        version: int | None,
-        payload: str,
+        self, key: str, value: bytes, ttl_seconds: int | None = None
     ) -> None: ...
 
-
-@runtime_checkable
-class OutboxWriter(Protocol):
-    """Persists domain events for reliable publish."""
-
-    async def enqueue(self, event: EventEnvelope) -> UUID: ...
-
-
-@runtime_checkable
-class RateLimiter(Protocol):
-    """Tenant/action rate limiting."""
-
-    async def allow(self, tenant_id: str, action: str, limit: int, window_seconds: int) -> bool: ...
+    async def delete(self, key: str) -> None: ...
 
 
 @runtime_checkable
 class ScanEnqueuer(Protocol):
     """Background job enqueue port (Celery / worker)."""
 
-    async def enqueue_execute(self, scan_id: UUID, tenant_id: str, correlation_id: str) -> None: ...
+    async def enqueue_execute(
+        self, scan_id: UUID, tenant_id: str, correlation_id: str
+    ) -> None: ...
 
 
 class WorkspaceFactory(Protocol):
@@ -183,7 +153,9 @@ class IdempotencyCache(Protocol):
 
     async def get(self, key: str) -> str | None: ...
 
-    async def set(self, key: str, value: str, ttl_seconds: int | None = None) -> None: ...
+    async def set(
+        self, key: str, value: str, ttl_seconds: int | None = None
+    ) -> None: ...
 
 
 @runtime_checkable
@@ -192,7 +164,9 @@ class ModelCache(Protocol):
 
     async def get(self, key: str) -> bytes | None: ...
 
-    async def set(self, key: str, value: bytes, ttl_seconds: int | None = None) -> None: ...
+    async def set(
+        self, key: str, value: bytes, ttl_seconds: int | None = None
+    ) -> None: ...
 
     async def delete(self, key: str) -> None: ...
 

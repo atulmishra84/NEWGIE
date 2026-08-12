@@ -7,7 +7,6 @@ from uuid import uuid4
 from gie_contracts.context_model import (
     Confidence,
     ContextModel,
-    DetectedItem,
     ProvenanceSection,
     SecretFinding,
     Severity,

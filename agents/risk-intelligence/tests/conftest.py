@@ -4,13 +4,16 @@ from gie_contracts.risk import RiskInputBundle
 from risk_intelligence.infrastructure.bootstrap import build_container
 from risk_intelligence.settings import Settings
 
+
 @pytest.fixture
 def settings():
     return Settings(gie_env="test", require_auth=False)
 
+
 @pytest_asyncio.fixture
 async def container(settings):
     return await build_container(memory=True, settings=settings)
+
 
 @pytest.fixture
 def sample_bundle():
@@ -18,8 +21,14 @@ def sample_bundle():
         tenant_id="acme",
         agent_id="agent-checkout-bot",
         context_model={
-            "ai": {"frameworks": [{"name": "langgraph"}, {"name": "openai"}], "autonomous_capabilities": ["tool_use"]},
-            "interfaces": {"tools": [{"name": "search"}, {"name": "shell"}], "mcp_servers": [{"name": "fs"}]},
+            "ai": {
+                "frameworks": [{"name": "langgraph"}, {"name": "openai"}],
+                "autonomous_capabilities": ["tool_use"],
+            },
+            "interfaces": {
+                "tools": [{"name": "search"}, {"name": "shell"}],
+                "mcp_servers": [{"name": "fs"}],
+            },
             "data": {"secret_findings": [{"kind": "api_key"}]},
             "business": {"criticality": "critical"},
         },

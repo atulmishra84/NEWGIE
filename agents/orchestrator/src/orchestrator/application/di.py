@@ -3,8 +3,15 @@ from dataclasses import dataclass
 from orchestrator.application.analyze import AnalyzeHandler
 from orchestrator.application.workflow import WorkflowHandler
 from orchestrator.domain.engine import OrchestratorEngine
-from orchestrator.domain.ports import AgentInvoker, CacheStore, EventPublisher, ExecutionRepository, TraceRepository
+from orchestrator.domain.ports import (
+    AgentInvoker,
+    CacheStore,
+    EventPublisher,
+    ExecutionRepository,
+    TraceRepository,
+)
 from orchestrator.settings import Settings
+
 
 @dataclass
 class Container:
@@ -24,11 +31,14 @@ class Container:
     def workflow(self) -> WorkflowHandler:
         return WorkflowHandler(self.engine)
 
+
 _container = None
+
 
 def set_container(c: Container) -> None:
     global _container
     _container = c
+
 
 def get_container() -> Container:
     if _container is None:

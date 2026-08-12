@@ -31,8 +31,14 @@ def sample_bundle():
                 "mcp_servers": [{"name": "fs"}],
             },
         },
-        risk={"overall_score": 0.82, "findings": [{"id": "R1", "title": "Prompt injection"}]},
-        compliance={"frameworks": ["SOC2", "GDPR", "EU AI Act"], "controls": ["gdpr-art32"]},
+        risk={
+            "overall_score": 0.82,
+            "findings": [{"id": "R1", "title": "Prompt injection"}],
+        },
+        compliance={
+            "frameworks": ["SOC2", "GDPR", "EU AI Act"],
+            "controls": ["gdpr-art32"],
+        },
         knowledge={"hits": [{"node_id": "owasp-llm01", "title": "Prompt Injection"}]},
         identity={"providers": ["entra_id"], "auth_schemes": ["oauth2"]},
         business={"criticality": "critical", "industry": "healthcare"},

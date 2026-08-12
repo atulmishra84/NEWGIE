@@ -73,8 +73,16 @@ def generate_policy_package(
             formats.append(required)
 
     reasoning: list[dict[str, Any]] = [
-        {"step": 1, "action": "ingest_recommendations", "detail": f"Loaded {len(recs)} recommendations"},
-        {"step": 2, "action": "select_formats", "detail": f"Generating {len(formats)} policy formats"},
+        {
+            "step": 1,
+            "action": "ingest_recommendations",
+            "detail": f"Loaded {len(recs)} recommendations",
+        },
+        {
+            "step": 2,
+            "action": "select_formats",
+            "detail": f"Generating {len(formats)} policy formats",
+        },
     ]
     prev_ver = previous.version if previous else None
     policies = []
@@ -112,7 +120,10 @@ def generate_policy_package(
         checked_at=utcnow(),
         errors=[e for p in policies for e in p.validation.errors],
         warnings=[w for p in policies for w in p.validation.warnings],
-        checks=[{"filename": p.filename, "status": p.validation.status.value} for p in policies],
+        checks=[
+            {"filename": p.filename, "status": p.validation.status.value}
+            for p in policies
+        ],
     )
     summary = (
         f"Generated {len(policies)} deployment-ready policies for {bundle.agent_id} "
@@ -127,7 +138,9 @@ def generate_policy_package(
         policies=policies,
         artifacts=artifacts,
         named_artifacts=named,
-        confidence=Confidence(score=0.9 if recs else 0.65, rationale="recommendation-driven generation"),
+        confidence=Confidence(
+            score=0.9 if recs else 0.65, rationale="recommendation-driven generation"
+        ),
         reasoning_path=reasoning,
         summary=summary,
         validation=package_validation,
@@ -151,20 +164,33 @@ def validate_content(content: str, fmt: PolicyFormat | None = None) -> Validatio
     checks: list[dict[str, Any]] = []
     if not content or not content.strip():
         errors.append("Empty policy content")
-    if fmt in {PolicyFormat.JSON, PolicyFormat.OPENAI_GUARDRAILS, PolicyFormat.AZURE_AI_FOUNDRY,
-               PolicyFormat.LANGGRAPH, PolicyFormat.CREWAI, PolicyFormat.AUTOGEN,
-               PolicyFormat.SEMANTIC_KERNEL, PolicyFormat.API_GATEWAY, PolicyFormat.PROMPT,
-               PolicyFormat.IDENTITY, PolicyFormat.RUNTIME, PolicyFormat.DLP} or (
-        fmt is None and content.lstrip().startswith("{")
-    ):
+    if fmt in {
+        PolicyFormat.JSON,
+        PolicyFormat.OPENAI_GUARDRAILS,
+        PolicyFormat.AZURE_AI_FOUNDRY,
+        PolicyFormat.LANGGRAPH,
+        PolicyFormat.CREWAI,
+        PolicyFormat.AUTOGEN,
+        PolicyFormat.SEMANTIC_KERNEL,
+        PolicyFormat.API_GATEWAY,
+        PolicyFormat.PROMPT,
+        PolicyFormat.IDENTITY,
+        PolicyFormat.RUNTIME,
+        PolicyFormat.DLP,
+    } or (fmt is None and content.lstrip().startswith("{")):
         try:
             json.loads(content)
             checks.append({"check": "json_parse", "ok": True})
         except json.JSONDecodeError as exc:
             errors.append(f"JSON parse error: {exc}")
             checks.append({"check": "json_parse", "ok": False})
-    if fmt in {PolicyFormat.YAML, PolicyFormat.KUBERNETES, PolicyFormat.ADMISSION_CONTROLLER} or (
-        fmt is None and (content.lstrip().startswith("apiVersion") or ":" in content[:80])
+    if fmt in {
+        PolicyFormat.YAML,
+        PolicyFormat.KUBERNETES,
+        PolicyFormat.ADMISSION_CONTROLLER,
+    } or (
+        fmt is None
+        and (content.lstrip().startswith("apiVersion") or ":" in content[:80])
     ):
         try:
             yaml.safe_load(content)
@@ -182,5 +208,15 @@ def validate_content(content: str, fmt: PolicyFormat | None = None) -> Validatio
         if "terraform" not in content and "resource" not in content:
             errors.append("Terraform content missing resource blocks")
         checks.append({"check": "terraform_structure", "ok": "resource" in content})
-    status = ValidationStatus.INVALID if errors else (ValidationStatus.WARNING if warnings else ValidationStatus.VALID)
-    return ValidationResult(status=status, checked_at=utcnow(), errors=errors, warnings=warnings, checks=checks)
+    status = (
+        ValidationStatus.INVALID
+        if errors
+        else (ValidationStatus.WARNING if warnings else ValidationStatus.VALID)
+    )
+    return ValidationResult(
+        status=status,
+        checked_at=utcnow(),
+        errors=errors,
+        warnings=warnings,
+        checks=checks,
+    )

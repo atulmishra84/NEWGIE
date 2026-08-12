@@ -26,7 +26,9 @@ class GieContextClient:
             headers["X-API-Key"] = api_key
         elif bearer_token:
             headers["Authorization"] = f"Bearer {bearer_token}"
-        self._client = httpx.Client(base_url=base_url.rstrip("/"), headers=headers, timeout=timeout)
+        self._client = httpx.Client(
+            base_url=base_url.rstrip("/"), headers=headers, timeout=timeout
+        )
         self.scans = ScansClient(self._client)
         self.models = ModelsClient(self._client)
 

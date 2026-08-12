@@ -8,11 +8,14 @@ from gie_contracts.integration import ConnectionStatus, IntegrationConnection, u
 
 T = TypeVar("T")
 
+
 class CircuitOpenError(RuntimeError):
     pass
 
+
 def _now() -> datetime:
     return datetime.now(timezone.utc)
+
 
 async def with_retry(
     fn: Callable[[], Awaitable[T]],
@@ -32,17 +35,21 @@ async def with_retry(
     assert last_exc is not None
     raise last_exc
 
+
 def ensure_circuit_allows(conn: IntegrationConnection, *, open_seconds: int) -> None:
     if conn.circuit_breaker_state == "open":
         opened = conn.metadata.get("circuit_opened_at")
         if opened:
             opened_at = datetime.fromisoformat(opened)
             if _now() < opened_at + timedelta(seconds=open_seconds):
-                raise CircuitOpenError(f"Circuit open for connection {conn.connection_id}")
+                raise CircuitOpenError(
+                    f"Circuit open for connection {conn.connection_id}"
+                )
             conn.circuit_breaker_state = "half_open"
             conn.status = ConnectionStatus.DEGRADED
         else:
             raise CircuitOpenError(f"Circuit open for connection {conn.connection_id}")
+
 
 def record_success(conn: IntegrationConnection) -> None:
     conn.failure_count = 0
@@ -52,6 +59,7 @@ def record_success(conn: IntegrationConnection) -> None:
     conn.last_error = None
     conn.updated_at = utcnow()
     conn.metadata.pop("circuit_opened_at", None)
+
 
 def record_failure(conn: IntegrationConnection, *, error: str, threshold: int) -> bool:
     """Returns True if circuit just opened."""

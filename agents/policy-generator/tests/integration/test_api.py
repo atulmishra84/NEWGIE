@@ -4,6 +4,7 @@ from policy_generator.adapters.rest.app import create_app
 from policy_generator.infrastructure.bootstrap import build_container
 from policy_generator.settings import Settings
 
+
 @pytest.mark.asyncio
 async def test_generate_validate_templates_get(sample_bundle):
     settings = Settings(gie_env="test", require_auth=False)

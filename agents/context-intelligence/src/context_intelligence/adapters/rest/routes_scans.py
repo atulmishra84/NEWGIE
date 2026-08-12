@@ -8,7 +8,7 @@ from uuid import UUID, uuid4
 from fastapi import APIRouter, Depends, Header, HTTPException, Query, Request, status
 from gie_contracts.envelope import ObservabilityEnvelope, ResponseMeta
 from gie_contracts.sources import ScanSource
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 
 from context_intelligence.adapters.rest.deps import (
     AuthContext,
@@ -20,7 +20,13 @@ from context_intelligence.adapters.rest.deps import (
     require_read,
     require_write,
 )
-from context_intelligence.domain.ports import ContextRepository, EventPublisher, IdempotencyCache, OutboxWriter, RateLimiter
+from context_intelligence.domain.ports import (
+    ContextRepository,
+    EventPublisher,
+    IdempotencyCache,
+    OutboxWriter,
+    RateLimiter,
+)
 from context_intelligence.domain.scan_executor import request_scan
 from context_intelligence.infrastructure.celery_app import execute_scan_task
 from context_intelligence.settings import get_settings
@@ -58,12 +64,21 @@ async def create_scan(
     publisher: Annotated[EventPublisher, Depends(get_event_publisher)],
     idempotency: Annotated[IdempotencyCache, Depends(get_idempotency_cache)],
     rate_limiter: Annotated[RateLimiter, Depends(get_rate_limiter)],
-    idempotency_key_header: Annotated[str | None, Header(alias="Idempotency-Key")] = None,
+    idempotency_key_header: Annotated[
+        str | None, Header(alias="Idempotency-Key")
+    ] = None,
 ) -> ObservabilityEnvelope[dict[str, Any]]:
     settings = get_settings()
     key = body.idempotency_key or idempotency_key_header or str(uuid4())
-    if not await rate_limiter.allow(auth.tenant_id, "scan_create", settings.rate_limit_requests, settings.rate_limit_window_seconds):
-        raise HTTPException(status_code=status.HTTP_429_TOO_MANY_REQUESTS, detail="Rate limit exceeded")
+    if not await rate_limiter.allow(
+        auth.tenant_id,
+        "scan_create",
+        settings.rate_limit_requests,
+        settings.rate_limit_window_seconds,
+    ):
+        raise HTTPException(
+            status_code=status.HTTP_429_TOO_MANY_REQUESTS, detail="Rate limit exceeded"
+        )
 
     cached = await idempotency.get(auth.tenant_id, key)
     if cached:
@@ -105,7 +120,9 @@ async def get_scan(
 ) -> ObservabilityEnvelope[dict[str, Any]]:
     record = await repo.get_scan(scan_id, auth.tenant_id)
     if not record:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Scan not found")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Scan not found"
+        )
     return ObservabilityEnvelope(data=record, meta=_meta(request))
 
 
@@ -118,8 +135,12 @@ async def list_scans(
     offset: int = Query(default=0, ge=0),
     status_filter: str | None = Query(default=None, alias="status"),
 ) -> ObservabilityEnvelope[dict[str, Any]]:
-    items = await repo.list_scans(auth.tenant_id, limit=limit, offset=offset, status=status_filter)
-    return ObservabilityEnvelope(data={"items": items, "limit": limit, "offset": offset}, meta=_meta(request))
+    items = await repo.list_scans(
+        auth.tenant_id, limit=limit, offset=offset, status=status_filter
+    )
+    return ObservabilityEnvelope(
+        data={"items": items, "limit": limit, "offset": offset}, meta=_meta(request)
+    )
 
 
 @router.post("/{scan_id}/cancel")
@@ -131,9 +152,14 @@ async def cancel_scan(
 ) -> ObservabilityEnvelope[dict[str, Any]]:
     record = await repo.get_scan(scan_id, auth.tenant_id)
     if not record:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Scan not found")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Scan not found"
+        )
     if record["status"] in {"completed", "failed", "cancelled"}:
-        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=f"Scan already {record['status']}")
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail=f"Scan already {record['status']}",
+        )
     await repo.update_scan_status(scan_id, status="cancelled")
     updated = await repo.get_scan(scan_id, auth.tenant_id)
     await repo.write_audit_log(
