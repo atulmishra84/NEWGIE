@@ -4,7 +4,6 @@
 
 ```
 deploy/aws/
-├── build_lambda.sh          # Packages all handlers into dist/gie_bedrock_agents.zip
 └── lambda_handlers/
     ├── shared.py                            # parse_event / ok / err utilities
     ├── dispatcher.py                        # Routes by actionGroup to per-agent handler
@@ -25,15 +24,13 @@ deploy/aws/
     └── risk_assessment_handler.py
 ```
 
-## Build & Deploy
+## Deploy
+
+No build step required. Terraform's `archive_file` data source zips the
+`lambda_handlers/` directory automatically at plan/apply time.
 
 ```bash
-# 1. Build the Lambda zip
-cd deploy/aws
-./build_lambda.sh
-
-# 2. Deploy with Terraform
-cd ../terraform
+cd deploy/terraform
 terraform init
 terraform plan -var="environment=dev"
 terraform apply -var="environment=dev"
@@ -45,4 +42,4 @@ terraform apply -var="environment=dev"
 2. Add the mapping in `dispatcher.py` under `_ACTION_GROUP_MAP`.
 3. Add a new `module "<agent_name>"` block in `terraform/bedrock_agents.tf`.
 4. Add the output entry in `terraform/bedrock_agents_outputs.tf`.
-5. Run `./build_lambda.sh` and `terraform apply`.
+5. Run `terraform apply` — the zip is rebuilt automatically.
