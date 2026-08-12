@@ -47,7 +47,6 @@ def lambda_handler(event: dict[str, Any], context: Any) -> dict[str, Any]:
 def _submit_feedback(params: dict) -> dict:
     entity_id = params.get("entity_id", "")
     feedback_type = params.get("feedback_type", "correction")
-    payload = params.get("payload", "")
     if not entity_id:
         raise ValueError("entity_id is required")
     return {"entity_id": entity_id, "feedback_type": feedback_type, "feedback_id": f"fb-{entity_id[:6]}", "accepted": True}

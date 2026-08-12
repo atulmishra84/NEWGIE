@@ -46,8 +46,6 @@ def lambda_handler(event: dict[str, Any], context: Any) -> dict[str, Any]:
 
 def _generate_policy(params: dict) -> dict:
     policy_type = params.get("policy_type", "access_control")
-    context = params.get("context", "")
-    requirements = params.get("requirements", "")
     return {"policy_type": policy_type, "draft_id": f"draft-{policy_type[:6]}", "status": "DRAFT", "content": ""}
 
 

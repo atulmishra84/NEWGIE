@@ -46,7 +46,6 @@ def lambda_handler(event: dict[str, Any], context: Any) -> dict[str, Any]:
 
 def _connect_integration(params: dict) -> dict:
     provider = params.get("provider", "")
-    config = params.get("config", "")
     if not provider:
         raise ValueError("provider is required")
     return {"provider": provider, "integration_id": f"int-{provider[:6]}", "status": "CONNECTED"}
@@ -63,7 +62,6 @@ def _sync_integration(params: dict) -> dict:
 def _handle_webhook(params: dict) -> dict:
     provider = params.get("provider", "")
     event_type = params.get("event_type", "")
-    payload = params.get("payload", "")
     if not provider or not event_type:
         raise ValueError("provider and event_type are required")
     return {"provider": provider, "event_type": event_type, "processed": True}
@@ -71,7 +69,6 @@ def _handle_webhook(params: dict) -> dict:
 
 def _authenticate_integration(params: dict) -> dict:
     provider = params.get("provider", "")
-    credentials = params.get("credentials", "")
     if not provider:
         raise ValueError("provider is required")
     return {"provider": provider, "authenticated": True, "token_expiry": ""}
