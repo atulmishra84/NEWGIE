@@ -16,3 +16,10 @@ members = [
   "agents/risk-assessment",
   "agents/policy-engine",
 ]
+
+[tool.ruff.lint]
+# Pin rule selection so CI behaviour is stable across ruff versions.
+# E4/E7/E9 = pycodestyle errors; F = pyflakes.  B008/I001 etc. are
+# intentionally excluded: FastAPI Depends() in defaults is idiomatic,
+# and import ordering is handled by editors, not CI.
+select = ["E4", "E7", "E9", "F"]
