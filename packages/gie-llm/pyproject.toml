@@ -4,6 +4,7 @@ version = "1.0.0"
 description = "GIE shared AWS Bedrock LLM client — inference, embeddings, voice"
 requires-python = ">=3.12"
 dependencies = [
+  "anthropic>=0.55",
   "boto3>=1.34",
   "pydantic-settings>=2.3",
 ]

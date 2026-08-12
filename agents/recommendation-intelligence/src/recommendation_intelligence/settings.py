@@ -20,15 +20,11 @@ class Settings(BaseSettings):
     cache_ttl_seconds: int = 300
     otel_exporter_otlp_endpoint: str = ""
 
-    # AWS Bedrock LLM
-    bedrock_enabled: bool = True
-    bedrock_model_id: str = "anthropic.claude-3-haiku-20240307-v1:0"
-    bedrock_max_tokens: int = 1024
-    bedrock_temperature: float = 0.3
-    aws_region: str = "us-east-1"
-    aws_access_key_id: str = ""
-    aws_secret_access_key: str = ""
-    aws_session_token: str = ""
+    # Anthropic Claude API
+    anthropic_api_key: str = ""
+    anthropic_model_id: str = "claude-opus-5"
+    anthropic_max_tokens: int = 2048
+    anthropic_enabled: bool = True
 
 
 @lru_cache

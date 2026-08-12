@@ -5,7 +5,7 @@ from __future__ import annotations
 import logging
 from typing import Any
 
-from gie_llm import BedrockLLMClient
+from gie_llm import AnthropicLLMClient
 
 logger = logging.getLogger(__name__)
 
@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 async def enhance_query_result(
     result_dict: dict[str, Any],
     *,
-    client: BedrockLLMClient,
+    client: AnthropicLLMClient,
     original_query: str = "",
 ) -> dict[str, Any]:
     enhancement = await client.enhance(

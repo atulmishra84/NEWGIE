@@ -1,4 +1,4 @@
-"""Bedrock configuration mixin — add to any agent's Settings class."""
+"""LLM configuration mixins — add to any agent's Settings class."""
 
 from __future__ import annotations
 
@@ -28,3 +28,12 @@ class BedrockSettingsMixin:
     aws_transcribe_bucket: str = ""  # S3 bucket for Transcribe jobs
     aws_polly_voice_id: str = "Joanna"
     aws_polly_engine: str = "neural"
+
+
+class AnthropicSettingsMixin:
+    """Pydantic-settings mixin that adds Anthropic API fields to any Settings class."""
+
+    anthropic_api_key: str = ""
+    anthropic_model_id: str = "claude-opus-5"
+    anthropic_max_tokens: int = 2048
+    anthropic_enabled: bool = True

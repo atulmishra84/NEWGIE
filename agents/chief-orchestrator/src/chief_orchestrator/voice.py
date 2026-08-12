@@ -8,31 +8,27 @@ import re
 from typing import BinaryIO
 
 from gie_contracts import Channel, IntentType, NormalizedIntent
-from gie_llm import BedrockLLMClient
+from gie_llm import AnthropicLLMClient
 
 from chief_orchestrator.config import settings
 from chief_orchestrator.voice_providers import synthesize_speech, transcribe_audio
 
 logger = logging.getLogger(__name__)
 
-_BEDROCK_CLIENT: BedrockLLMClient | None = None
+_ANTHROPIC_CLIENT: AnthropicLLMClient | None = None
 
 
-def _get_llm() -> BedrockLLMClient | None:
-    global _BEDROCK_CLIENT
-    if not settings.bedrock_enabled:
+def _get_llm() -> AnthropicLLMClient | None:
+    global _ANTHROPIC_CLIENT
+    if not settings.anthropic_enabled:
         return None
-    if _BEDROCK_CLIENT is None:
-        _BEDROCK_CLIENT = BedrockLLMClient(
-            region=settings.aws_region,
-            model_id=settings.bedrock_model_id,
-            max_tokens=settings.bedrock_max_tokens,
-            temperature=settings.bedrock_temperature,
-            aws_access_key_id=settings.aws_access_key_id,
-            aws_secret_access_key=settings.aws_secret_access_key,
-            aws_session_token=settings.aws_session_token,
-        )
-    return _BEDROCK_CLIENT
+    if _ANTHROPIC_CLIENT is None:
+        _ANTHROPIC_CLIENT = AnthropicLLMClient(
+                api_key=settings.anthropic_api_key,
+                model_id=settings.anthropic_model_id,
+                max_tokens=settings.anthropic_max_tokens,
+            )
+    return _ANTHROPIC_CLIENT
 
 
 async def llm_classify_intent(text: str, channel: Channel) -> NormalizedIntent | None:

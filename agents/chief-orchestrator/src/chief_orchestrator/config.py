@@ -31,7 +31,7 @@ class Settings(BaseSettings):
     deepgram_api_key: str = ""
     deepgram_base_url: str = "https://api.deepgram.com/v1"
 
-    # AWS / Bedrock
+    # AWS voice services (Polly TTS, Transcribe STT)
     aws_region: str = "us-east-1"
     aws_access_key_id: str = ""
     aws_secret_access_key: str = ""
@@ -39,10 +39,12 @@ class Settings(BaseSettings):
     aws_polly_voice_id: str = "Joanna"
     aws_polly_engine: str = "neural"
     aws_transcribe_bucket: str = ""
-    bedrock_enabled: bool = True
-    bedrock_model_id: str = "anthropic.claude-3-haiku-20240307-v1:0"
-    bedrock_max_tokens: int = 2048
-    bedrock_temperature: float = 0.5
+
+    # Anthropic Claude API
+    anthropic_api_key: str = ""
+    anthropic_model_id: str = "claude-opus-5"
+    anthropic_max_tokens: int = 2048
+    anthropic_enabled: bool = True
 
     # CVE scanners: comma-separated osv,snyk
     cve_providers: str = "osv"

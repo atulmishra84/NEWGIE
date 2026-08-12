@@ -5,7 +5,7 @@ from __future__ import annotations
 import logging
 from typing import Any
 
-from gie_llm import BedrockLLMClient
+from gie_llm import AnthropicLLMClient
 
 logger = logging.getLogger(__name__)
 
@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 async def enhance_risk_report(
     report_dict: dict[str, Any],
     *,
-    client: BedrockLLMClient,
+    client: AnthropicLLMClient,
 ) -> dict[str, Any]:
     """Enrich a deterministic risk report with LLM narrative and insights."""
     enhancement = await client.enhance(
