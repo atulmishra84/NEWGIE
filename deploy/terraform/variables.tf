@@ -60,3 +60,21 @@ variable "redis_engine_version" {
   type        = string
   default     = "7.1"
 }
+
+variable "bedrock_foundation_model" {
+  description = "Bedrock foundation model ID used by all GIE agents"
+  type        = string
+  default     = "anthropic.claude-3-haiku-20240307-v1:0"
+}
+
+variable "log_retention_days" {
+  description = "CloudWatch log retention in days"
+  type        = number
+  default     = 30
+}
+
+variable "tags" {
+  description = "Additional resource tags applied to all Bedrock resources"
+  type        = map(string)
+  default     = {}
+}
